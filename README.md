@@ -12,3 +12,13 @@
 - Nasir Al-Monsu
 - Oliver Clark-Windle
 - Scott Forster
+
+### Technologies Used
+- TailwindCSS
+- Laravel Framework - Breeze
+- Vue
+- Flowbite
+- Chart.js
+- Leaflet
+- Mapbox
+- NodeJS
