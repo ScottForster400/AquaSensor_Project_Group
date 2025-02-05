@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
 use App\Models\Sensor;
 use Illuminate\Http\Request;
 
@@ -12,10 +13,12 @@ class SensorController extends Controller
      */
     public function index()
     {
-        $sensor_info = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022';
 
+        $response = Http::get('https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022');
+        $jsonData = $response->json();
+        dd($jsonData);
 
-        return view('sensors', compact('sensor_info'));
+        return view('sensors');
     }
 
     /**
