@@ -8,7 +8,7 @@
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
 
-            <p>test</p>
+            {{dd($sensor_info);}}
         </div>
     </div>
 </x-app-layout>

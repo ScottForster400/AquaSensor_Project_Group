@@ -12,7 +12,10 @@ class SensorController extends Controller
      */
     public function index()
     {
-        return view('sensors');
+        $sensor_info = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022';
+
+
+        return view('sensors', compact('sensor_info'));
     }
 
     /**

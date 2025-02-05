@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SensorController;
-use App\Http\Controllers\SensorDataController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SensorController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SensorDataController;
 
 Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index');
 Route::get('/', [SensorController::class, 'index'])->name('sensors.index');
