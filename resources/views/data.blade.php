@@ -14,11 +14,17 @@
                 <div id="card-top" class="flex flex-row h-20">
                     <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
                         <h2>Sensor Location</h2>
-                        <div id="displayed-info" class="flex flex-row items-end">
+                        <div id="DO-data" class=" hidden flex-row items-end">
                             <div class="h-8 w-8 ">
                                 <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -4.5px; position:relative">
                             </div>
                             <p class="pl-1">12 mg/l</p>
+                        </div>
+                        <div id="temp-data" class=" flex flex-row items-end">
+                            <div class="h-8 w-8 ">
+                                <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -4.5px; position:relative">
+                            </div>
+                            <p class="pl-1">12°c</p>
                         </div>
                     </div>
                     <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
@@ -33,8 +39,14 @@
                     </div>
                 </div>
                 <div id="card-data">
+                    @include('layouts.main-card-tab')
                 </div>
             </x-card>
+
+            <div >
+
+            </div>
         </div>
     </div>
+
 </x-app-layout>
