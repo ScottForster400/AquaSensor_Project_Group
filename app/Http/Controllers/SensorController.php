@@ -14,16 +14,8 @@ class SensorController extends Controller
      */
     public function index()
     {
-        dd(openssl_get_cert_locations());
-        $client = new Client();
 
-        $url = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022';
-
-        $response = $client->get($url);
-        $data = json_decode($response->getBody()->getContents(), true);
-
-
-        return view('sensors', compact('data'));
+        return view('sensors');
     }
 
     /**
