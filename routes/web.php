@@ -6,6 +6,8 @@ use App\Http\Controllers\SensorDataController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index');
+Route::get('/', [SensorController::class, 'index'])->name('sensors.index');
+Route::get('/', [AdminController::class, 'index'])->name('admin.index');
 
 // Route::get('/dashboard', function () {
 //     return view('');
