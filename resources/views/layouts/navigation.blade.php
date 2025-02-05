@@ -93,6 +93,7 @@
                         {{ __('/ Sensor List ') }}
                     </x-responsive-nav-link>
                 </div>
+
             </x-responsive-nav-accordion-body>
             {{-- <x-responsive-nav-link :href="route('sensorData.index')" :active="request()->routeIs('sensorData.index')">
                 {{ __('/ Data') }}
