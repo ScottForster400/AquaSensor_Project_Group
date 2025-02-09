@@ -33,6 +33,21 @@
                 </x-modal-body>
             </x-modal>
 
+            <x-table>
+                <x-table-head>
+                    <tr>
+                        <x-th>All Sensors</x-th>
+                    </tr>
+                </x-table-head>
+                <x-table-body>
+                            <x-tr>
+                                <x-th>
+                                    1
+                                </x-th>
+                            </x-tr>
+                </x-table-body>
+            </x-table>
+
         </div>
     </div>
 </x-app-layout>
