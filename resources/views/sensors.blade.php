@@ -57,9 +57,9 @@
                     @foreach($opensource as $sensor)
                         <x-tr>
                             <x-th>
-                                <x-accordion-head title="{{$sensor->location}} - {{$sensor->sensor_id}}">
+                                <x-accordion-head data-accordion-target="{{$sensor->sensor_id}}" aria-controls="{{$sensor->sensor_id}}" title="{{$sensor->location}} - {{$sensor->sensor_id}}">
                                 </x-accordion-head>
-                                <x-accordion-body>
+                                <x-accordion-body id="{{$sensor->sensor_id}}" aria-labelledby="{{$sensor->sensor_id}}">
                                     <x-primary-button>View Sensor</x-primary-button>
                                     <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                                 </x-accordion-body>
@@ -68,6 +68,8 @@
                     @endforeach
                 </x-table-body>
             </x-table>
+
+            {{$opensource->links()}}
 
         </div>
     </div>

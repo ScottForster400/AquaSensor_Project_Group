@@ -112,6 +112,12 @@
             </x-responsive-nav-link>
         </div>
 
+        <div class="space-y-1 border-b-slate-200 border-b-2 ">
+            <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                {{ __('/ Login') }}
+            </x-responsive-nav-link>
+        </div>
+
         <!-- Responsive Settings Options -->
         {{-- <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
