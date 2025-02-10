@@ -8,3 +8,5 @@ window.Alpine = Alpine;
 Alpine.start();
 
 import 'flowbite';
+
+

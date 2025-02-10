@@ -84,15 +84,16 @@
             </x-responsive-nav-accordion-head>
             <x-responsive-nav-accordion-body>
                 <div class="space-y-1 border-b-slate-200 border-b-2 ">
-                    <x-responsive-nav-link >
+                    <x-responsive-nav-link :href="route('sensorData.index')" :active="request()->routeIs('sensorData.index')">
                         {{ __('/ Sensor Overview ') }}
                     </x-responsive-nav-link>
                 </div>
                 <div class="space-y-1 border-b-slate-200 border-b-2 ">
-                    <x-responsive-nav-link >
+                    <x-responsive-nav-link :href="route('sensors.index')" :active="request()->routeIs('sensors.index')">
                         {{ __('/ Sensor List ') }}
                     </x-responsive-nav-link>
                 </div>
+
             </x-responsive-nav-accordion-body>
             {{-- <x-responsive-nav-link :href="route('sensorData.index')" :active="request()->routeIs('sensorData.index')">
                 {{ __('/ Data') }}
@@ -108,6 +109,12 @@
         <div class="space-y-1 border-b-slate-200 border-b-2">
             <x-responsive-nav-link >
                 {{ __('/ Contact') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="space-y-1 border-b-slate-200 border-b-2 ">
+            <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                {{ __('/ Login') }}
             </x-responsive-nav-link>
         </div>
 

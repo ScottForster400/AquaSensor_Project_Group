@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
-use GuzzleHttp\Client;
-use App\Models\Sensor;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class SensorController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
-
-
-        return view('sensors',compact('opensource'));
+        return view('admin');
     }
 
     /**
@@ -39,7 +34,7 @@ class SensorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sensor $sensor)
+    public function show(User $user)
     {
         //
     }
@@ -47,7 +42,7 @@ class SensorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sensor $sensor)
+    public function edit(User $user)
     {
         //
     }
@@ -55,7 +50,7 @@ class SensorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sensor $sensor)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -63,7 +58,7 @@ class SensorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sensor $sensor)
+    public function destroy(User $user)
     {
         //
     }

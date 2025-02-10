@@ -14,14 +14,14 @@ return new class extends Migration
     {
         Schema::create('sensors', function (Blueprint $table) {
             $table->id('sensor_id');
-            $table->foreignIdFor(User::class,'user_id');
-            $table->string('location',50);
-            $table->string('body_of_water',50);
-            $table->float('longitude',12);
-            $table->float('latitude',12);
-            $table->boolean('opensource');
+            $table->foreignIdFor(User::class,'user_id')->nullable();
+            $table->string('location',50)->nullable();
+            $table->string('body_of_water',50)->nullable();
+            $table->float('longitude',12)->nullable();
+            $table->float('latitude',12)->nullable();
+            $table->boolean('opensource')->default(0);
             $table->string('activation_key',16);
-            $table->boolean('activated');
+            $table->boolean('activated')->default(0);
             $table->timestamps();
         });
     }
