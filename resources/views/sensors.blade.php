@@ -47,6 +47,14 @@
                 </x-modal-body>
             </x-modal>
 
+            @foreach($sensor as $sens)
+                <div class="col-lg-2 ">
+                    <div class="feature-with-icon" data-aos="flip-up" >
+                        <h5><strong>{{ucfirst($sens)}}</strong></h5>
+                    </div>
+                </div>
+            @endforeach
+
             <x-table>
                 <x-table-head>
                     <tr>

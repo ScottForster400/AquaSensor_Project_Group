@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use App\Models\Sensor;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SensorController extends Controller
 {
@@ -16,8 +18,13 @@ class SensorController extends Controller
     {
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
 
+        //$currentuser = Auth::user()->user_id;
+        //$ownedsensors = Sensor::where('user_id',$currentuser)->paginate(5);
 
-        return view('sensors',compact('opensource'));
+
+        $sensor = Http::get('https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022')['message'];
+
+        return view('sensors',data: compact('opensource','sensors'));
     }
 
     /**
