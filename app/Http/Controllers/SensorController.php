@@ -27,8 +27,12 @@ class SensorController extends Controller
         // return view('sensors',data: compact('opensource','sensors'));
 
 
+
         $curl = curl_init();
 
+        // Mats special code
+        //curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        
         curl_setopt_array($curl, array(
     CURLOPT_URL => 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022',
                 CURLOPT_RETURNTRANSFER => true,
