@@ -14,16 +14,11 @@ class SensorController extends Controller
      */
     public function index()
     {
-        //$client = new Client();
+        $opensource = Sensor::where('activated', 1)->where('opensource',1);
 
-        //$url = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022';
+        $opensource = $opensource->get();
 
-        //$response = $client->get($url);
-        //$data = json_decode($response->getBody()->getContents(), true);
-
-
-        return view('sensors');
-        //,compact($data)
+        return view('sensors',compact('opensource'));
     }
 
     /**

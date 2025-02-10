@@ -54,16 +54,18 @@
                     </tr>
                 </x-table-head>
                 <x-table-body>
-                            <x-tr>
-                                <x-th>
-                                    <x-accordion-head title="Sensor1">
-                                    </x-accordion-head>
-                                    <x-accordion-body>
-                                        <x-primary-button>View Sensor</x-primary-button>
-                                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                    </x-accordion-body>
-                                </x-th>
-                            </x-tr>
+                    @foreach($opensource as $sensor)
+                        <x-tr>
+                            <x-th>
+                                <x-accordion-head title="{{$sensor->location}} - {{$sensor->sensor_id}}">
+                                </x-accordion-head>
+                                <x-accordion-body>
+                                    <x-primary-button>View Sensor</x-primary-button>
+                                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                </x-accordion-body>
+                            </x-th>
+                        </x-tr>
+                    @endforeach
                 </x-table-body>
             </x-table>
 
