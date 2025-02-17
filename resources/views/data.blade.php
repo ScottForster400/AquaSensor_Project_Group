@@ -10,7 +10,7 @@
             <form action="" class = "w-4/5">
                 <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
             </form>
-            <x-card>
+            <x-card class="mb-2">
                 <div id="card-top" class="flex flex-row h-20">
                     <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
                         <h2>Sensor Location</h2>
@@ -43,9 +43,92 @@
                 </div>
             </x-card>
 
-            <div >
+            <div class="flex flex-row justify-evenly w-10/12 h-28">
+                {{-- <div class="[perspective:1000px]">
+                    <v class="basis-1/2 mr-2 transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                        <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
+                            <div class="h-8 w-8 flex justify-center items-center">
+                                <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
+                            </div>
+                            <h3>12°c</h3>
+                            <p class="text-gray-500 text-xs">Temperature</p>
+                        </x-card>
 
+                        <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
+                            <p>Flip test</p>
+                        </x-card>
+                    </div>
+                </div> --}}
+
+                <x-card-flippable class="mr-2">
+                    <x-card-flippable-frontface>
+                        <div class="h-8 w-8 flex justify-center items-center ">
+                            <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
+                        </div>
+                        <h3>12°c</h3>
+                        <p class="text-gray-500 text-xs">Temperature</p>
+                    </x-card-flippable-frontface>
+                    <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
+                        <div class="text-xs w-full ">
+                            <h3 class="text-gray-500 ">Daily Average</h3>
+                            <p>11.3</p>
+                        </div>
+                        <div class="text-xs w-full">
+                            <h3 class="text-gray-500 ">Weekley Average</h3>
+                            <p>13.3</p>
+                        </div>
+                        <div class="text-xs w-full">
+                            <h3 class="text-gray-500 ">Monthly Average</h3>
+                            <p>9.3</p>
+                        </div>
+                    </x-card-flippable-backface>
+                </x-card-flippable>
+
+                <x-card-flippable class=ml-2>
+                    <x-card-flippable-frontface>
+                        <div class="h-9 w-9 flex justify-center items-center ">
+                            <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
+                        </div>
+                        <h3>12 mg/l</h3>
+                        <p class="text-gray-500 text-xs">Dissolved Oxygen</p>
+                    </x-card-flippable-frontface>
+                    <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
+                        <div class="text-xs w-full ">
+                            <h3 class="text-gray-500 ">Daily Average</h3>
+                            <p>11.3</p>
+                        </div>
+                        <div class="text-xs w-full">
+                            <h3 class="text-gray-500 ">Weekley Average</h3>
+                            <p>13.3</p>
+                        </div>
+                        <div class="text-xs w-full">
+                            <h3 class="text-gray-500 ">Monthly Average</h3>
+                            <p>9.3</p>
+                        </div>
+                    </x-card-flippable-backface>
+                </x-card-flippable>
+
+                {{-- <div class="basis-1/2 ml-2">
+                    <x-card class="basis-1/2 h-3/4 w-full  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
+                        <div class="h-9 w-9 flex justify-center items-center ">
+                            <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
+                        </div>
+                        <h3>12 mg/l</h3>
+                        <p class="text-gray-500 text-xs">Dissolved Oxygen</p>
+                    </x-card>
+                </div> --}}
             </div>
+            <x-card class="px-2 !my-3">
+                <h2 class="">
+                    Sensor Data
+                </h2>
+                <form action="" class="w-full flex justify-center">
+                    <x-date-time-picker></x-date-time-picker>
+                </form>
+                <div id="graph" class="h-32 flex items-center justify-center border-gray-400 border-solid border-2 my-2">
+                    <p>Graph placeholder</p>
+                </div>
+            </x-card>
         </div>
     </div>
 
