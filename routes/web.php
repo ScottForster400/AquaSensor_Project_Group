@@ -8,7 +8,6 @@ use App\Http\Controllers\SensorDataController;
 
 Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index');
 Route::get('/sensors', [SensorController::class, 'index'])->name('sensors.index');
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
 // Route::get('/dashboard', function () {
 //     return view('');
@@ -25,3 +24,9 @@ require __DIR__.'/auth.php';
 Route::resource('sensors',SensorController::class);
 
 Route::resource('sensorData',SensorDataController::class);
+
+Route::Get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.index');
+Route::Get('/admin/createUser', [AdminController::class, 'createUser'])->middleware(['auth', 'verified'])->name('admin.createUser');
+Route::Get('/admin/destroyUser', [AdminController::class, 'destroyUser'])->middleware(['auth', 'verified'])->name('admin.destroyUser');
+Route::Get('/admin/createSensor', [AdminController::class, 'createSensor'])->middleware(['auth', 'verified'])->name('admin.createSensor');
+Route::Get('/admin/destroySensor', [AdminController::class, 'destroySensor'])->middleware(['auth', 'verified'])->name('admin.destroySensor');
