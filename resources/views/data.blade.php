@@ -44,22 +44,6 @@
             </x-card>
 
             <div class="flex flex-row justify-evenly w-10/12 h-28">
-                {{-- <div class="[perspective:1000px]">
-                    <v class="basis-1/2 mr-2 transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                        <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
-                            <div class="h-8 w-8 flex justify-center items-center">
-                                <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
-                            </div>
-                            <h3>12°c</h3>
-                            <p class="text-gray-500 text-xs">Temperature</p>
-                        </x-card>
-
-                        <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
-                            <p>Flip test</p>
-                        </x-card>
-                    </div>
-                </div> --}}
-
                 <x-card-flippable class="mr-2">
                     <x-card-flippable-frontface>
                         <div class="h-8 w-8 flex justify-center items-center ">
@@ -125,11 +109,34 @@
                 <form action="" class="w-full flex justify-center">
                     <x-date-time-picker></x-date-time-picker>
                 </form>
-                <div id="graph" class="h-32 flex items-center justify-center border-gray-400 border-solid border-2 my-2">
-                    <p>Graph placeholder</p>
+                <div id="graph" class="h-32 w-full flex  border-gray-400 border-solid border-2 my-2">
+                    <canvas id="myChart"></canvas>
                 </div>
             </x-card>
         </div>
     </div>
+    {{-- <script src="{{ $chart->cdn() }}"></script> --}}
+    {{-- {{$chart->script()}} --}}
+    <script>
+        const ctx = document.getElementById('myChart');
 
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+              label: '# of Votes',
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      </script>
 </x-app-layout>

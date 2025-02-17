@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sensor_Data;
+use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 use Illuminate\Http\Request;
+use Laravel\Pail\Options;
+
+
 
 class SensorDataController extends Controller
 {
@@ -12,7 +16,41 @@ class SensorDataController extends Controller
      */
     public function index()
     {
-        return view('data');
+        $chart = Chartjs::build()
+            ->name("UserRegistrationsChart")
+            ->type("line")
+            ->size(["width" => 400, "height" => 200])
+            ->labels(["a","b","c","d"])
+            ->datasets([
+                [
+                    "label" => "User Registrations",
+                    "backgroundColor" => "rgba(38, 185, 154, 0.31)",
+                    "borderColor" => "rgba(38, 185, 154, 0.7)",
+                    "data" =>[1,2,3,4]
+                ]
+            ])
+            ->options([
+                'scales' => [
+                    'x' => [
+                        'type' => 'time',
+                        'time' => [
+                            'unit' => 'month'
+                        ],
+                        'min' => 'a',
+                    ]
+                ],
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Monthly User Registrations'
+                    ]
+                ]
+            ]);
+
+
+
+
+        return view('data',compact("chart"));
     }
 
     /**

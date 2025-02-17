@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{{ asset('/js/dataPage.js') }} " defer></script>
     </head>
     <body class="font-sans antialiased">
