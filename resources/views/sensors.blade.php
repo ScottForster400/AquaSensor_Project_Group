@@ -48,6 +48,10 @@
             </x-modal>
 
 
+            <x-search-bar></x-search-bar>
+
+
+
             <x-table>
                 <x-table-head>
                     <tr>

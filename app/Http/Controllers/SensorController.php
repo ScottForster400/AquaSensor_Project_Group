@@ -23,6 +23,7 @@ class SensorController extends Controller
         // Mats special code
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
+        //gets api data
         curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022',
                 CURLOPT_RETURNTRANSFER => true,
@@ -38,11 +39,20 @@ class SensorController extends Controller
 
         curl_close($curl);
 
-        $y = explode(',',$response);
+        //gets rid of the \n on the new lines to allow iteration
+        $response = rtrim($response, "\n");
+        $rows = explode("\n", $response);
 
-        $x = str_getcsv($response);
-        dd($y);
+        //cleans up any extra newlines if the trim didnt work.
+        //https://www.php.net/manual/en/function.array-filter.php
+        $rows = array_filter($rows, function ($row) {
+            return !empty(trim($row));
+        });
+        $rows = array_values($rows);
 
+        //converts to array.
+        //https://www.php.net/manual/en/function.array-map.php
+        $data = array_map('str_getcsv', $rows);
 
 
 
