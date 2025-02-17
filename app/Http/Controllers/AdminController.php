@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Sensor;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -18,7 +19,7 @@ class AdminController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createUser()
     {
         //
     }
@@ -26,7 +27,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeUser(Request $request)
     {
         //
     }
@@ -34,23 +35,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
+    public function showUser(User $user)
     {
         //
     }
@@ -58,7 +43,46 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroyUser(User $user)
+    {
+        //
+    }
+
+
+    public function createSensor()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeSensor(Request $request)
+    {
+        $request->validate([
+            'activation_key' => 'required|max:16'
+        ]);
+
+        $sensor = new Sensor([
+            'activation_key' => $request->activation_key,
+            'opensource' => 0,
+            'activated' => 0
+        ]);
+        $sensor->save();
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showSensor(Sensor $sensor)
+    {
+        //
+    }
+    
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroySensor(Sensor $sensor)
     {
         //
     }
