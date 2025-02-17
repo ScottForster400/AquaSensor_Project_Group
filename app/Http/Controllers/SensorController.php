@@ -54,6 +54,13 @@ class SensorController extends Controller
         //https://www.php.net/manual/en/function.array-map.php
         $data = array_map('str_getcsv', $rows);
 
+        //removes headers as first array entry
+        $api_data = array_shift($data);
+
+        //displays the array data for testing
+        //echo '<pre>';
+        //print_r($data);
+        //echo '</pre>';
 
 
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
