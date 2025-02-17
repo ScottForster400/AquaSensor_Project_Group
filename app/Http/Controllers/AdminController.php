@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Sensor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -21,7 +22,10 @@ class AdminController extends Controller
      */
     public function createUser()
     {
-        //
+        $temp = User::get('admin');
+        echo ("User:".Auth::User()."<br>");
+        echo ("Id:".Auth::id());
+        dd ($temp);
     }
 
     /**
