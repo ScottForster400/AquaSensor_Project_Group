@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Sensor_Data;
 use App\Models\Sensor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -22,10 +24,7 @@ class AdminController extends Controller
      */
     public function createUser()
     {
-        $temp = User::get('admin');
-        echo ("User:".Auth::User()."<br>");
-        echo ("Id:".Auth::id());
-        dd ($temp);
+        //
     }
 
     /**
@@ -33,7 +32,19 @@ class AdminController extends Controller
      */
     public function storeUser(Request $request)
     {
-        //
+        $request ->validate([
+            'name'=> 'required|max:255|string',
+            'email'=> 'required|max:255|string|lowercase|email',
+            'password'=> 'required|max:255',
+            'admin'=> 'boolean',
+        ]);
+        $newUser = new User([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'admin' => $request->admin,
+        ]);
+        $newUser ->save();
     }
 
     /**
@@ -49,13 +60,22 @@ class AdminController extends Controller
      */
     public function destroyUser(User $user)
     {
-        //
+        if (Auth::user()->admin != 1) {
+            abort(403);
+        }
+        
+        $ownedSensors = Sensor::where('id', $user->id);
+        foreach ($ownedSensors as $sensor) {
+            Sensor_Data::where('sensor_id', $sensor->id)->delete();
+            $sensor->delete();
+        }
+        $user->delete();
     }
 
 
     public function createSensor()
     {
-        //
+        route('admin.storeSensor');
     }
 
     /**
@@ -88,6 +108,11 @@ class AdminController extends Controller
      */
     public function destroySensor(Sensor $sensor)
     {
-        //
+        if (Auth::user()->admin != 1) {
+            abort(403);
+        }
+        
+        $sensor->delete();
+        Sensor_Data::where('sensor_id', $sensor->id)->delete();
     }
 }
