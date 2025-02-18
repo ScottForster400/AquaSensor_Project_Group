@@ -5,18 +5,27 @@
         </h2>
     </x-slot>
     
+    
+    
     <p>Sensors</p>
 
-
+    <x-card class="mb-2">
+        <div id="card-top" class="flex flex-row h-20">
     <x-modal-toggle data-modal-target="create-sensor" data-modal-toggle="create-sensor">Create Sensor</x-modal-toggle>
 
                  <x-modal id="create-sensor" class="bg-gray-500 bg-opacity-75 h-full">
                     <x-modal-header data-modal-hide="create-sensor">Create Sensor</x-modal-header>
                     <x-modal-body>
                         <form id="sensor-form">
-                            
+                            @error('email')
+                                <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                            <div>
+                            <label for="quantity">Sensor ID:</label>
+                            <input type="number" id="quantity" name="quantity" min="1" max="69">
+                            </div>
                             <div class="mb-6">
-                                <label for="confirm" class="block text-sm font-medium text-gray-900">Type "CONFIRM" to create a sensor</label>
+                                <label for="confirm" class="block text-sm font-medium text-gray-900">Type "confirm" to create a sensor</label>
                                 <input type="text" id="confirm" name="confirm" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
                             <button type="button" id="create-sensor-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
@@ -36,8 +45,15 @@
                     </form>
                 </x-modal-body>
             </x-modal>
-
+</div>
+            </x-card>
+           
             <p>Users</p>
+
+            <x-card class="mb-2">
+        <div id="card-top" class="flex flex-row h-20">
+            
+            
 
             <x-modal-toggle data-modal-target="create-user" data-modal-toggle="create-user">Create User</x-modal-toggle>
 
@@ -79,7 +95,8 @@
                     </form>
                 </x-modal-body>
             </x-modal>
-
+</div>
+</x-card>
 
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
