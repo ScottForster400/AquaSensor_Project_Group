@@ -10,18 +10,20 @@
 </div>
 <div id="default-styled-tab-content w-4/5">
     <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="temp" role="tabpanel" aria-labelledby="temperature-tab">
-
         <x-table>
             <x-table-body>
                 @foreach($opensource as $sensor)
                     <x-tr>
-                        <x-th>
-                            <x-accordion-head data-accordion-target="{{$sensor->sensor_id}}" aria-controls="{{$sensor->sensor_id}}" title="{{$sensor->location}} - {{$sensor->sensor_id}}">
-                            </x-accordion-head>
-                            <x-accordion-body id="{{$sensor->sensor_id}}" aria-labelledby="accordion-flush-heading-1" class="hidden">
-                                <x-primary-button>View Sensor</x-primary-button>
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                            </x-accordion-body>
+                        <x-th class="border-b border-gray-300 w-full">
+                            <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor->location}} - {{$sensor->sensor_id}}</x-modal-toggle>
+                            <!-- Modal to view report -->
+                            <x-modal id="edit{{$sensor}}" class="bg-gray-500 bg-opacity-75 h-full">
+                                <x-modal-header data-modal-hide="edit{{$sensor}}">Report</x-modal-header>
+                                <x-modal-body>
+                                    <x-primary-button>View Sensor</x-primary-button>
+                                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                </x-modal-body>
+                            </x-modal>
                         </x-th>
                     </x-tr>
                 @endforeach
