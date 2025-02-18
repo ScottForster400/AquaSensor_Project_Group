@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sensor_Data;
-use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
-use Illuminate\Http\Request;
 use Laravel\Pail\Options;
-
-
+use App\Models\Sensor_Data;
+use Illuminate\Http\Request;
+use PhpMqtt\Client\MqttClient;
+use App\Jobs\MqttSubscriberJob;
+use PhpMqtt\Client\Facades\MQTT;
+use Illuminate\Support\Facades\Log;
+use PhpMqtt\Client\ConnectionSettings;
+use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class SensorDataController extends Controller
 {
@@ -16,41 +19,45 @@ class SensorDataController extends Controller
      */
     public function index()
     {
-        $chart = Chartjs::build()
-            ->name("UserRegistrationsChart")
-            ->type("line")
-            ->size(["width" => 400, "height" => 200])
-            ->labels(["a","b","c","d"])
-            ->datasets([
-                [
-                    "label" => "User Registrations",
-                    "backgroundColor" => "rgba(38, 185, 154, 0.31)",
-                    "borderColor" => "rgba(38, 185, 154, 0.7)",
-                    "data" =>[1,2,3,4]
-                ]
-            ])
-            ->options([
-                'scales' => [
-                    'x' => [
-                        'type' => 'time',
-                        'time' => [
-                            'unit' => 'month'
-                        ],
-                        'min' => 'a',
-                    ]
-                ],
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Monthly User Registrations'
-                    ]
-                ]
-            ]);
+        // MqttSubscriberJob::dispatch();
 
 
 
 
-        return view('data',compact("chart"));
+
+
+
+        $mqtt = MQTT::connection();
+        dd("client connected\n");
+        dd("client connected\n");
+
+        $mqtt->subscribe('message/test', function ($topic, $message) {
+            printf("Received message on topic [%s]: %s\n", $topic, $message);
+        }, 0);
+
+        for ($i = 0; $i< 10; $i++) {
+        $payload = array(
+            'protocol' => 'tcp',
+            'date' => date('Y-m-d H:i:s'),
+            'url' => 'https://github.com/emqx/MQTT-Client-Examples'
+        );
+        $mqtt->publish(
+            // topic
+            'message/test',
+            // payload
+            json_encode($payload),
+            // qos
+            0,
+            // retain
+            true
+        );
+        printf("msg $i send\n");
+        sleep(1);
+        }
+        sleep(5);
+        $mqtt->loop(true);
+
+        return view('data');
     }
 
     /**
@@ -66,7 +73,19 @@ class SensorDataController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'data' => 'required|array'
+        ]);
+        //dd($request->data);
+        $sensor_data = new sensor_data([
+            'data' => $request->data
+
+        ]);
+        $sensor_data->save();
+        return response()->json([
+            'message' => 'successfully saved data'
+        ]);
     }
 
     /**

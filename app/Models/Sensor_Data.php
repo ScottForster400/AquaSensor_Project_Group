@@ -9,7 +9,7 @@ class Sensor_Data extends Model
 {
     use HasFactory;
 
-    protected $table = 'sensor__data'; 
+    protected $table = 'sensor__data';
 
     protected $primaryKey = 'sensor_data_id';
 
@@ -18,6 +18,11 @@ class Sensor_Data extends Model
         'sensor_data_date',
         'dissolved_oxygen',
         'temperature',
+        'timestamps',
+        'data'
+    ];
+    protected $casts = [
+        'data' => 'array'
     ];
 
     public $timestamps = true;

@@ -10,6 +10,7 @@ Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index'
 Route::get('/sensors', [SensorController::class, 'index'])->name('sensors.index');
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
+// Route::post('/sensorData',[SensorDataController::class, 'store']);
 // Route::get('/dashboard', function () {
 //     return view('');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -24,4 +25,4 @@ require __DIR__.'/auth.php';
 
 Route::resource('sensors',SensorController::class);
 
-Route::resource('sensorData',SensorDataController::class);
+//Route::resource('sensorData',SensorDataController::class);
