@@ -4,7 +4,9 @@
             {{ __('Admin') }}
         </h2>
     </x-slot>
-    
+                    @error('email')
+                        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+                    @enderror
     
     
     <p>Sensors</p>
@@ -17,9 +19,7 @@
                     <x-modal-header data-modal-hide="create-sensor">Create Sensor</x-modal-header>
                     <x-modal-body>
                         <form id="sensor-form">
-                            @error('email')
-                                <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
+                            
                             <div>
                             <label for="quantity">Sensor ID:</label>
                             <input type="number" id="quantity" name="quantity" min="1" max="69">
@@ -74,6 +74,10 @@
                             <div>
                                 <label for="password" class="block text-sm font-medium text-gray-900">Password</label>
                                 <input type="password" id="password" name="password" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
+                            </div>
+                            <div>
+                                <label for="companyname" class="block text-sm font-medium text-gray-900">Company Name</label>
+                                <input type="text" id="companyname" name="companyname" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
                             <label for="test6">Admin</label>
                             <input type="hidden" id="test6" value="1" ng-model="isFull" checked name="admin">
