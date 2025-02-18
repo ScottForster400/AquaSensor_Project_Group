@@ -4,9 +4,9 @@
             {{ __('Admin') }}
         </h2>
     </x-slot>
-                    @error('email')
-                        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
-                    @enderror
+        @error('email')
+            <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+        @enderror
     
     
     <p>Sensors</p>
@@ -21,13 +21,16 @@
                         <form id="sensor-form">
                             
                             <div>
-                            <label for="quantity">Sensor ID:</label>
-                            <input type="number" id="quantity" name="quantity" min="1" max="69">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-900">Sensor Name</label>
+                                <input type="text" id="name" name="name" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
+                            </div>
                             </div>
                             <div class="mb-6">
-                                <label for="confirm" class="block text-sm font-medium text-gray-900">Type "confirm" to create a sensor</label>
+                                <label for="confirm" class="block text-sm font-medium text-gray-900">Type "Create" to create a sensor</label>
                                 <input type="text" id="confirm" name="confirm" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
+                            
                             <button type="button" id="create-sensor-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
                         </form>
                     </x-modal-body>
@@ -38,14 +41,26 @@
             <x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full">
                 <x-modal-header data-modal-hide="edit">Delete Sensor</x-modal-header>
                 <x-modal-body>
-                    <form>
+                    <form id="sensor form">
+                    <label for="quantity">Sensor ID:</label>
+                            <input type="number" id="quantity" name="quantity" min="1" max="69">
+                            <p>Name: Bob</p> 
+                            <p>Company Name: Bob the Builder</p>
+                            <p>Location: Bangladesh</p>
+                            <p>Created at: 11/12/24, 14:28</p>
+                            <p>Activated: Yes</p>
+                            <p>Open Source: Yes</p>
+                            <p>Longitude: 53.381130</p>
+                            <p>Latitude: -1.4584</p>
+                        
+                        </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete</button>
                         </div>
                     </form>
                 </x-modal-body>
             </x-modal>
-</div>
+            </div>
             </x-card>
            
             <p>Users</p>
@@ -100,8 +115,8 @@
                     </form>
                 </x-modal-body>
             </x-modal>
-</div>
-</x-card>
+        </div>
+        </x-card>
 
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
