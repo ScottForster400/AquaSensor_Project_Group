@@ -20,21 +20,13 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function createUser()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function storeUser(Request $request)
+    public function createUser(Request $request)
     {
         $request ->validate([
             'name'=> 'required|max:255|string',
-            'email'=> 'required|max:255|string|lowercase|email',
+            'email'=> 'required|max:255|string|lowercase|email|unique:App\Models\user,email',
             'password'=> 'required|max:255',
             'admin'=> 'boolean',
         ]);
@@ -45,6 +37,7 @@ class AdminController extends Controller
             'admin' => $request->admin,
         ]);
         $newUser ->save();
+        return view('admin.index', ["New user made successfully"]);
     }
 
     /**
@@ -72,16 +65,10 @@ class AdminController extends Controller
         $user->delete();
     }
 
-
-    public function createSensor()
-    {
-        route('admin.storeSensor');
-    }
-
     /**
      * Store a newly created resource in storage.
      */
-    public function storeSensor(Request $request)
+    public function createSensor(Request $request)
     {
         $request->validate([
             'activation_key' => 'required|max:16'
