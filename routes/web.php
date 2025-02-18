@@ -25,8 +25,9 @@ Route::resource('sensors',SensorController::class);
 
 Route::resource('sensorData',SensorDataController::class);
 
-Route::Get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.index');
-Route::Get('/admin/createUser', [AdminController::class, 'createUser'])->middleware(['auth', 'verified'])->name('admin.createUser');
-Route::Get('/admin/destroyUser', [AdminController::class, 'destroyUser'])->middleware(['auth', 'verified'])->name('admin.destroyUser');
-Route::Get('/admin/createSensor', [AdminController::class, 'createSensor'])->middleware(['auth', 'verified'])->name('admin.createSensor');
-Route::Get('/admin/destroySensor', [AdminController::class, 'destroySensor'])->middleware(['auth', 'verified'])->name('admin.destroySensor');
+//->middleware(['auth', 'verified'])
+Route::Get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::Get('/admin/createUser', [AdminController::class, 'createUser'])->name('admin.createUser');
+Route::Get('/admin/destroyUser', [AdminController::class, 'destroyUser'])->name('admin.destroyUser');
+Route::Get('/admin/createSensor', [AdminController::class, 'createSensor'])->name('admin.createSensor');
+Route::Get('/admin/destroySensor', [AdminController::class, 'destroySensor'])->name('admin.destroySensor');
