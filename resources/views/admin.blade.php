@@ -60,7 +60,8 @@
             <x-modal id="create-user" class="bg-gray-500 bg-opacity-75 h-full">
                 <x-modal-header data-modal-hide="create-user">Create User</x-modal-header>
                 <x-modal-body>
-                    <form>
+                    <form  method="POST" action="{{ route('admin.createUser') }}">
+                        @csrf
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-900">Name</label>
@@ -75,8 +76,8 @@
                                 <input type="password" id="password" name="password" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
                             <label for="test6">Admin</label>
-                            <input type="hidden" id="test6" value="no" ng-model="isFull" checked>
-                            <input type="checkbox" id="test6" value="yes" ng-model="isFull">
+                            <input type="hidden" id="test6" value="1" ng-model="isFull" checked name="admin">
+                            <input type="checkbox" id="test6" value="0" ng-model="isFull" name="admin">
                             
                         </div>
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
