@@ -11,3 +11,12 @@ function showDO(){
     var DO = document.getElementById('DO-data');
     DO.style.display = 'flex';
 }
+function flipCard(item){
+
+    if(item.classList.contains("my-rotate-y-180")){
+        item.classList.remove("my-rotate-y-180")
+    }
+    else{
+        item.classList.add("my-rotate-y-180")
+    }
+}
