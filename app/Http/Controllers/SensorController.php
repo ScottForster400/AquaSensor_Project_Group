@@ -8,6 +8,8 @@ use App\Models\Sensor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
 
 
 class SensorController extends Controller
@@ -61,16 +63,23 @@ class SensorController extends Controller
         //dd($data);
 
         //gets all of the users sensors
-        $user = Auth::id();
-        $user_sensors = Sensor::where('user_id', $user)->paginate(5);
+        //$user = Auth::id();
+        //$user_sensors = Sensor::where('user_id', $user)->paginate(5);
+
+        //$current_user = Auth::user()->user_id;
+        //$user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
+
+
 
 
         //gets all open source and activated sensors
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
+        $id_1_sensors_example = Sensor::where('user_id',1)->paginate(5);
 
-        return view('sensors',compact('opensource','user_sensors'));
+        return view('sensors',compact('opensource','id_1_sensors_example'));
 
     }
+
 
     /**
      * Show the form for creating a new resource.

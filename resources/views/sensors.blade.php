@@ -5,6 +5,7 @@
         </h2>
     </x-slot>
 
+
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
 
@@ -71,29 +72,11 @@
                 </div>
             </div>
 
-            <x-card class="mb-2">
-                <div id="card-top" class="flex flex-row">
-                    <x-table>
+            <div id="card-data" class="w-4/5">
+                @include('layouts.sensor-table')
+            </div>
 
-                        <x-table-body>
-                            @foreach($user_sensors as $sensor)
-                                <x-tr>
-                                    <x-th>
-                                        <x-accordion-head data-accordion-target="{{$sensor->sensor_id}}" aria-controls="{{$sensor->sensor_id}}" title="{{$sensor->location}} - {{$sensor->sensor_id}}">
-                                        </x-accordion-head>
-                                        <x-accordion-body id="{{$sensor->sensor_id}}" aria-labelledby="{{$sensor->sensor_id}}">
-                                            <x-primary-button>View Sensor</x-primary-button>
-                                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                        </x-accordion-body>
-                                    </x-th>
-                                </x-tr>
-                            @endforeach
-                        </x-table-body>
-                    </x-table>
 
-                </div>
-                {{$user_sensors->links()}}
-            </x-card>
 
 
 
