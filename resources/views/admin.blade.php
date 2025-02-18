@@ -14,6 +14,7 @@
                     <x-modal-header data-modal-hide="create-sensor">Create Sensor</x-modal-header>
                     <x-modal-body>
                         <form id="sensor-form">
+                            
                             <div class="mb-6">
                                 <label for="confirm" class="block text-sm font-medium text-gray-900">Type "CONFIRM" to create a sensor</label>
                                 <input type="text" id="confirm" name="confirm" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
@@ -24,8 +25,6 @@
                 </x-modal>
 
                
-
-
             <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Delete Sensor</x-modal-toggle>
             <x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full">
                 <x-modal-header data-modal-hide="edit">Delete Sensor</x-modal-header>
@@ -69,11 +68,6 @@
                 </x-modal-body>
             </x-modal>
 
-                 
-            
-            
-            
-            
                 <x-modal-toggle data-modal-target="delete sensor" data-modal-toggle="delete sensor">Delete User</x-modal-toggle>
             <x-modal id="delete sensor" class="bg-gray-500 bg-opacity-75 h-full">
                 <x-modal-header data-modal-hide="delete sensor">Delete User</x-modal-header>
@@ -85,6 +79,54 @@
                     </form>
                 </x-modal-body>
             </x-modal>
+
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Function to open modal
+                    function openModal(modalId) {
+                        const modal = document.getElementById(modalId);
+                        if (modal) {
+                            modal.classList.remove("hidden");
+                            modal.classList.add("flex"); // Ensure modal is visible
+                        }
+                    }
+
+                    // Function to close modal
+                    function closeModal(modalId) {
+                        const modal = document.getElementById(modalId);
+                        if (modal) {
+                            modal.classList.add("hidden");
+                            modal.classList.remove("flex");
+                        }
+                    }
+
+                    // Add event listeners to toggle buttons
+                    document.querySelectorAll("[data-modal-toggle]").forEach(button => {
+                        button.addEventListener("click", function () {
+                            const target = this.getAttribute("data-modal-target");
+                            openModal(target);
+                        });
+                    });
+
+                    // Add event listeners to close buttons
+                    document.querySelectorAll("[data-modal-hide]").forEach(button => {
+                        button.addEventListener("click", function () {
+                            const target = this.getAttribute("data-modal-hide");
+                            closeModal(target);
+                        });
+                    });
+
+                    // Close modal when clicking outside the modal content
+                    document.querySelectorAll(".modal").forEach(modal => {
+                        modal.addEventListener("click", function (event) {
+                            if (event.target === modal) {
+                                closeModal(modal.id);
+                            }
+                        });
+                    });
+                });
+            </script>
 
 
 
