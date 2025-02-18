@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class SensorController extends Controller
 {
     /**
@@ -51,21 +52,23 @@ class SensorController extends Controller
         $rows = array_values($rows);
 
         //converts to array.
-        //https://www.php.net/manual/en/function.array-map.php
         $data = array_map('str_getcsv', $rows);
 
         //removes headers as first array entry
-        $api_data = array_shift($data);
+        array_shift($data);
 
         //displays the array data for testing
-        //echo '<pre>';
-        //print_r($data);
-        //echo '</pre>';
+        //dd($data);
+
+        //gets all of the users sensors
+        $user = Auth::id();
+        $user_sensors = Sensor::where('user_id', $user)->paginate(5);
 
 
+        //gets all open source and activated sensors
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
 
-        return view('sensors',compact('opensource'));
+        return view('sensors',compact('opensource','user_sensors'));
 
     }
 

@@ -76,7 +76,7 @@
                     <x-table>
 
                         <x-table-body>
-                            @foreach($opensource as $sensor)
+                            @foreach($user_sensors as $sensor)
                                 <x-tr>
                                     <x-th>
                                         <x-accordion-head data-accordion-target="{{$sensor->sensor_id}}" aria-controls="{{$sensor->sensor_id}}" title="{{$sensor->location}} - {{$sensor->sensor_id}}">
@@ -92,7 +92,7 @@
                     </x-table>
 
                 </div>
-                {{$opensource->links()}}
+                {{$user_sensors->links()}}
             </x-card>
 
 
