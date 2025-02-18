@@ -2,25 +2,31 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Sensor_Data;
 use PhpMqtt\Client\MqttClient;
 use Illuminate\Console\Command;
-use App\Services\sensorListenService;
 use PhpMqtt\Client\ConnectionSettings;
 
-class ListenToSensorData extends Command
+class ListenToSensors extends Command
 {
-    protected $signature = 'sensor:listen-all';
-    protected $description = 'Listen to all sensor data and update the database in real-time';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:listen-to-sensors';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
 
+    /**
+     * Execute the console command.
+     */
     public function handle()
     {
-            // Connect to the MQTT broker
         $server = '	broker.hivemq.com.com';
         $port = 1883;
         $clientId = rand(1,100000);
@@ -48,5 +54,6 @@ class ListenToSensorData extends Command
         }, 0);
 
         $mqtt->loop(true);
+
     }
 }
