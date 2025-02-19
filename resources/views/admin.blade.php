@@ -4,10 +4,30 @@
             {{ __('Admin') }}
         </h2>
     </x-slot>
-        @error('email')
-            <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
-        @enderror
-    
+    @if(session('success'))
+        <p>{{ session('success') }}</p>
+    @endif
+    @error('email')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
+    @error('password')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
+    @error('name')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
+    @error('admin')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
+    @error('companyname')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
+    @error('quantity')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
+    @error('confirm')
+        <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
+    @enderror
     
     <p>Sensors</p>
 
@@ -18,8 +38,8 @@
                  <x-modal id="create-sensor" class="bg-gray-500 bg-opacity-75 h-full">
                     <x-modal-header data-modal-hide="create-sensor">Create Sensor</x-modal-header>
                     <x-modal-body>
-                        <form id="sensor-form">
-                            
+                        <form id="sensor-form" method="POST" action="{{ route('admin.createSensor') }}">
+                            @csrf
                             <div>
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-900">Sensor Name</label>
@@ -30,8 +50,7 @@
                                 <label for="confirm" class="block text-sm font-medium text-gray-900">Type "Create" to create a sensor</label>
                                 <input type="text" id="confirm" name="confirm" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
-                            
-                            <button type="button" id="create-sensor-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
+                            <button type="submit" id="create-sensor-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
                         </form>
                     </x-modal-body>
                 </x-modal>
@@ -95,8 +114,8 @@
                                 <input type="text" id="companyname" name="companyname" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
                             <label for="test6">Admin</label>
-                            <input type="hidden" id="test6" value="1" ng-model="isFull" checked name="admin">
-                            <input type="checkbox" id="test6" value="0" ng-model="isFull" name="admin">
+                            <input type="hidden" id="test6" value="0" ng-model="isFull" checked name="admin">
+                            <input type="checkbox" id="test6" value="1" ng-model="isFull" name="admin">
                             
                         </div>
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>

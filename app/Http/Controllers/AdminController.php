@@ -29,15 +29,17 @@ class AdminController extends Controller
             'email'=> 'required|max:255|string|lowercase|email|unique:App\Models\user,email',
             'password'=> 'required|max:255',
             'admin'=> 'boolean',
+            'companyname'=> 'required|max:255|string'
         ]);
         $newUser = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'admin' => $request->admin,
+            'company_name' => $request->companyname
         ]);
         $newUser ->save();
-        return view('admin.index', ["New user made successfully"]);
+        return to_route('admin.index')->with('success', "New user made successfully");
     }
 
     /**
@@ -71,15 +73,15 @@ class AdminController extends Controller
     public function createSensor(Request $request)
     {
         $request->validate([
-            'activation_key' => 'required|max:16'
+            'confirm'=> 'required|starts_with:confirm|size:7'
         ]);
-
+        dd($request);
         $sensor = new Sensor([
-            'activation_key' => $request->activation_key,
             'opensource' => 0,
             'activated' => 0
         ]);
         $sensor->save();
+        return to_route('admin.index')->with('success', "New sensor made successfully");
     }
 
     /**
