@@ -19,6 +19,7 @@ class SensorDataController extends Controller
         $curl = curl_init();
         $apiURL = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=';
 
+
         if ($sensorCount > 0) {
             // Mats special code
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -28,6 +29,7 @@ class SensorDataController extends Controller
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
                 $apiURL .= $randomSensors->sensor_id;
+                //dd($apiURL);
             }
 
             //gets api data
@@ -64,7 +66,11 @@ class SensorDataController extends Controller
             array_shift($data);
             return view('data',compact('data'));
         }
-        return view('data');
+        else{
+            return view('data');
+        }
+
+
     }
 
     /**

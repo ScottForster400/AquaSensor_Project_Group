@@ -20,7 +20,7 @@ class SensorController extends Controller
     public function index(Request $request)
     {
         //gets all of the users sensors
-        $current_user = Auth::user()->id;
+        $current_user = Auth::id();
         $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
 
         //gets all open source and activated sensors
