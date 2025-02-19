@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sensor_Data;
 use Illuminate\Http\Request;
+use PhpMqtt\Client\Facades\MQTT;
 
 class SensorDataController extends Controller
 {
@@ -12,6 +13,8 @@ class SensorDataController extends Controller
      */
     public function index()
     {
+
+
         return view('data');
     }
 
