@@ -13,6 +13,7 @@ Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index'
 
 Route::get('/sensors', [SensorController::class, 'index'])->name('sensors.index');
 Route::get('/sensors/search', [SensorController::class, 'search'])->name('sensors.search');
+Route::get('/sensors/sort', [SensorController::class, 'sort'])->name('sensors.sort');
 
 
 
