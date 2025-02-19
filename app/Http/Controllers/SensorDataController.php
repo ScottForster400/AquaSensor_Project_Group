@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sensor_Data;
+use App\Models\Sensor;
 use Illuminate\Http\Request;
 
 class SensorDataController extends Controller
@@ -12,7 +13,9 @@ class SensorDataController extends Controller
      */
     public function index()
     {
-        return view('data');
+        $Sensors = Sensor::where('opensource', 1);
+
+        return view('data')->with('Sensors', $Sensors);
     }
 
     /**
