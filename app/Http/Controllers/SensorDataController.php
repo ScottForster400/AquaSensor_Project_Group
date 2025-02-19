@@ -25,7 +25,7 @@ class SensorDataController extends Controller
             if (array_key_exists('sensor_id', $_REQUEST)) {
                 $apiURL .= $_REQUEST['sensor_id'];
             } else {
-                $allSensors = Sensor::where('opensource', 1)->get();
+                $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
                 $apiURL .= $randomSensors->sensor_id;
             }
