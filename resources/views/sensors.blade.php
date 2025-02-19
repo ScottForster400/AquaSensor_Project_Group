@@ -12,6 +12,8 @@
                 <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
             </form>
 
+
+
             <div class="flex justify-around w-4/5 pt-4">
                 <div>
                     <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Activate Sensor</x-modal-toggle>
@@ -61,10 +63,10 @@
                     <div>
                         <x-dropdown-button-body>
                             <x-dropdown-button-li class="w-full">
-                                <x-dropdown-button-a>A to Z</x-dropdown-button-a>
+                                <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_asc'] )}}">A to Z</x-dropdown-button-a>
                             </x-dropdown-button-li>
                             <x-dropdown-button-li class="w-full">
-                                <x-dropdown-button-a>Z to A</x-dropdown-button-a>
+                                <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_des'])}}">Z to A</x-dropdown-button-a>
                             </x-dropdown-button-li>
                         </x-dropdown-button-body>
                     </div>

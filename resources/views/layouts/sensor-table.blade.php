@@ -15,16 +15,12 @@
                 @foreach($opensource as $sensor)
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
-                            <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor->location}} - {{$sensor->sensor_id}}</x-modal-toggle>
+                            <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor->sensor_name}} - {{$sensor->location}}</x-modal-toggle>
                             <!-- Modal to view report -->
                             <x-modal id="edit{{$sensor}}" class="bg-gray-500 bg-opacity-75 h-full">
                                 <x-modal-header data-modal-hide="edit{{$sensor}}">Sensor</x-modal-header>
                                 <x-modal-body>
                                     <div class="flex-col">
-
-                                        <div class="flex justify-center">
-                                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                        </div>
                                         <div class="flex justify-center pt-4">
                                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}" >
                                                 <x-primary-button >View Sensor</x-primary-button>
@@ -55,7 +51,7 @@
                                     <div class="flex-col">
 
                                         <div class="flex justify-center">
-                                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                            <div id='map' class='h-96 w-full'></div>
                                         </div>
                                         <div class="flex justify-center pt-4">
                                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
