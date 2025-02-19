@@ -4,11 +4,11 @@
             {{ __('Data') }}
         </h2>
     </x-slot>
-
+    {{-- @dd($Sensors) --}}
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
             <form action="" class = "w-4/5">
-                <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
+                <x-search-bar-gps :Sensors="$Sensors"placeholder="Search for a Sensor..."></x-search-bar-gps>
             </form>
             <x-card class="mb-2">
                 <div id="card-top" class="flex flex-row h-20">
@@ -54,12 +54,12 @@
                             <p class="text-gray-500 text-xs">Temperature</p>
                         </x-card>
 
-                        <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
-                            <p>Flip test</p>
-                        </x-card>
-                    </div>
+                    <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
+                        <p>Flip test</p>
+                    </x-card>
                 </div> --}}
-
+            </div> 
+            <div>
                 <x-card-flippable class="mr-2">
                     <x-card-flippable-frontface>
                         <div class="h-8 w-8 flex justify-center items-center ">
