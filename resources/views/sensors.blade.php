@@ -61,10 +61,10 @@
                     <div>
                         <x-dropdown-button-body>
                             <x-dropdown-button-li class="w-full">
-                                <x-dropdown-button-a>A to Z</x-dropdown-button-a>
+                                <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_asc'] )}}">A to Z</x-dropdown-button-a>
                             </x-dropdown-button-li>
                             <x-dropdown-button-li class="w-full">
-                                <x-dropdown-button-a>Z to A</x-dropdown-button-a>
+                                <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_des'])}}">Z to A</x-dropdown-button-a>
                             </x-dropdown-button-li>
                         </x-dropdown-button-body>
                     </div>

@@ -19,9 +19,6 @@ class SensorController extends Controller
      */
     public function index(Request $request)
     {
-        //displays the array data for testing
-        //dd($data);
-
         //gets all of the users sensors
         $current_user = Auth::user()->id;
         $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
@@ -45,7 +42,7 @@ class SensorController extends Controller
         ->where('opensource',1)
         ->paginate(5)->withQueryString();
 
-        $current_user = Auth::user()->user_id;
+        $current_user = Auth::user()->id;
 
         $users_searchedSensors = Sensor::
         Where('sensor_name','like',"%$searchRequest%")
@@ -56,6 +53,26 @@ class SensorController extends Controller
 
 
         return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors);
+    }
+
+    public function sort(){
+
+        $current_user = Auth::user()->id;
+        if(array_key_exists('sort_by',$_REQUEST)){
+            $sortBy = $_REQUEST['sort_by'];
+            if($sortBy =='alph_asc'){
+                $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','asc')->paginate(5);
+            }
+            elseif($sortBy =='alph_des'){
+                $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','desc')->paginate(5);
+            }
+
+
+
+        }
+        return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors);
     }
 
 
