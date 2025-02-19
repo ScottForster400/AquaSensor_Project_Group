@@ -22,12 +22,12 @@ class SensorDataController extends Controller
         if ($sensorCount > 0) {
             // Mats special code
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            if ($_REQUEST == null) {
+            if (array_key_exists('sensor_id', $_REQUEST)) {
+                $apiURL .= $_REQUEST['sensor_id'];
+            } else {
                 $allSensors = Sensor::where('opensource', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
                 $apiURL .= $randomSensors->sensor_id;
-            } else {
-                $apiURL .= $_REQUEST['sensor_id'];
             }
 
             //gets api data
