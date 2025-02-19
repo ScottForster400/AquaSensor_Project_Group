@@ -1,6 +1,10 @@
-const tempJson = var sites = {!! json_encode($sites->toArray()) !!};
+<script>
+    const tempJson = {!! json_encode($tempData->toArray()) !!};
+    const doJson = {!! json_encode($doData->toArray()) !!};
+    const dateJson = {!! json_encode($doData->toArray()) !!};
+    console.dir(tempJson);
 
-const data = {
+    const data = {
     labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
     datasets: [{
         type: 'line',
@@ -15,8 +19,8 @@ const data = {
         borderColor: 'rgb(110, 99, 255)',
         data: [26,21,13,5,8,2,15,17,14,11,6,10,20,24,22],
     }]
-};
-const config = {
+    };
+    const config = {
     type: 'line',
     data: data,
     options: {
@@ -30,7 +34,7 @@ const config = {
         },
         hover: {  // <-- to add
             mode: 'nearest'
-          },
+            },
         tooltips: {
             mode: 'nearest',
             intersect: true
@@ -39,9 +43,9 @@ const config = {
             mode: 'nearest'
         }
     }
-};
+    };
 
-const dataTemp = {
+    const dataTemp = {
     labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
     datasets: [{
         type: 'line',
@@ -50,8 +54,8 @@ const dataTemp = {
         borderColor: 'rgb(255, 99, 132)',
         data: [-10,1,6,14,12,10,7,5,9,4,14,9,18,4,3],
     }]
-};
-const tempConfig = {
+    };
+    const tempConfig = {
     type: 'line',
     data: dataTemp,
     options: {
@@ -65,7 +69,7 @@ const tempConfig = {
         },
         hover: {  // <-- to add
             mode: 'nearest'
-          },
+            },
         tooltips: {
             mode: 'nearest',
             intersect: true
@@ -74,8 +78,8 @@ const tempConfig = {
             mode: 'nearest'
         }
     }
-};
-const dataDO = {
+    };
+    const dataDO = {
     labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
     datasets: [{
         type: 'line',
@@ -84,8 +88,8 @@ const dataDO = {
         borderColor: 'rgb(110, 99, 255)',
         data: [20,12,6,15,10,10,7,12,20,4,14,9,13,12,3],
     }]
-};
-const DOConfig = {
+    };
+    const DOConfig = {
     type: 'line',
     data: dataDO,
     options: {
@@ -100,7 +104,7 @@ const DOConfig = {
         },
         hover: {  // <-- to add
             mode: 'nearest'
-          },
+            },
         tooltips: {
             mode: 'nearest',
             intersect: true
@@ -109,18 +113,19 @@ const DOConfig = {
             mode: 'nearest'
         }
     }
-};
+    };
 
 
-const myChart = new Chart(
+    const myChart = new Chart(
     document.getElementById('myChart'),
     config // We'll add the configuration details later.
-);
-const tempChart = new Chart(
+    );
+    const tempChart = new Chart(
     document.getElementById('tempChart'),
     tempConfig // We'll add the configuration details later.
-);
-const DOChart = new Chart(
+    );
+    const DOChart = new Chart(
     document.getElementById('DOChart'),
     DOConfig // We'll add the configuration details later.
-);
+    );
+</script>

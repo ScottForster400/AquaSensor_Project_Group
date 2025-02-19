@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Data') }}
@@ -105,6 +104,6 @@
             </x-card>
         </div>
     </div>
-
+    @include('layouts.charts')
 
 </x-app-layout>
