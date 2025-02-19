@@ -51,7 +51,7 @@
                                     <div class="flex-col">
 
                                         <div class="flex justify-center">
-                                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                            <div id='map' class='h-96 w-full'></div>
                                         </div>
                                         <div class="flex justify-center pt-4">
                                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
