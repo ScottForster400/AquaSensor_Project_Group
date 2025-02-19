@@ -63,8 +63,8 @@ class SensorController extends Controller
         //dd($data);
 
         //gets all of the users sensors
-        //$user = Auth::id();
-        //$user_sensors = Sensor::where('user_id', $user)->paginate(5);
+        $user = Auth::id();
+        $user_sensors = Sensor::where('user_id', $user)->paginate(5);
 
         //$current_user = Auth::user()->user_id;
         //$user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
