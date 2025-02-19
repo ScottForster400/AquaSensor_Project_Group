@@ -13,7 +13,7 @@ class SensorDataController extends Controller
      */
     public function index()
     {
-        $Sensors = Sensor::where('opensource', 1);
+        $Sensors = Sensor::where('opensource', 1)->get();
 
         return view('data')->with('Sensors', $Sensors);
     }

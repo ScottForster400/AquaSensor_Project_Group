@@ -131,5 +131,5 @@
             </x-card>
         </div>
     </div>
-
+    <script src="{{ 'js/userLocation.js' }}"></script>
 </x-app-layout>
