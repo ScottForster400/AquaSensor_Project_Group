@@ -62,6 +62,7 @@ class SensorDataController extends Controller
 
             //removes headers as first array entry
             array_shift($data);
+            return view('data',compact('data'));
         }
         return view('data');
     }
