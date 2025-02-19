@@ -42,13 +42,17 @@
                             @csrf
                             <div>
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-900">Sensor Name</label>
-                                <input type="text" id="name" name="name" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
+                                <label for="name" class="block text-sm font-medium text-gray-900">Sensor Name (optional)</label>
+                                <input type="text" id="name" name="name" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
                             </div>
                             <div class="mb-6">
-                                <label for="confirm" class="block text-sm font-medium text-gray-900">Type "Create" to create a sensor</label>
-                                <input type="text" id="confirm" name="confirm" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
+                                <label for="ID" class="block text-sm font-medium text-gray-900">Sensor ID</label>
+                                <input type="text" id="ID" name="ID" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
+                            </div>
+                            <div class="mb-6">
+                                <label for="ActivationKey" class="block text-sm font-medium text-gray-900">Activation key</label>
+                                <input type="text" id="ActivationKey" name="ActivationKey" required class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-300">
                             </div>
                             <button type="submit" id="create-sensor-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
                         </form>

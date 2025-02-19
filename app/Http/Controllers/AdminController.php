@@ -73,12 +73,16 @@ class AdminController extends Controller
     public function createSensor(Request $request)
     {
         $request->validate([
-            'confirm'=> 'required|starts_with:confirm|size:7'
+            'ID'=> 'required|string|max:255|unique:App\Models\Sensor,sensor_id',
+            'name'=> 'string|max:255|nullable',
+            'ActivationKey'=> 'string|size:16|unique:App\Models\Sensor,activation_key'
         ]);
-        dd($request);
         $sensor = new Sensor([
+            'sensor_id' => $request->ID,
+            'sensor_name' => $request->name,
             'opensource' => 0,
-            'activated' => 0
+            'activated' => 0,
+            'activation_key' => $request->ActivationKey
         ]);
         $sensor->save();
         return to_route('admin.index')->with('success', "New sensor made successfully");
