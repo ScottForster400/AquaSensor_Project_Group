@@ -8,49 +8,56 @@ use App\Models\Sensor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+
 
 class SensorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        //displays the array data for testing
+        //dd($data);
 
+        //gets all of the users sensors
+        $current_user = Auth::user()->id;
+        $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
 
-        $curl = curl_init();
-
-        // Mats special code
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-        curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=sensor022',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        $y = explode(',',$response);
-
-        $x = str_getcsv($response);
-        dd($y);
-
-
-
-
+        //gets all open source and activated sensors
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
 
-        return view('sensors',compact('opensource'));
+
+        return view('sensors',compact('opensource','user_sensors'));
 
     }
+
+    public function search(Request $request){
+
+        $searchRequest = $request->search;
+        $opensource_searchedSensors = Sensor::
+        Where('sensor_name','like',"%$searchRequest%")
+        ->orWhere('sensor_id','like',"%$searchRequest%")
+        ->orWhere('location','like',"%$searchRequest%")
+        ->where('activated',1)
+        ->where('opensource',1)
+        ->paginate(5)->withQueryString();
+
+        $current_user = Auth::user()->user_id;
+
+        $users_searchedSensors = Sensor::
+        Where('sensor_name','like',"%$searchRequest%")
+        ->orWhere('sensor_id','like',"%$searchRequest%")
+        ->orWhere('location','like',"%$searchRequest%")
+        ->where('user_id',$current_user)
+        ->paginate(5)->withQueryString();
+
+
+        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors);
+    }
+
 
     /**
      * Show the form for creating a new resource.

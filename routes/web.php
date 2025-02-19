@@ -5,12 +5,20 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SensorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SensorDataController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use Illuminate\Support\Facades\DB;
+
 
 Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index');
+
 Route::get('/sensors', [SensorController::class, 'index'])->name('sensors.index');
+Route::get('/sensors/search', [SensorController::class, 'search'])->name('sensors.search');
+
+
+
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
-// Route::get('/dashboard', function () {
+//Route::get('/dashboard', function () {
 //     return view('');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
