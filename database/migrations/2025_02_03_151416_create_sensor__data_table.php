@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sensor__data', function (Blueprint $table) {
-            $table->string('sensor_data_id')->primary();
+            $table->id('sensor_data_id');
             $table->string('sensor_name');
             $table->string('sensor_id')->foreignIdFor(Sensor::class);
             $table->string('sensor_data_date');
