@@ -13,7 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sensors', function (Blueprint $table) {
-            $table->id('sensor_id');
+            $table->string('sensor_id')->primary();
+            $table->string('sensor_name')->nullable();
             $table->foreignIdFor(User::class,'user_id')->nullable();
             $table->string('location',50)->nullable();
             $table->string('body_of_water',50)->nullable();

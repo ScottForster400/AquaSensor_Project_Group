@@ -29,7 +29,7 @@ class SensorDataController extends Controller
             } else {
                 $apiURL .= $_REQUEST['sensor_id'];
             }
-            
+
             //gets api data
             curl_setopt_array($curl, array(
                     CURLOPT_URL => $apiURL,
