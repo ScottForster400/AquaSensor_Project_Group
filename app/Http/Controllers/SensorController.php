@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 
 class SensorController extends Controller
@@ -75,6 +76,29 @@ class SensorController extends Controller
         return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors);
     }
 
+    public function activate(Request $request)
+    {
+
+        $updated_sensor = Sensor::where('activation_key',$request->activation_key)->first();
+        //dd($updated_sensor);
+
+        $updated_sensor->update([
+            'location' => $request->sensor_location,
+            'body_of_water' => $request->body_of_water,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'opensource' => $request->opensource
+        ]);
+        $updated_sensor->save();
+
+        return to_route('sensors.index');
+    }
+
+    public function update()
+    {
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -111,10 +135,6 @@ class SensorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sensor $sensor)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
