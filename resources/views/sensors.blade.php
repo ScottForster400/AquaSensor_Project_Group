@@ -12,6 +12,8 @@
                 <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
             </form>
 
+            <div id='map' class='h-96 w-full'></div>
+
             <div class="flex justify-around w-4/5 pt-4">
                 <div>
                     <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Activate Sensor</x-modal-toggle>
