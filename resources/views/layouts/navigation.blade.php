@@ -113,9 +113,28 @@
         </div>
 
         <div class="space-y-1 border-b-slate-200 border-b-2 ">
-            <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                {{ __('/ Login') }}
-            </x-responsive-nav-link>
+            @if (Auth::check())
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+
+                    <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                        {{ __('/ Log Out') }}
+                    </x-responsive-nav-link>
+                </form>
+
+            @else
+                <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                    {{ __('/ Login') }}
+                </x-responsive-nav-link>
+
+            @endif
+
+
+
+
+
         </div>
 
         <!-- Responsive Settings Options -->
