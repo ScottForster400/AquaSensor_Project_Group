@@ -8,7 +8,7 @@
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
 
-            <form action="" class = "w-4/5">
+            <form  action="{{route('sensor.search')}}" method="GET" class = "w-4/5">
                 <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
             </form>
 

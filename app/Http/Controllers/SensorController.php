@@ -81,6 +81,30 @@ class SensorController extends Controller
     }
 
 
+    public function search(Request $request){
+
+
+        $search = $request->input('search');
+        //gets the users id
+        $current_user = Auth::user()->user_id;
+
+        //gets the searched sensors which have been assigned to the user
+        $sameBranchSensors = Sensor::where('user_id', $current_user)
+            ->when($search, function ($query, $name) {
+                return $query->where('name', 'like', "%$name%");
+            })
+            ->paginate(5);
+
+        //gets the name of branch of the admin
+        $locationBranch = Branch::where('branch_id',$user_branch_id)->pluck('branch_name')->first();
+
+
+        //displays all employees with a similar name as the searched one
+        $results = User::where('name', 'like', "%$search%")->get();
+
+        return view('manage-employees', compact('sameBranchUsers', 'locationBranch', 'search'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

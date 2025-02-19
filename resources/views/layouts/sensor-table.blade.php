@@ -15,13 +15,22 @@
                 @foreach($opensource as $sensor)
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
-                            <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor->location}} - {{$sensor->sensor_id}}</x-modal-toggle>
+                            <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor->location}} - {{$sensor->sensor_id}}</x-modal-toggle>
                             <!-- Modal to view report -->
                             <x-modal id="edit{{$sensor}}" class="bg-gray-500 bg-opacity-75 h-full">
-                                <x-modal-header data-modal-hide="edit{{$sensor}}">Report</x-modal-header>
+                                <x-modal-header data-modal-hide="edit{{$sensor}}">Sensor</x-modal-header>
                                 <x-modal-body>
-                                    <x-primary-button>View Sensor</x-primary-button>
-                                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                    <div class="flex-col">
+
+                                        <div class="flex justify-center">
+                                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                        </div>
+                                        <div class="flex justify-center pt-4">
+                                            <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}" >
+                                                <x-primary-button >View Sensor</x-primary-button>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </x-modal-body>
                             </x-modal>
                         </x-th>
@@ -37,13 +46,25 @@
             <x-table-body>
                 @foreach($id_1_sensors_example as $sensor1)
                     <x-tr>
-                        <x-th>
-                            <x-accordion-head data-accordion-target="{{$sensor1->sensor_id}}" aria-controls="{{$sensor1->sensor_id}}" title="{{$sensor1->location}} - {{$sensor1->sensor_id}}">
-                            </x-accordion-head>
-                            <x-accordion-body id="{{$sensor1->sensor_id}}" aria-labelledby="accordion-flush-heading-1" class="hidden">
-                                <x-primary-button>View Sensor</x-primary-button>
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                            </x-accordion-body>
+                        <x-th class="border-b border-gray-300 w-full">
+                            <x-modal-toggle data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor1->location}} - {{$sensor1->sensor_id}}</x-modal-toggle>
+                            <!-- Modal to view report -->
+                            <x-modal id="view{{$sensor1->sensor_id}}" class="bg-gray-500 bg-opacity-75 h-full">
+                                <x-modal-header data-modal-hide="view{{$sensor1->sensor_id}}">Report</x-modal-header>
+                                <x-modal-body>
+                                    <div class="flex-col">
+
+                                        <div class="flex justify-center">
+                                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                        </div>
+                                        <div class="flex justify-center pt-4">
+                                            <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
+                                                <x-primary-button >View Sensor</x-primary-button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </x-modal-body>
+                            </x-modal>
                         </x-th>
                     </x-tr>
                 @endforeach
