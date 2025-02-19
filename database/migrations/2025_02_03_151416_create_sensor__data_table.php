@@ -13,11 +13,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sensor__data', function (Blueprint $table) {
-            $table->id('sensor_data_id');
+            $table->string('sensor_data_id')->primary();
+            $table->string('sensor_name');
             $table->foreignIdFor(Sensor::class,'sensor_id');
-            $table->dateTime('sensor_data_date');
-            $table->float('dissolved_oxygen');
+            $table->date('sensor_data_date');
+            $table->time('sensor_data_time');
+            $table->integer('packet_counter');
             $table->float('temperature');
+            $table->float('%dissolved_oxygen');
+            $table->float('mg/l_dissolved_oxygen');
+            $table->longText('data')->nullable();
             $table->timestamps();
         });
     }
