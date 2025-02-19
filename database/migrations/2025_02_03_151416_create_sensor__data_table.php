@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('sensor__data', function (Blueprint $table) {
             $table->string('sensor_data_id')->primary();
             $table->string('sensor_name');
-            $table->foreignIdFor(Sensor::class,'sensor_id');
-            $table->date('sensor_data_date');
+            $table->string('sensor_id')->foreignIdFor(Sensor::class);
+            $table->string('sensor_data_date');
             $table->time('sensor_data_time');
             $table->integer('packet_counter');
             $table->float('temperature');
