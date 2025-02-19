@@ -28,7 +28,7 @@
     @error('confirm')
         <div class="text-sm mt-1 text-red-500">{{ $message }}</div>
     @enderror
-    
+
     <p>Sensors</p>
 
     <x-card class="mb-2">
@@ -67,15 +67,17 @@
                     <form id="sensor form">
                     <label for="quantity">Sensor ID:</label>
                             <input type="number" id="quantity" name="quantity" min="1" max="69">
-                            <p>Name: Bob</p> 
-                            <p>Company Name: Bob the Builder</p>
-                            <p>Location: Bangladesh</p>
-                            <p>Created at: 11/12/24, 14:28</p>
-                            <p>Activated: Yes</p>
-                            <p>Open Source: Yes</p>
-                            <p>Longitude: 53.381130</p>
-                            <p>Latitude: -1.4584</p>
-                        
+                            @foreach ($sensor as $sensorData)
+                                <p>Name: {{ $sensorData->sensor_name }}</p>
+                                <!--<p>Company Name: {{ $sensorData->companyname }}</p>-->
+                                <p>Location: {{ $sensorData->location }}</p>
+                                <p>Body of water: {{ $sensorData->body_of_water }}</p>
+                                <p>Created at: {{ $sensorData->created_at }}</p>
+                                <p>Activated: {{ $sensorData->updated_at }}</p>
+                                <p>Open Source: {{ $sensorData->opensource }}</p>
+                                <p>Longitude: {{ $sensorData->longitude }}</p>
+                                <p>Latitude: {{ $sensorData->latitude }}</p>
+                            @endforeach
                         </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete</button>
@@ -133,6 +135,13 @@
                 <x-modal-body>
                     <form>
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
+                            @foreach ($user as $userData)
+                                <p>Name: {{ $userData->name }}</p>
+                                <p>Email: {{ $userData->email }}</p>
+                                <p>Is verified: @if($userData->email_verified_at == null) no @else yes @endif</p>
+                                <p>Created at: {{ $userData->company_name }}</p>
+                                <p>Is admin: @if($userData->admin == 0) no @else yes @endif</p>
+                            @endforeach
                             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete User</button>
                         </div>
                     </form>

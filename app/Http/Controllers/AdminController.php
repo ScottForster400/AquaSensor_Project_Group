@@ -16,7 +16,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin');
+        $sensor = Sensor::Get();
+        $user = User::Get();
+        return view('admin')->with('sensor', $sensor)->with('user', $user);
     }
 
     /**
@@ -40,14 +42,6 @@ class AdminController extends Controller
         ]);
         $newUser ->save();
         return to_route('admin.index')->with('success', "New user made successfully");
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function showUser(User $user)
-    {
-        //
     }
 
     /**
@@ -88,14 +82,6 @@ class AdminController extends Controller
         return to_route('admin.index')->with('success', "New sensor made successfully");
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function showSensor(Sensor $sensor)
-    {
-        //
-    }
-    
     /**
      * Remove the specified resource from storage.
      */

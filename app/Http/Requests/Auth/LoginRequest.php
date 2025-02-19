@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,9 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
+        } else {
+            $loginAttempt = User::where('email', $this->email)->get(['user_id', 'name'])->firstOrFail();
+            Auth::login(new User([$this->only('email'), $this->only('password'), $loginAttempt->email, $loginAttempt->user_id]));
         }
 
         RateLimiter::clear($this->throttleKey());
