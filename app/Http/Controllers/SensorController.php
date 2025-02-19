@@ -17,7 +17,7 @@ class SensorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
 
@@ -73,37 +73,30 @@ class SensorController extends Controller
 
 
         //gets all open source and activated sensors
+
+
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
+
         $id_1_sensors_example = Sensor::where('user_id',1)->paginate(5);
 
         return view('sensors',compact('opensource','id_1_sensors_example'));
 
     }
 
-
     public function search(Request $request){
 
+        $searchRequest = $request->search;
+        $searchedSensors = Sensor::
+        where('sensor_name','like',"%$searchRequest%")
+        ->orWhere('sensor_id','like',"%$searchRequest%")
+        ->orWhere('location','like',"%$searchRequest%")
+        ->paginate(5)->withQueryString();
 
-        $search = $request->input('search');
-        //gets the users id
-        $current_user = Auth::user()->user_id;
+        $id_1_sensors_example = Sensor::where('user_id',1)->paginate(5);
 
-        //gets the searched sensors which have been assigned to the user
-        $sameBranchSensors = Sensor::where('user_id', $current_user)
-            ->when($search, function ($query, $name) {
-                return $query->where('name', 'like', "%$name%");
-            })
-            ->paginate(5);
-
-        //gets the name of branch of the admin
-        $locationBranch = Branch::where('branch_id',$user_branch_id)->pluck('branch_name')->first();
-
-
-        //displays all employees with a similar name as the searched one
-        $results = User::where('name', 'like', "%$search%")->get();
-
-        return view('manage-employees', compact('sameBranchUsers', 'locationBranch', 'search'));
+        return view('sensors')->with('opensource',$searchedSensors)->with('id_1_sensors_example',$id_1_sensors_example);
     }
+
 
     /**
      * Show the form for creating a new resource.
