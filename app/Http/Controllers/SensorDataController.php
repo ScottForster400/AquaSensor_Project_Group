@@ -64,7 +64,25 @@ class SensorDataController extends Controller
 
             //removes headers as first array entry
             array_shift($data);
-            return view('data',compact('data'));
+            $temp=2;
+            $do=3;
+            $date=0;
+            $time=1;
+            $tempData = collect();
+            $doData = collect();
+            $dateData = collect();
+            $timeData = collect();
+            foreach($data as $entry){
+                $tempData->push($entry[$temp]);
+                $doData->push($entry[$do]);
+                $datetime = ("$entry[$date] $entry[$time]");
+                $dateData->push($datetime);
+                $timeData->push($entry[$time]);
+            }
+
+
+
+            return view('data',compact('tempData','doData','dateData','timeData'));
         }
         else{
             return view('data');
