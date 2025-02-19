@@ -44,7 +44,7 @@
 
         <x-table>
             <x-table-body>
-                @foreach($id_1_sensors_example as $sensor1)
+                @foreach($user_sensors as $sensor1)
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
                             <x-modal-toggle data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor1->location}} - {{$sensor1->sensor_id}}</x-modal-toggle>
@@ -70,7 +70,7 @@
                 @endforeach
             </x-table-body>
         </x-table>
-        {{$id_1_sensors_example->links()}}
+        {{$user_sensors->links()}}
 
     </div>
 </div>

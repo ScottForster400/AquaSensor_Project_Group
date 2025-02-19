@@ -23,38 +23,39 @@ class SensorController extends Controller
         //dd($data);
 
         //gets all of the users sensors
-        $user = Auth::id();
-        $user_sensors = Sensor::where('user_id', $user)->paginate(5);
-
-        //$current_user = Auth::user()->user_id;
-        //$user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
-
-
-
+        $current_user = Auth::user()->id;
+        $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
 
         //gets all open source and activated sensors
-
-
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
 
-        $id_1_sensors_example = Sensor::where('user_id',1)->paginate(5);
 
-        return view('sensors',compact('opensource','id_1_sensors_example'));
+        return view('sensors',compact('opensource','user_sensors'));
 
     }
 
     public function search(Request $request){
 
         $searchRequest = $request->search;
-        $searchedSensors = Sensor::
-        where('sensor_name','like',"%$searchRequest%")
+        $opensource_searchedSensors = Sensor::
+        Where('sensor_name','like',"%$searchRequest%")
         ->orWhere('sensor_id','like',"%$searchRequest%")
         ->orWhere('location','like',"%$searchRequest%")
+        ->where('activated',1)
+        ->where('opensource',1)
         ->paginate(5)->withQueryString();
 
-        $id_1_sensors_example = Sensor::where('user_id',1)->paginate(5);
+        $current_user = Auth::user()->user_id;
 
-        return view('sensors')->with('opensource',$searchedSensors)->with('id_1_sensors_example',$id_1_sensors_example);
+        $users_searchedSensors = Sensor::
+        Where('sensor_name','like',"%$searchRequest%")
+        ->orWhere('sensor_id','like',"%$searchRequest%")
+        ->orWhere('location','like',"%$searchRequest%")
+        ->where('user_id',$current_user)
+        ->paginate(5)->withQueryString();
+
+
+        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors);
     }
 
 
