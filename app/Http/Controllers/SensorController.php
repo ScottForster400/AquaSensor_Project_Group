@@ -80,7 +80,12 @@ class SensorController extends Controller
     {
 
         $current_user = Auth::user()->id;
-        $updated_sensor = Sensor::where('activation_key',$request->activation_key)->first();
+        $updated_sensor = Sensor::where('activation_key',$request->activation_key)->where('activated',0)->first();
+
+        if (is_null($updated_sensor)){
+            session()->flash('warning','There is no inactive sensor with this Activation Key.');
+            return to_route('sensors.index');
+        }
 
         $updated_sensor->update([
             'sensor_name' => $request->sensor_name,
@@ -93,6 +98,7 @@ class SensorController extends Controller
             'opensource' => $request->opensource
         ]);
         $updated_sensor->save();
+
 
         return to_route('sensors.index');
     }
