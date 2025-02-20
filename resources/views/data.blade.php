@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
-                        <p>{{$weekDay}}</p>
+                        {{-- <p>{{$weekDay}}</p> --}}
                         <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
                         <div class="flex flex-row items-center">
                             <div class="h-5 w-5 mr-2">
