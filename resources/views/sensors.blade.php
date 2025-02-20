@@ -30,7 +30,7 @@
                                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                                             <div>
                                                 <x-input-label for="sensor_name" :value="__('Sensor Name')" />
-                                                <x-text-input id="sensor_name" name="sensor_name" type="text" class="mt-1 block w-full" :value="old('sensor_name')" required autofocus autocomplete="sensor_name" />
+                                                <x-text-input id="sensor_name" name="sensor_name" type="text" class="mt-1 block w-full " :value="old('sensor_name')" required autofocus autocomplete="sensor_name" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('sensor_name')" />
                                             </div>
                                             <div>
