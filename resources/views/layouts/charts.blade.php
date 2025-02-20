@@ -1,7 +1,7 @@
 <script>
-    const tempJson = {!! json_encode($tempData->toArray()) !!};
-    const doJson = {!! json_encode($doData->toArray()) !!};
-    const dateJson = {!! json_encode($dateData->toArray()) !!};
+    const tempJson = {!! json_encode($mobileAveragedData[2]->toArray()) !!};
+    const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
+    const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};
     console.dir(tempJson);
 
     const data = {

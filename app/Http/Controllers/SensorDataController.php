@@ -81,6 +81,7 @@ class SensorDataController extends Controller
                 $averageDoData = 0;
 
                 $dataAverager = array_splice($mobileData, 0, $mobileAverageCount);
+
                 for ( $j = 0; $j < count($dataAverager); $j++) {
                     $averageTempData += $dataAverager[$j][$temp];
                     $averageDoData += $dataAverager[$j][$do];
@@ -111,7 +112,9 @@ class SensorDataController extends Controller
             $currentSensorData = Sensor_Data::where('sensor_id',$randomSensors->sensor_id);
             // dd($currentSensorData);
 
-            return view('data',[$mobileAveragedData, $averagedData]);
+            //dd($mobileAveragedData);
+
+            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData);
         }
         else{
             return view('data');
