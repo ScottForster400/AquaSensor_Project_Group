@@ -79,17 +79,26 @@ class SensorController extends Controller
     public function activate(Request $request)
     {
 
-        $updated_sensor = Sensor::where('activation_key',$request->activation_key)->first();
-        //dd($updated_sensor);
+        $current_user = Auth::user()->id;
+        $updated_sensor = Sensor::where('activation_key',$request->activation_key)->where('activated',0)->first();
+
+        if (is_null($updated_sensor)){
+            session()->flash('warning','There is no inactive sensor with this Activation Key.');
+            return to_route('sensors.index');
+        }
 
         $updated_sensor->update([
+            'sensor_name' => $request->sensor_name,
             'location' => $request->sensor_location,
             'body_of_water' => $request->body_of_water,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+            'user_id' => $current_user,
+            'activated' => 1,
             'opensource' => $request->opensource
         ]);
         $updated_sensor->save();
+
 
         return to_route('sensors.index');
     }

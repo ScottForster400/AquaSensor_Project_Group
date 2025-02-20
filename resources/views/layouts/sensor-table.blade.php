@@ -3,9 +3,11 @@
         <li class="me-2" role="presentation">
             <button class="inline-block p-4 border-b-2 rounded-t-lg" id="temp--styled-tab" data-tabs-target="#temp" type="button" role="tab" aria-controls="temperature" aria-selected="false" onclick="showTemp()">All Sensors</button>
         </li>
-        <li class="me-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="DO-styled-tab" data-tabs-target="#DO" type="button" role="tab" aria-controls="dashboard" aria-selected="false" onclick="showDO()">My Sensors</button>
-        </li>
+        @if (Auth::check())
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="DO-styled-tab" data-tabs-target="#DO" type="button" role="tab" aria-controls="dashboard" aria-selected="false" onclick="showDO()">My Sensors</button>
+            </li>
+        @endif
     </ul>
 </div>
 <div id="default-styled-tab-content w-4/5">
@@ -13,6 +15,7 @@
         <x-table>
             <x-table-body>
                 @foreach($opensource as $sensor)
+
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
                             <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor->sensor_name}} - {{$sensor->location}}</x-modal-toggle>
@@ -43,18 +46,18 @@
                 @foreach($user_sensors as $sensor1)
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
-                            <x-modal-toggle onclick="mapModalOpen()" data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor1->location}} - {{$sensor1->sensor_id}}</x-modal-toggle>
+                            <x-modal-toggle onclick="mapModalOpen()" data-modal-target="view{{$sensor->sensor_id}}" data-modal-toggle="view{{$sensor->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor1->location}} - {{$sensor->sensor_id}}</x-modal-toggle>
                             <!-- Modal to view report -->
-                            <x-modal id="view{{$sensor1->sensor_id}}" class="bg-gray-500 bg-opacity-75 h-full">
-                                <x-modal-header data-modal-hide="view{{$sensor1->sensor_id}}">Report</x-modal-header>
+                            <x-modal id="view{{$sensor->sensor_id}}" class="bg-gray-500 bg-opacity-75 h-full">
+                                <x-modal-header data-modal-hide="view{{$sensor->sensor_id}}">Report</x-modal-header>
                                 <x-modal-body>
                                     <div class="flex-col">
 
                                         <div class="flex justify-center">
-                                            <div id='map{{$sensor1->sensor_id}}' class='h-96 w-full'></div>
+                                            <div id='map{{$sensor->sensor_id}}' class='h-96 w-full'></div>
                                         </div>
                                         <div class="flex justify-center pt-4">
-                                            <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
+                                            <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}" >
                                                 <x-primary-button >View Sensor</x-primary-button>
                                             </a>
                                         </div>

@@ -20,6 +20,7 @@ class SensorDataController extends Controller
         $apiURL = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=';
 
         if ($sensorCount > 0) {
+            //gets all sensor data from api
             // Mats special code
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             if (array_key_exists('sensor_id', $_REQUEST)) {
