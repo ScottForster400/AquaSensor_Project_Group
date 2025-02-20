@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sensor_Data;
+use Carbon\Carbon;
 use App\Models\Sensor;
+use App\Models\Sensor_Data;
 use Illuminate\Http\Request;
 use PhpMqtt\Client\Facades\MQTT;
 
