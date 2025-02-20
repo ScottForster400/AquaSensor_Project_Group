@@ -43,7 +43,7 @@
                 @foreach($user_sensors as $sensor1)
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
-                            <x-modal-toggle data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor1->location}} - {{$sensor1->sensor_id}}</x-modal-toggle>
+                            <x-modal-toggle onclick="mapModalOpen()" data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">{{$sensor1->location}} - {{$sensor1->sensor_id}}</x-modal-toggle>
                             <!-- Modal to view report -->
                             <x-modal id="view{{$sensor1->sensor_id}}" class="bg-gray-500 bg-opacity-75 h-full">
                                 <x-modal-header data-modal-hide="view{{$sensor1->sensor_id}}">Report</x-modal-header>
@@ -51,7 +51,7 @@
                                     <div class="flex-col">
 
                                         <div class="flex justify-center">
-                                            <div id='map' class='h-96 w-full'></div>
+                                            <div id='map{{$sensor1->sensor_id}}' class='h-96 w-full'></div>
                                         </div>
                                         <div class="flex justify-center pt-4">
                                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
