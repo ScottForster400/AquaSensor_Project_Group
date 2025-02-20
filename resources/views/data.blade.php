@@ -114,5 +114,9 @@
             </x-card>
         </div>
     </div>
-    <script src="{{ 'js/userLocation.js' }}"></script>
+    @dump($Sensors)
+    <script>
+        window.SensorsJS = @json($Sensors);
+    </script>
+    <script src="{{ asset('js/userLocation.js') }}"></script>
 </x-app-layout>
