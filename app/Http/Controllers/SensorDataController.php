@@ -21,6 +21,7 @@ class SensorDataController extends Controller
 
 
         if ($sensorCount > 0) {
+            //gets all sensor data from api
             // Mats special code
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             if (array_key_exists('sensor_id', $_REQUEST)) {
