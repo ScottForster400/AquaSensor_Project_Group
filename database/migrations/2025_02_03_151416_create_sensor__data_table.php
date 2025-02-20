@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('packet_counter');
             $table->float('temperature');
             $table->float('%dissolved_oxygen');
-            $table->float('mg/l_dissolved_oxygen');
+            $table->float('mgl_dissolved_oxygen');
             $table->longText('data')->nullable();
             $table->timestamps();
         });

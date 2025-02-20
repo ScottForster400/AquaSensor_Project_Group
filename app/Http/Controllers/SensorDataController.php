@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sensor_Data;
+use Carbon\Carbon;
 use App\Models\Sensor;
+use App\Models\Sensor_Data;
 use Illuminate\Http\Request;
 use PhpMqtt\Client\Facades\MQTT;
 
@@ -25,9 +26,11 @@ class SensorDataController extends Controller
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             if (array_key_exists('sensor_id', $_REQUEST)) {
                 $apiURL .= $_REQUEST['sensor_id'];
+                $sensor_id = $_REQUEST['sensor_id'];
             } else {
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
+                $sensor_id = $randomSensors->sensor_id;
                 $apiURL .= "sensor022";
                 //$apiURL .= $randomSensors->sensor_id;
             }
@@ -107,12 +110,17 @@ class SensorDataController extends Controller
                 $averagedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[$dataLength][$date]);
                 $averagedData[$time]->push($dataAverager[0][$time]);
             }
-            $currentSensorData = Sensor_Data::where('sensor_id',$randomSensors->sensor_id);
-            // dd($currentSensorData);
+            $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first();
+            $currentSensor = Sensor::where('sensor_id',$sensor_id)->first();
+            //dd($currentSensorData);
 
             //dd($mobileAveragedData);
 
-            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData);
+            //gets weekday
+            $dt = Carbon::now();
+            $weekDay = $dt->englishDayOfWeek;
+
+            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('currentSensorData', $currentSensorData)->with('weekDay',$weekDay)->with('currentSensor',$currentSensor);
         }
         else{
             return view('data');

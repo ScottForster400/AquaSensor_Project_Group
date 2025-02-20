@@ -13,23 +13,27 @@
             <x-card class="mb-2 !px-4 !py-6">
                 <div id="card-top" class="flex flex-row h-20 px-2">
                     <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
-                        <h2>Sensor Location</h2>
+                        @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)
+                            <h2>{{Str::title($currentSensorData->sensor_id)}}</h2>
+                        @else
+                            <h2>{{Str::title($currentSensor->sensor_name)}}</h2>
+                        @endif
                         <div id="DO-data" class=" hidden flex-row items-end">
                             <div class="h-8 w-8 ">
                                 <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -4.5px; position:relative">
                             </div>
-                            <p class="pl-1">12 mg/l</p>
+                            <p class="">{{$currentSensorData->mgl_dissolved_oxygen}} mg/l</p>
                         </div>
                         <div id="temp-data" class=" flex flex-row items-end">
                             <div class="h-8 w-8 ">
-                                <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -4.5px; position:relative">
+                                <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -7.5px; position:relative">
                             </div>
-                            <p class="pl-1">12°c</p>
+                            <p class="">{{$currentSensorData->temperature}}°c</p>
                         </div>
                     </div>
                     <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
-                        <p>Monday</p>
-                        <p>10 am</p>
+                        <p>{{$weekDay}}</p>
+                        <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
                         <div class="flex flex-row items-center">
                             <div class="h-5 w-5 mr-2">
                                 <img src="{{URL::asset('imgs/tick.svg')}}" alt="tick" class="w-full h-full ">
@@ -49,7 +53,7 @@
                         <div class="h-8 w-8 flex justify-center items-center ">
                             <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
                         </div>
-                        <h3>12°c</h3>
+                        <h3>{{$currentSensorData->temperature}}°c</h3>
                         <p class="text-gray-500 text-xs">Temperature</p>
                     </x-card-flippable-frontface>
                     <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
@@ -72,7 +76,7 @@
                         <div class="h-9 w-9 flex justify-center items-center ">
                             <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
                         </div>
-                        <h3>12 mg/l</h3>
+                        <h3>{{$currentSensorData->mgl_dissolved_oxygen}} mg/l</h3>
                         <p class="text-gray-500 text-xs">Dissolved Oxygen</p>
                     </x-card-flippable-frontface>
                     <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
