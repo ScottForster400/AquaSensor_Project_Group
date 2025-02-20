@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Sensor;
 
 class AdminController extends Controller
 {
@@ -12,7 +14,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin');
+        $current_user = Auth::id();
+
+        $allsensors = Sensor::paginate(4);
+        $allusers = User::where('id','!=',$current_user)->paginate(5);
+        return view('admin',compact('allsensors','allusers'));
     }
 
     /**
