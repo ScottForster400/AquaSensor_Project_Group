@@ -1,4 +1,4 @@
-const tempJson = var sites = {!! json_encode($sites->toArray()) !!};
+// const tempJson = var sites = {!! json_encode($sites->toArray()) !!};
 
 const data = {
     labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
