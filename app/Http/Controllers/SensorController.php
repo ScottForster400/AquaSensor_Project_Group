@@ -79,6 +79,16 @@ class SensorController extends Controller
     public function activate(Request $request)
     {
 
+        $request->validate([
+            'sensor_name' => 'required|Max:255',
+            'location' => 'required|Max:50',
+            'body_of_water' => 'required|Max:50',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'activation_key' => 'required|Max:16',
+            'opensource' => 'required'
+        ]);
+
         $current_user = Auth::user()->id;
         $updated_sensor = Sensor::where('activation_key',$request->activation_key)->where('activated',0)->first();
 
@@ -86,6 +96,7 @@ class SensorController extends Controller
             session()->flash('warning','There is no inactive sensor with this Activation Key.');
             return to_route('sensors.index');
         }
+
 
         $updated_sensor->update([
             'sensor_name' => $request->sensor_name,
