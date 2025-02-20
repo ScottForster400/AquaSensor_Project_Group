@@ -8,7 +8,7 @@
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
             <form action="" class = "w-4/5">
-                <x-search-bar-gps :Sensors="$Sensors"placeholder="Search for a Sensor..."></x-search-bar-gps>
+                @include('layouts.searchbar')
             </form>
             <x-card class="mb-2">
                 <div id="card-top" class="flex flex-row h-20">
@@ -42,24 +42,7 @@
                     @include('layouts.main-card-tab')
                 </div>
             </x-card>
-
             <div class="flex flex-row justify-evenly w-10/12 h-28">
-                {{-- <div class="[perspective:1000px]">
-                    <v class="basis-1/2 mr-2 transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                        <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
-                            <div class="h-8 w-8 flex justify-center items-center">
-                                <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
-                            </div>
-                            <h3>12°c</h3>
-                            <p class="text-gray-500 text-xs">Temperature</p>
-                        </x-card>
-
-                    <x-card class=" w-full h-3/4  mt-2 flex flex-col items-center text-center justify-between px-2 hover:bg-gray-100 hover:shadow-xl transition-all">
-                        <p>Flip test</p>
-                    </x-card>
-                </div> --}}
-            </div> 
-            <div>
                 <x-card-flippable class="mr-2">
                     <x-card-flippable-frontface>
                         <div class="h-8 w-8 flex justify-center items-center ">
