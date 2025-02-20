@@ -38,7 +38,7 @@
                 @foreach($user_sensors as $sensor1)
                     <x-tr>
                         <x-th class="border-b border-gray-300 w-full">
-                            <x-modal-toggle onclick="mapModalOpen()" data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
+                            <x-modal-toggle onclick="mapModalOpen()" data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-1 py-1 transition-all duration-300 ease-in-out">
                                 <strong class="underline">{{Str::limit($sensor1->sensor_name,15)}}</strong>
                                 <p class="text-gray-600">{{Str::limit($sensor1->location,20)}}</p>
                             </x-modal-toggle>
@@ -55,13 +55,23 @@
                                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
                                                 <x-primary-button >View Sensor</x-primary-button>
                                             </a>
-                                            <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Activate Sensor</x-modal-toggle>
                                         </div>
                                     </div>
                                 </x-modal-body>
                             </x-modal>
                         </x-th>
+                        <x-th class="border-b border-gray-300 w-full">
+                            <div class="flex-col">
+                                <div>
+                                    Inspect
+                                </div>
+                                <div>
+                                    <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Edit</x-modal-toggle>
+                                </div>
+                            </div>
+                        </x-th>
                     </x-tr>
+
                 @endforeach
             </x-table-body>
         </x-table>
