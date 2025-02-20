@@ -75,8 +75,8 @@ class SensorDataController extends Controller
             $mobileAverageCount = 2000;
             $dataLength = count($data)/$averageCount;
             $mobileData = $data;
-            $MobileDataLength = count($data)/$mobileAverageCount;
-            for ($i = 0; $i < $MobileDataLength; $i++) {
+            $mobileDataLength = count($data)/$mobileAverageCount;
+            for ($i = 0; $i < $mobileDataLength; $i++) {
                 $averageTempData = 0;
                 $averageDoData = 0;
 
@@ -87,8 +87,7 @@ class SensorDataController extends Controller
                 }
                 $mobileAveragedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
                 $mobileAveragedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
-                $datetime = $dataAverager[0][$date] . " " . $dataAverager[0][$time];
-                $mobileAveragedData[$date]->push($datetime);
+                $mobileAveragedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[$mobileDataLength][$date]);
                 $mobileAveragedData[$time]->push($dataAverager[0][$time]);
             }
 
@@ -104,8 +103,7 @@ class SensorDataController extends Controller
                 }
                 $averagedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
                 $averagedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
-                $datetime = $dataAverager[0][$date] . " " . $dataAverager[0][$time];
-                $averagedData[$date]->push($datetime);
+                $averagedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[$dataLength][$date]);
                 $averagedData[$time]->push($dataAverager[0][$time]);
             }
             $currentSensorData = Sensor_Data::where('sensor_id',$randomSensors->sensor_id);
