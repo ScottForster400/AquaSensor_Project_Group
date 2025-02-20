@@ -98,7 +98,6 @@ class SensorDataController extends Controller
                 $averagedFlipData[0][$i] = number_format($tempAverager/count($flipCardData[$i][$j]), 3);
                 $averagedFlipData[1][$i] = number_format($doAverager/count($flipCardData[$i][$j]), 3);
             }
-            dd($averagedFlipData);
 
             return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData);
         }
