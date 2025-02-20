@@ -13,7 +13,7 @@
     for (let i = 0; i < 5; i++) {
         console.dir(i);
         var sensorLocation = L.map('map').setView([51.505, -0.09], 13); //.Sensors[i]
-
+        
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'

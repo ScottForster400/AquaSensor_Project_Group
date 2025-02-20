@@ -1,23 +1,23 @@
 <script>
     const tempJson = {!! json_encode($tempData->toArray()) !!};
     const doJson = {!! json_encode($doData->toArray()) !!};
-    const dateJson = {!! json_encode($doData->toArray()) !!};
+    const dateJson = {!! json_encode($dateData->toArray()) !!};
     console.dir(tempJson);
 
     const data = {
-    labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
+    labels: dateJson,
     datasets: [{
         type: 'line',
         label: 'Temp: °C',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgb(255, 99, 132)',
-        data: [12,13,5,14,20,6,7,5,6,4,8,9,5,4,3],
+        data: tempJson,
     },{
         type: 'line',
         label: 'DO: (mg,L)',
         backgroundColor: 'rgb(110, 99, 255,0.5)',
         borderColor: 'rgb(110, 99, 255)',
-        data: [26,21,13,5,8,2,15,17,14,11,6,10,20,24,22],
+        data: doJson,
     }]
     };
     const config = {

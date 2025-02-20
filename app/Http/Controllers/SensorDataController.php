@@ -15,10 +15,9 @@ class SensorDataController extends Controller
     public function index()
     {
         $response = null;
-        $sensorCount = Count(Sensor::where('opensource', 1)->get());
+        $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
         $curl = curl_init();
         $apiURL = 'https://api.aquasensor.co.uk/aq.php?op=readings&username=shu&token=aebbf6305f9fce1d5591ee05a3448eff&sensorid=';
-
 
         if ($sensorCount > 0) {
             // Mats special code
@@ -28,8 +27,8 @@ class SensorDataController extends Controller
             } else {
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
-                $apiURL .= $randomSensors->sensor_id;
-                //dd($apiURL);
+                $apiURL .= "sensor022";
+                //$apiURL .= $randomSensors->sensor_id;
             }
 
             //gets api data
@@ -68,21 +67,47 @@ class SensorDataController extends Controller
             $do=3;
             $date=0;
             $time=1;
-            $tempData = collect();
-            $doData = collect();
-            $dateData = collect();
-            $timeData = collect();
-            foreach($data as $entry){
-                $tempData->push($entry[$temp]);
-                $doData->push($entry[$do]);
-                $datetime = ("$entry[$date] $entry[$time]");
-                $dateData->push($datetime);
-                $timeData->push($entry[$time]);
+            $mobileAveragedData = collect([collect(), collect(), collect(), collect()]);
+            $averagedData = collect([collect(), collect(), collect(), collect()]);
+            
+            $averageCount = 700;
+            $mobileAverageCount = 2000;
+            $dataLength = count($data)/$averageCount;
+            $mobileData = $data;
+            $MobileDataLength = count($data)/$mobileAverageCount;
+            for ($i = 0; $i < $MobileDataLength; $i++) {
+                $averageTempData = 0;
+                $averageDoData = 0;
+
+                $dataAverager = array_splice($mobileData, 0, $mobileAverageCount);
+                for ( $j = 0; $j < count($dataAverager); $j++) {
+                    $averageTempData += $dataAverager[$j][$temp];
+                    $averageDoData += $dataAverager[$j][$do];
+                }
+                $mobileAveragedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
+                $mobileAveragedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
+                $datetime = $dataAverager[0][$date] . " " . $dataAverager[0][$time];
+                $mobileAveragedData[$date]->push($datetime);
+                $mobileAveragedData[$time]->push($dataAverager[0][$time]);
             }
 
+            for ($i = 0; $i < $dataLength; $i++) {
+                $averageTempData = 0;
+                $averageDoData = 0;
 
+                $dataAverager = array_splice($data, 0, $averageCount);
+                for ( $j = 0; $j < count($dataAverager); $j++) {
+                    $averageTempData += $dataAverager[$j][$temp];
+                    $averageDoData += $dataAverager[$j][$do];
+                }
+                $averagedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
+                $averagedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
+                $datetime = $dataAverager[0][$date] . " " . $dataAverager[0][$time];
+                $averagedData[$date]->push($datetime);
+                $averagedData[$time]->push($dataAverager[0][$time]);
+            }
 
-            return view('data',compact('tempData','doData','dateData','timeData'));
+            return view('data',[$mobileAveragedData, $averagedData]);
         }
         else{
             return view('data');
