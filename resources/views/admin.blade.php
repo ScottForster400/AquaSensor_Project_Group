@@ -5,9 +5,39 @@
         </h2>
     </x-slot>
 
-
 <div class="py-12 flex justify-center">
     <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
+        
+        @if(session('success'))
+            <p>{{ session('success') }}</p>
+        @endif
+        @error('email')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('password')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('name')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('admin')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('companyname')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('quantity')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('confirm')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('ID')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
+        @error('ActivationKey')
+            <x-warning>{{ $message }}</x-warning>
+        @enderror
 
 
         <x-card class="flex items-center flex-col w-4/5">
@@ -39,7 +69,7 @@
         <x-modal id="createsensor" class="bg-gray-500 bg-opacity-75 h-full">
             <x-modal-header data-modal-hide="createsensor">Create Sensor</x-modal-header>
             <x-modal-body>
-                <form method="post" class="mt-6 space-y-6">
+                <form method="post" class="mt-6 space-y-6" action="{{ route('admin.createSensor') }}">
                     @csrf
                     <div class="grid gap-6 mb-6 md:grid-cols-2">
                         <div>
