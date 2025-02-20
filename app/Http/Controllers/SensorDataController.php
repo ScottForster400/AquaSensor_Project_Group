@@ -81,7 +81,8 @@ class SensorDataController extends Controller
                 $timeData->push($entry[$time]);
             }
 
-
+            $currentSensorData = Sensor_Data::where('sensor_id',$randomSensors->sensor_id);
+            // dd($currentSensorData);
 
             return view('data',compact('tempData','doData','dateData','timeData'));
         }
