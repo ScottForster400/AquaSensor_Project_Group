@@ -37,9 +37,38 @@
                             <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
                             <div class="flex flex-row items-center">
                                 <div class="h-5 w-5 mr-2">
-                                    <img src="{{URL::asset('imgs/tick.svg')}}" alt="tick" class="w-full h-full ">
-                                </div>
-                                <p>Safe</p>
+                                    @if($currentSensorData->mgl_dissolved_oxygen<=4)
+                                            <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
+                                        </div>
+                                        <p>Unsafe</p>
+                                    @elseif($currentSensorData->mgl_dissolved_oxygen<=6.5)
+
+                                        @if ($currentSensorData->temperature>=10)
+                                                <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Caution</p>
+                                        @else
+                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Unsafe</p>
+                                        @endif
+                                    @else
+
+                                        @if ($currentSensorData->temperature>=14)
+                                                <img src="{{URL::asset('imgs/safe.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Safe</p>
+                                        @elseif($currentSensorData->temperature>=10)
+                                                <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Caution</p>
+                                        @else
+                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Unsafe</p>
+                                        @endif
+                                    @endif
+
                             </div>
                         </div>
                     </div>
