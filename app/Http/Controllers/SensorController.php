@@ -27,7 +27,7 @@ class SensorController extends Controller
         //gets all open source and activated sensors
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
 
-        
+
         return view('sensors',compact('opensource','user_sensors'));
 
     }
@@ -80,13 +80,13 @@ class SensorController extends Controller
     {
 
         $request->validate([
-            'sensor_name' => 'required|Max:255',
-            'location' => 'required|Max:50',
-            'body_of_water' => 'required|Max:50',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'activation_key' => 'required|Max:16',
-            'opensource' => 'required'
+             'sensor_name' => 'required|Max:255',
+             'sensor_location' => 'required|Max:50',
+             'body_of_water' => 'required|Max:50',
+             'latitude' => 'required',
+             'longitude' => 'required',
+             'activation_key' => 'required|Max:16',
+             'opensource' => 'required'
         ]);
 
         $current_user = Auth::user()->id;
@@ -114,9 +114,32 @@ class SensorController extends Controller
         return to_route('sensors.index');
     }
 
-    public function update()
+    public function update(Request $request, Sensor $sensor)
     {
 
+        $request->validate([
+             'sensor_name' => 'required|Max:255',
+             'sensor_location' => 'required|Max:50',
+             'body_of_water' => 'required|Max:50',
+             'latitude' => 'required',
+             'longitude' => 'required',
+        ]);
+
+        $updated_sensor = Sensor::where('sensor_id',$sensor->sensor_id)->first();
+
+
+        $updated_sensor->update([
+             'sensor_name' => $request->sensor_name,
+             'location' => $request->sensor_location,
+             'body_of_water' => $request->body_of_water,
+             'latitude' => $request->latitude,
+             'longitude' => $request->longitude,
+             'opensource' => $request->opensource
+         ]);
+        $updated_sensor->save();
+
+
+        return to_route('sensors.index');
     }
 
 
@@ -125,7 +148,7 @@ class SensorController extends Controller
      */
     public function create()
     {
-        //
+        dd('create');
     }
 
     /**
@@ -133,7 +156,7 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd('store');
     }
 
     /**
@@ -141,7 +164,7 @@ class SensorController extends Controller
      */
     public function show(Sensor $sensor)
     {
-        //
+        dd("AFE");
     }
 
     /**
@@ -149,7 +172,7 @@ class SensorController extends Controller
      */
     public function edit(Sensor $sensor)
     {
-        //
+        DD("DGADGQYGQIS");
     }
 
     /**
@@ -161,6 +184,6 @@ class SensorController extends Controller
      */
     public function destroy(Sensor $sensor)
     {
-        //
+        DD("DGADGQYGQIS");
     }
 }

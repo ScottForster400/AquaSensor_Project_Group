@@ -15,6 +15,7 @@ Route::get('/sensors', [SensorController::class, 'index'])->name('sensors.index'
 Route::get('/sensors/search', [SensorController::class, 'search'])->name('sensors.search');
 Route::get('/sensors/sort', [SensorController::class, 'sort'])->name('sensors.sort');
 Route::post('/sensors/activate', [SensorController::class, 'activate'])->name('sensors.activate');
+Route::post('/sensors/update', [SensorController::class, 'update'])->name('sensors.update');
 
 
 //Route::get('/dashboard', function () {

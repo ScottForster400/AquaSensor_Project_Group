@@ -36,37 +36,19 @@
         <x-table>
             <x-table-body>
                 @foreach($user_sensors as $sensor1)
-                    <x-tr>
-                        <x-th class="border-b border-gray-300 w-full">
-                            <x-modal-toggle onclick="mapModalOpen()" data-modal-target="view{{$sensor1->sensor_id}}" data-modal-toggle="view{{$sensor1->sensor_id}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-1 py-1 transition-all duration-300 ease-in-out">
-                                <strong class="underline">{{Str::limit($sensor1->sensor_name,15)}}</strong>
-                                <p class="text-gray-600">{{Str::limit($sensor1->location,20)}}</p>
-                            </x-modal-toggle>
-                            <!-- Modal to view report -->
-                            <x-modal id="view{{$sensor1->sensor_id}}" class="bg-gray-500 bg-opacity-75 h-full">
-                                <x-modal-header data-modal-hide="view{{$sensor1->sensor_id}}">Report</x-modal-header>
-                                <x-modal-body>
-                                    <div class="flex-col">
-
-                                        <div class="flex justify-center">
-                                            <div id='map{{$sensor1->sensor_id}}' class='h-96 w-full'></div>
-                                        </div>
-                                        <div class="flex justify-center pt-4">
-                                            <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}" >
-                                                <x-primary-button >View Sensor</x-primary-button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </x-modal-body>
-                            </x-modal>
+                    <x-tr class="!px-0 !p-0 !py-0">
+                        <x-th class="border-b border-gray-300 w-full !px-2">
+                            <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}">
+                                <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-1 py-1 transition-all duration-300 ease-in-out">
+                                    <strong class="underline">{{Str::limit($sensor1->sensor_name,15)}}</strong>
+                                    <p class="text-gray-600">{{Str::limit($sensor1->location,20)}}</p>
+                                </x-modal-toggle>
+                            </a>
                         </x-th>
-                        <x-th class="border-b border-gray-300 w-full">
-                            <div class="flex-col">
-                                <div>
-                                    Inspect
-                                </div>
-                                <div>
-                                    <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Edit</x-modal-toggle>
+                        <x-th class="border-b border-gray-300 w-full !px-1">
+                            <div class="flex-col !px-0">
+                                <div class="!px-0">
+                                    <x-modal-toggle data-modal-target="editsensor" data-modal-toggle="editsensor">Edit</x-modal-toggle>
                                 </div>
                             </div>
                         </x-th>
@@ -83,10 +65,11 @@
 
 
 <!-- Modal to activate Sensor -->
-<x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full">
-    <x-modal-header data-modal-hide="edit">Activate Sensor</x-modal-header>
+<x-modal id="editsensor" class="bg-gray-500 bg-opacity-75 h-full">
+    <x-modal-header data-modal-hide="editsensor">Edit Sensor</x-modal-header>
     <x-modal-body>
-        <form method="post" action="{{ route('sensors.activate') }}" class="mt-6 space-y-6">
+        <form method="post" action="{{ route('sensors.update',$sensor1) }}" class="mt-6 space-y-6">
+            @method('put')
             @csrf
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
@@ -114,15 +97,12 @@
                     <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
                     <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                 </div>
-                <div>
-                    <x-input-label for="activation_key" :value="__('Activation Key')" />
-                    <x-text-input id="activation_key" name="activation_key" type="number" class="mt-1 block w-full" :value="old('activation_key')" required autofocus autocomplete="activation_key" />
-                    <x-input-error class="mt-2" :messages="$errors->get('activation_key')" />
-                </div>
                 <div class="mb-6">
                     <label for="opensource" class="inline-flex items-center">
-                        <input type="checkbox" name="opensource" id="opensource" value="0" class="form-checkbox">
-                        <span class="ml-2">Open Source?</span>
+                        <select name="opensource" id="opensource" name="opensource">
+                            <option value="1">Open Source</option>
+                            <option value="0">Closed Source</option>
+                        </select>
                     </label>
                 </div>
 

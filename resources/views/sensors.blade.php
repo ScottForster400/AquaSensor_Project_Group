@@ -60,8 +60,10 @@
                                             </div>
                                             <div class="mb-6">
                                                 <label for="opensource" class="inline-flex items-center">
-                                                    <input type="checkbox" name="opensource" id="opensource" value="0" class="form-checkbox">
-                                                    <span class="ml-2">Open Source?</span>
+                                                    <select name="opensource" id="opensource" name="opensource">
+                                                        <option value="1">Open Source</option>
+                                                        <option value="0">Closed Source</option>
+                                                    </select>
                                                 </label>
                                             </div>
 
