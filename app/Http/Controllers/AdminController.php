@@ -30,7 +30,7 @@ class AdminController extends Controller
             'email'=> 'required|max:255|string|lowercase|email|unique:App\Models\user,email',
             'password'=> 'required|max:255',
             'admin'=> 'boolean',
-            'companyname'=> 'required|max:255|string'
+            'company_name'=> 'required|max:255|string'
         ]);
         $newUser = new User([
             'name' => $request->name,
