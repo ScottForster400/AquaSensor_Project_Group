@@ -6,12 +6,12 @@
     </x-slot>
 
     @if(isset($currentSensorData))
-        <div class="py-12 flex justify-center">
-            <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
+        <div class="py-12 flex justify-center z-10 pb-1">
+            <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-10 ">
                 <form action="{{route('sensorData.search')}}" class = "w-10/12">
                     <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
                 </form>
-                <x-card class="mb-2 !px-4 !py-6">
+                <x-card class="mb-2 !px-4 !py-6 z-10">
                     <div id="card-top" class="flex flex-row h-20 px-2">
                         <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
                             @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)
@@ -148,5 +148,5 @@
         </div>
     </div>
     @endif
-
+    @include('layouts.waves')
 </x-app-layout>
