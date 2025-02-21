@@ -105,10 +105,10 @@ class SensorDataController extends Controller
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
 
-            // $dt = Carbon::now();
-            // $weekDay = $dt->englishDayOfWeek();
 
-            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData)->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor);
+            $dt = Carbon::now();
+            $weekDay=($dt->englishDayOfWeek);
+            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData)->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor)->with('weekDay',$weekDay);
         }
         else{
 

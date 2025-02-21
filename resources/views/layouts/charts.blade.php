@@ -1,4 +1,5 @@
 <script>
+    Chart.defaults.font.size = 10;
     const tempJson = {!! json_encode($mobileAveragedData[2]->toArray()) !!};
     const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
     const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};
@@ -16,7 +17,7 @@
     },{
         pointHitRadius: 20,
         type: 'line',
-        label: 'DO: (mg,L)',
+        label: 'DO: (mg/L)',
         backgroundColor: 'rgb(110, 99, 255,0.5)',
         borderColor: 'rgb(110, 99, 255)',
         data: doJson,
@@ -32,6 +33,12 @@
         scales: {
             y: {
                 beginAtZero: true
+            },
+            x: {
+                ticks: {
+                    maxRotation: 90,
+                    minRotation: 90
+                }
             }
         },
         hover: {  // <-- to add

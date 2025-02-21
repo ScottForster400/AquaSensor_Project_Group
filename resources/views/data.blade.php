@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
-                        {{-- <p>{{$weekDay}}</p> --}}
+                        <p>{{$weekDay}}</p>
                         <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
                         <div class="flex flex-row items-center">
                             <div class="h-5 w-5 mr-2">
@@ -82,15 +82,15 @@
                     <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
                         <div class="text-xs w-full ">
                             <h3 class="text-gray-500 ">Daily Average</h3>
-                            <p>11.3</p>
+                            <p>{{$averagedFlipData[1[0]]}} mg/L</p>
                         </div>
                         <div class="text-xs w-full">
                             <h3 class="text-gray-500 ">Weekley Average</h3>
-                            <p>13.3</p>
+                            <p>{{$averagedFlipData[1[1]]}} mg/L</p>
                         </div>
                         <div class="text-xs w-full">
                             <h3 class="text-gray-500 ">Monthly Average</h3>
-                            <p>9.3</p>
+                            <p>{{$averagedFlipData[1[2]]}} mg/L</p>
                         </div>
                     </x-card-flippable-backface>
                 </x-card-flippable>
