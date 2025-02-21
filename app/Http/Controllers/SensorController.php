@@ -43,17 +43,23 @@ class SensorController extends Controller
         ->where('opensource',1)
         ->paginate(5)->withQueryString();
 
-        $current_user = Auth::user()->id;
+        if(Auth::check()){
 
-        $users_searchedSensors = Sensor::
-        Where('sensor_name','like',"%$searchRequest%")
-        ->orWhere('sensor_id','like',"%$searchRequest%")
-        ->orWhere('location','like',"%$searchRequest%")
-        ->where('user_id',$current_user)
-        ->paginate(5)->withQueryString();
+            $current_user = Auth::user()->id;
+
+            $users_searchedSensors = Sensor::
+            Where('sensor_name','like',"%$searchRequest%")
+            ->orWhere('sensor_id','like',"%$searchRequest%")
+            ->orWhere('location','like',"%$searchRequest%")
+            ->where('user_id',$current_user)
+            ->paginate(5)->withQueryString();
 
 
-        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors);
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors);
+
+        }
+
+        return view('sensors')->with('opensource',$opensource_searchedSensors);
     }
 
     public function sort(){
