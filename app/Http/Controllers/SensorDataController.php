@@ -90,7 +90,7 @@ class SensorDataController extends Controller
                 $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
             ];
             $averagedFlipData = [[0, 0, 0], [0, 0, 0]];
-            for ($i= 0; $i<count($flipCardData); $i++) {
+            for ($i=0; $i<count($flipCardData); $i++) {
                 $tempAverager = 0;
                 $doAverager = 0;
                 for ($j= 0; $j<count($flipCardData); $j++) {
@@ -104,11 +104,40 @@ class SensorDataController extends Controller
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first();
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
-
-
             $dt = Carbon::now();
             $weekDay=($dt->englishDayOfWeek);
-            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardDataDO', $averagedFlipData[1])->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor)->with('weekDay',$weekDay)->with('flipCardDataTemp', $averagedFlipData[0]);
+
+            $hourlyAverages = [[], []];
+            $currentData = 0;
+            for ($j= 0; $j<24; $j++) {
+                $timedTemp = 0;
+                $timedDO = 0;
+                $totalReadingsInCurrentHour = 0;
+                while ($currentData < Count($flipCardData[0])) {
+                    $hour = (int)explode(":", $flipCardData[0][$currentData][$time])[0];
+                    $data = $flipCardData[0][$currentData];
+                    if ($hour == $j) {
+                        $timedTemp += $data[$temp];
+                        $timedDO += $data[$do];
+                        $totalReadingsInCurrentHour++;
+                    } else {
+                        $hourlyAverages[0][$j] = number_format($timedTemp/$totalReadingsInCurrentHour, 3);
+                        $hourlyAverages[0][$j] = number_format($timedDO/$totalReadingsInCurrentHour, 3);
+                        break;
+                    }
+                    $currentData++;
+                }
+            }
+
+            return view('data')
+                ->with('mobileAveragedData',$mobileAveragedData)
+                ->with('desktopAveragedData',$averagedData)
+                ->with('flipCardDataDO', $averagedFlipData[1])
+                ->with('currentSensorData',$currentSensorData)
+                ->with('currentSensor',$currentSensor)
+                ->with('weekDay',$weekDay)
+                ->with('flipCardDataTemp', $averagedFlipData[0])
+                ->with('hourlyAverages',$hourlyAverages);
         }
         else{
 
