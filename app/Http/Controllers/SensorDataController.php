@@ -27,7 +27,7 @@ class SensorDataController extends Controller
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
                 $sensor_id = $randomSensors->sensor_id;
-                $activeSensor = "sensor022";
+                $activeSensor = $sensor_id;
                 $data = $this->GetAndFormatCurl($activeSensor);
             }
 
