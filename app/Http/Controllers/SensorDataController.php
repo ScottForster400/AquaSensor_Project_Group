@@ -15,7 +15,7 @@ class SensorDataController extends Controller
      */
     public function index()
     {
-        
+
         $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
 
         if ($sensorCount > 0) {
@@ -29,7 +29,7 @@ class SensorDataController extends Controller
                 $activeSensor = "sensor022";
                 $data = $this->GetAndFormatCurl($activeSensor);
             }
-            
+
             $temp=2;
             $do=3;
             $date=0;
@@ -81,7 +81,7 @@ class SensorDataController extends Controller
                 $averagedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
                 $averagedData[$time]->push($dataAverager[0][$time]);
             }
-            
+
 
             $flipCardData = [
                 $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y') . "&todate=" . date('d-m-y')),
@@ -103,10 +103,11 @@ class SensorDataController extends Controller
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first();
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
-            // $dt = Carbon::now();
-            // $weekDay = $dt->englishDayOfWeek();
+            //dd($averagedFlipData);
 
-            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData)->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor);
+            $dt = Carbon::now();
+            $weekDay=($dt->englishDayOfWeek);
+            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData)->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor)->with('weekDay',$weekDay);
         }
         else{
             return view('data');
