@@ -90,7 +90,7 @@ class SensorDataController extends Controller
                 $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
             ];
             $averagedFlipData = [[0, 0, 0], [0, 0, 0]];
-            for ($i= 0; $i<count($flipCardData); $i++) {
+            for ($i=0; $i<count($flipCardData); $i++) {
                 $tempAverager = 0;
                 $doAverager = 0;
                 for ($j= 0; $j<count($flipCardData); $j++) {
@@ -104,11 +104,40 @@ class SensorDataController extends Controller
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first();
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
+            $dt = Carbon::now();
+            $weekDay=($dt->englishDayOfWeek);
 
-            // $dt = Carbon::now();
-            // $weekDay = $dt->englishDayOfWeek();
+            $hourlyAverages = [[], []];
+            $currentData = 0;
+            for ($j= 0; $j<24; $j++) {
+                $timedTemp = 0;
+                $timedDO = 0;
+                $totalReadingsInCurrentHour = 0;
+                while ($currentData < Count($flipCardData[0])) {
+                    $hour = (int)explode(":", $flipCardData[0][$currentData][$time])[0];
+                    $data = $flipCardData[0][$currentData];
+                    if ($hour == $j) {
+                        $timedTemp += $data[$temp];
+                        $timedDO += $data[$do];
+                        $totalReadingsInCurrentHour++;
+                    } else {
+                        $hourlyAverages[0][$j] = number_format($timedTemp/$totalReadingsInCurrentHour, 3);
+                        $hourlyAverages[1][$j] = number_format($timedDO/$totalReadingsInCurrentHour, 3);
+                        break;
+                    }
+                    $currentData++;
+                }
+            }
 
-            return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData)->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor);
+            return view('data')
+                ->with('mobileAveragedData',$mobileAveragedData)
+                ->with('desktopAveragedData',$averagedData)
+                ->with('flipCardDataDO', $averagedFlipData[1])
+                ->with('currentSensorData',$currentSensorData)
+                ->with('currentSensor',$currentSensor)
+                ->with('weekDay',$weekDay)
+                ->with('flipCardDataTemp', $averagedFlipData[0])
+                ->with('hourlyAverages',$hourlyAverages);
         }
         else{
 
@@ -123,7 +152,7 @@ class SensorDataController extends Controller
      */
     public function create()
     {
-        //
+        dd("create");
     }
 
     /**
@@ -131,7 +160,7 @@ class SensorDataController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd("stire");
     }
 
     /**
@@ -139,7 +168,7 @@ class SensorDataController extends Controller
      */
     public function show(Sensor_Data $sensor_Data)
     {
-        //
+        dd("show");
     }
 
     /**
@@ -147,7 +176,7 @@ class SensorDataController extends Controller
      */
     public function edit(Sensor_Data $sensor_Data)
     {
-        //
+        dd("edit");
     }
 
     /**
@@ -155,7 +184,7 @@ class SensorDataController extends Controller
      */
     public function update(Request $request, Sensor_Data $sensor_Data)
     {
-        //
+        dd("upadte");
     }
 
     /**
@@ -163,7 +192,7 @@ class SensorDataController extends Controller
      */
     public function destroy(Sensor_Data $sensor_Data)
     {
-        //
+        dd("destroy");
     }
 
     private function GetAndFormatCurl($search) {
@@ -206,5 +235,23 @@ class SensorDataController extends Controller
         //removes headers as first array entry
         array_shift($data);
         return $data;
+    }
+    public function search(Request $request){
+        $searchRequest = $request->search;
+
+        $searchedSensor = Sensor::
+        Where('sensor_id','like',"%$searchRequest%")
+        ->where('activated',1)
+        ->where('opensource',1)
+        ->first();
+
+        if($searchedSensor == null){
+            return view('data');
+        }
+        else{
+            $sensor_id=$searchedSensor->sensor_id;
+            return to_route('sensorData.index',compact('sensor_id'));
+        }
+
     }
 }
