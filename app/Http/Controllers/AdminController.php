@@ -82,13 +82,14 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroySensor(Sensor $sensor)
+    public function destroySensor(Request $request)
     {
         if (Auth::user()->admin != 1) {
             abort(403);
+        } else {
+            Sensor::where("sensor_id", $request->sensor_id)->delete();
+            Sensor_Data::where('sensor_id', $request->sensor_id)->delete();
         }
-        
-        $sensor->delete();
-        Sensor_Data::where('sensor_id', $sensor->id)->delete();
+        return to_route('admin.index')->with('success', "Sensor successfully deleted");
     }
 }
