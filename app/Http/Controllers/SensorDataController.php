@@ -122,7 +122,7 @@ class SensorDataController extends Controller
                         $totalReadingsInCurrentHour++;
                     } else {
                         $hourlyAverages[0][$j] = number_format($timedTemp/$totalReadingsInCurrentHour, 3);
-                        $hourlyAverages[0][$j] = number_format($timedDO/$totalReadingsInCurrentHour, 3);
+                        $hourlyAverages[1][$j] = number_format($timedDO/$totalReadingsInCurrentHour, 3);
                         break;
                     }
                     $currentData++;
