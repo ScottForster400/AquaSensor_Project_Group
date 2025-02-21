@@ -119,7 +119,7 @@
         <x-modal id="createuser" class="bg-gray-500 bg-opacity-75 h-full">
             <x-modal-header data-modal-hide="createuser">Create User</x-modal-header>
             <x-modal-body>
-                <form method="post" class="mt-6 space-y-6">
+                <form method="post" class="mt-6 space-y-6"  action="{{ route('admin.createUser') }}">
                     @csrf
                     <div class="grid gap-6 mb-6 md:grid-cols-2">
                         <div>
@@ -164,12 +164,14 @@
 
                             <x-tr>
                                 <x-th class="border-b border-gray-300 w-full">
-                                    <a>
-                                        <x-modal-toggle data-modal-target="edit{{$sensor}}" data-modal-toggle="edit{{$sensor}}" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
+                                    <form method="post" action="{{ route('admin.destroyUser') }}">
+                                        @csrf
+                                        <input type="hidden" value={{ $user->id }} name="user_id">
+                                        <button type="submit" class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
                                             <strong class="underline">{{Str::limit($user->name)}}</strong>
                                             <p class="text-gray-600">{{Str::limit($user->company_name,20)}}</p>
-                                        </x-modal-toggle>
-                                    </a>
+                                        </button>
+                                    </form>
                                 </x-th>
                             </x-tr>
                         @endforeach

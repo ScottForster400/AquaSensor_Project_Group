@@ -46,18 +46,21 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroyUser(User $user)
+    public function destroyUser(Request $request)
     {
         if (Auth::user()->admin != 1) {
             abort(403);
+        } else {
+            $ownedSensors = Sensor::where('user_id', $request->user_id)->get();
+            if (Count($ownedSensors) > 0) {
+                foreach ($ownedSensors as $sensor) {
+                    //Sensor_Data::where('sensor_id', $request->user_id)->delete();
+                    $sensor->delete();
+                }
+            }
+            User::where('id', $request->user_id)->delete();
         }
-        
-        $ownedSensors = Sensor::where('id', $user->id);
-        foreach ($ownedSensors as $sensor) {
-            Sensor_Data::where('sensor_id', $sensor->id)->delete();
-            $sensor->delete();
-        }
-        $user->delete();
+        return to_route('admin.index')->with('success', "User successfully deleted");
     }
 
     /**
@@ -88,7 +91,7 @@ class AdminController extends Controller
             abort(403);
         } else {
             Sensor::where("sensor_id", $request->sensor_id)->delete();
-            Sensor_Data::where('sensor_id', $request->sensor_id)->delete();
+            //Sensor_Data::where('sensor_id', $request->sensor_id)->delete();
         }
         return to_route('admin.index')->with('success', "Sensor successfully deleted");
     }
