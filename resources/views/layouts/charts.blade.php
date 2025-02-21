@@ -1,5 +1,5 @@
 <script>
-    Chart.defaults.font.size = 10;
+    Chart.defaults.font.size = 12;
     const tempJson = {!! json_encode($mobileAveragedData[2]->toArray()) !!};
     const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
     const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};

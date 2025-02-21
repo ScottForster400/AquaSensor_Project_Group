@@ -7,7 +7,7 @@
 
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
-            <form action="" class = "w-4/5">
+            <form action="{{route('sensorData.search')}}" class = "w-10/12">
                 <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
             </form>
             <x-card class="mb-2 !px-4 !py-6">
@@ -59,15 +59,15 @@
                     <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
                         <div class="text-xs w-full ">
                             <h3 class="text-gray-500 ">Daily Average</h3>
-                            <p>11.3</p>
+                            <p>{{$flipCardDataTemp[0]}}°C</p>
                         </div>
                         <div class="text-xs w-full">
                             <h3 class="text-gray-500 ">Weekley Average</h3>
-                            <p>13.3</p>
+                            <p>{{$flipCardDataTemp[1]}}°C</p>
                         </div>
                         <div class="text-xs w-full">
                             <h3 class="text-gray-500 ">Monthly Average</h3>
-                            <p>9.3</p>
+                            <p>{{$flipCardDataTemp[2]}}°C</p>
                         </div>
                     </x-card-flippable-backface>
                 </x-card-flippable>
@@ -82,20 +82,20 @@
                     <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1">
                         <div class="text-xs w-full ">
                             <h3 class="text-gray-500 ">Daily Average</h3>
-                            <p>{{$averagedFlipData[1[0]]}} mg/L</p>
+                            <p>{{$flipCardDataDO[0]}} mg/L</p>
                         </div>
                         <div class="text-xs w-full">
                             <h3 class="text-gray-500 ">Weekley Average</h3>
-                            <p>{{$averagedFlipData[1[1]]}} mg/L</p>
+                            <p>{{$flipCardDataDO[1]}} mg/L</p>
                         </div>
                         <div class="text-xs w-full">
                             <h3 class="text-gray-500 ">Monthly Average</h3>
-                            <p>{{$averagedFlipData[1[2]]}} mg/L</p>
+                            <p>{{$flipCardDataDO[2]}} mg/L</p>
                         </div>
                     </x-card-flippable-backface>
                 </x-card-flippable>
             </div>
-            <x-card class="px-2 !my-3">
+            <x-card class="px-2 !my-3 !pb-1">
                 <h2 class="">
                     Sensor Data
                 </h2>

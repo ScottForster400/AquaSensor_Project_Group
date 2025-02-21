@@ -16,6 +16,8 @@ Route::get('/sensors/search', [SensorController::class, 'search'])->name('sensor
 Route::get('/sensors/sort', [SensorController::class, 'sort'])->name('sensors.sort');
 Route::post('/sensors/activate', [SensorController::class, 'activate'])->name('sensors.activate');
 
+Route::get('/sensorData/search', [SensorDataController::class, 'search'])->name('sensorData.search');
+
 
 //Route::get('/dashboard', function () {
 //     return view('');
@@ -32,6 +34,7 @@ require __DIR__.'/auth.php';
 Route::resource('sensors',SensorController::class);
 
 Route::resource('sensorData',SensorDataController::class);
+
 
 Route::Get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.index');
 Route::Post('/admin/createUser', [AdminController::class, 'createUser'])->middleware(['auth', 'verified'])->name('admin.createUser');
