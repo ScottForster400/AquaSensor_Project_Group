@@ -22,6 +22,7 @@ class SensorDataController extends Controller
             if (array_key_exists('sensor_id', $_REQUEST)) {
                 $activeSensor = $_REQUEST['sensor_id'];
                 $data = $this->GetAndFormatCurl($activeSensor);
+                $sensor_id = $_REQUEST['sensor_id'];
             } else {
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
@@ -103,13 +104,14 @@ class SensorDataController extends Controller
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first();
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
-            //dd($averagedFlipData);
+
 
             $dt = Carbon::now();
             $weekDay=($dt->englishDayOfWeek);
             return view('data')->with('mobileAveragedData',$mobileAveragedData)->with('desktopAveragedData',$averagedData)->with('flipCardData', $averagedFlipData)->with('currentSensorData',$currentSensorData)->with('currentSensor',$currentSensor)->with('weekDay',$weekDay);
         }
         else{
+
             return view('data');
         }
 
