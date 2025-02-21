@@ -27,7 +27,7 @@ class SensorDataController extends Controller
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
                 $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
                 $sensor_id = $randomSensors->sensor_id;
-                $activeSensor = "sensor022";
+                $activeSensor = $sensor_id;
                 $data = $this->GetAndFormatCurl($activeSensor);
             }
 
@@ -128,6 +128,12 @@ class SensorDataController extends Controller
                     $currentData++;
                 }
             }
+            $timeLabel=collect();
+            for($i = 0; $i < count($hourlyAverages[0]); ++$i) {
+                $time = "{$i}:00";
+                $timeLabel->push($time);
+            }
+
 
             return view('data')
                 ->with('mobileAveragedData',$mobileAveragedData)
@@ -137,7 +143,8 @@ class SensorDataController extends Controller
                 ->with('currentSensor',$currentSensor)
                 ->with('weekDay',$weekDay)
                 ->with('flipCardDataTemp', $averagedFlipData[0])
-                ->with('hourlyAverages',$hourlyAverages);
+                ->with('hourlyAverages',$hourlyAverages)
+                ->with('timeLabel',$timeLabel);
         }
         else{
 

@@ -17,6 +17,7 @@ class AdminController extends Controller
     public function index()
     {
         $current_user = Auth::id();
+        if (Auth::user()->admin != 1) { return to_route('sensorData.index'); }
 
         $allsensors = Sensor::paginate(4);
         $allusers = User::where('id','!=',$current_user)->paginate(5);
@@ -25,20 +26,22 @@ class AdminController extends Controller
 
     public function createUser(Request $request)
     {
+        $admin = 0;
         $request ->validate([
             'name'=> 'required|max:255|string',
             'email'=> 'required|max:255|string|lowercase|email|unique:App\Models\user,email',
             'password'=> 'required|max:255',
-            'admin'=> 'boolean',
             'company_name'=> 'required|max:255|string'
         ]);
+        if ($request->admin != null) { $admin = 1; }
         $newUser = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'admin' => $request->admin,
+            'admin' => $admin,
             'company_name' => $request->companyname
         ]);
+
         $newUser ->save();
         return to_route('admin.index')->with('success', "New user made successfully");
     }

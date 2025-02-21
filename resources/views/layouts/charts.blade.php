@@ -3,7 +3,11 @@
     const tempJson = {!! json_encode($mobileAveragedData[2]->toArray()) !!};
     const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
     const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};
-    console.dir(tempJson);
+
+    const tempHourJson = {!! json_encode($hourlyAverages[0]) !!};
+    const doHourJson = {!! json_encode($hourlyAverages[1]) !!};
+    const timeJson = {!! json_encode($timeLabel) !!};
+    console.dir(doHourJson);
 
     const data = {
     labels: dateJson,
@@ -56,14 +60,14 @@
     };
 
     const dataTemp = {
-    labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
+    labels: timeJson,
     datasets: [{
         pointHitRadius: 20,
         type: 'line',
         label: 'Temp: °C',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgb(255, 99, 132)',
-        data: [-10,1,6,14,12,10,7,5,9,4,14,9,18,4,3],
+        data: tempHourJson,
     }]
     };
     const tempConfig = {
@@ -91,14 +95,14 @@
     }
     };
     const dataDO = {
-    labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
+    labels: timeJson,
     datasets: [{
         pointHitRadius: 20,
         type: 'line',
         label: 'DO (mg,L)',
         backgroundColor: 'rgb(110, 99, 255,0.5)',
         borderColor: 'rgb(110, 99, 255)',
-        data: [20,12,6,15,10,10,7,12,20,4,14,9,13,12,3],
+        data:doHourJson,
     }]
     };
     const DOConfig = {
