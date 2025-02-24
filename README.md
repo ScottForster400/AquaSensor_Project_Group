@@ -9,7 +9,7 @@
 
 - Charlie Molnar
 - Mateusz Kuzon
-- Nasir Al-Monsu
+- Nasir Al-Monsur
 - Oliver Clark-Windle
 - Scott Forster
 
