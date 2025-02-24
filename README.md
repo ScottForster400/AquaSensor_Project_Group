@@ -1,4 +1,3 @@
-
 # Aqua Sensor Group Project
 
 ### Group : Aqua1
@@ -12,6 +11,7 @@
 - Nasir Al-Monsur
 - Oliver Clark-Windle
 - Scott Forster
+
 
 ### Technologies Used
 - TailwindCSS
