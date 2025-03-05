@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\MQTT_subscribe;
 use Carbon\Carbon;
 use App\Models\Sensor;
 use App\Models\Sensor_Data;
 use Illuminate\Http\Request;
 use PhpMqtt\Client\Facades\MQTT;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class SensorDataController extends Controller
 {
@@ -15,6 +18,15 @@ class SensorDataController extends Controller
      */
     public function index()
     {
+        // $process = new Process(['public/scripts/mqtt_subscribe.py']);
+        // $process->run();
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
+
+        // echo $process->getOutput();
+
+        MQTT_subscribe::dispatch();
 
         $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
 
