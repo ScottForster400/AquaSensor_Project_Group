@@ -1,0 +1,10 @@
+.sb-active #sidebar{
+    width:10rem;
+}
+.sb-active p{
+    opacity: 1;
+    visibility: visible;
+}
+.sb-active #sidebar-toggle{
+    rotate: 180deg;
+}
