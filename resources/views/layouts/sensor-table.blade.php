@@ -33,7 +33,6 @@
     </div>
     @if (Auth::check())
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="DO" role="tabpanel" aria-labelledby="dashboard-tab">
-
             <x-table>
                 <x-table-body>
                     @foreach($user_sensors as $sensor1)
@@ -108,7 +107,6 @@
                 </x-table-body>
             </x-table>
             {{$user_sensors->links()}}
-
         </div>
     @endif
 </div>
