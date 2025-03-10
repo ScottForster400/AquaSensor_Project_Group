@@ -1,9 +1,16 @@
 .sb-active #sidebar{
-    width:10rem;
+    width:12rem;
 }
-.sb-active p{
+.sb-active li, .sb-active p{
     opacity: 1;
     visibility: visible;
+}
+.sb-active #list-cont{
+    display: block;
+    opacity: 1;
+}
+.sb-active #sidebar{
+    justify-content: normal;
 }
 .sb-active #sidebar-toggle{
     rotate: 180deg;
