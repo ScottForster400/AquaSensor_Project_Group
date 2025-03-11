@@ -5,38 +5,51 @@
             <ul class="flex flex-col gap-1 list-none">
                 <div class="flex items-center text-s text-gray-400 pt-2">
                     <li class="flex flex-row w-full justify-between opacity-0">
-                        <label class="inline-flex justify-between items-center me-2 cursor-pointer w-full">
-                            <span class=" text-xs font-medium text-gray-900 dark:text-gray-300">Open Source</span>
-                            <input type="checkbox" value="" class="sr-only peer" checked>
-                            <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-600 peer-checked:bg-purple-600 dark:peer-checked:bg-purple-600"></div>
-                          </label>
+                        <x-switch-select>Open Source</x-switch-select>
                     </li>
                 </div>
+                @if (Auth::user() != null)
+                    <div class="flex items-center text-s text-gray-400 pt-2">
+                        <li class="flex flex-row w-full justify-between opacity-0">
+                            <x-switch-select>My Sensors</x-switch-select>
+                        </li>
+                    </div>
+                @endif
 
-                <div class="flex items-center text-s text-gray-400 pt-2">
-                    <li class="flex flex-row w-full justify-between opacity-0">
-                        <label class="inline-flex justify-between items-center me-2 cursor-pointer w-full">
-                            <span class=" text-xs font-medium text-gray-900 dark:text-gray-300">My Sensors</span>
-                            <input type="checkbox" value="" class="sr-only peer" checked>
-                            <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-600 peer-checked:bg-purple-600 dark:peer-checked:bg-purple-600"></div>
-                          </label>
-                    </li>
-                </div>
                 <div class="flex items-center text-s text-gray-400 flex-row pt-2">
                     <li class="flex flex-row w-full justify-between opacity-0">
-                        <x-accordion-head data-accordion-target="#openSource" aria-expanded="false" class="!p-0" >
-                            <x-slot name="title" class="text-sm">Open Source</x-slot>
-                            <x-accordion-body id="openSource">
-                                @foreach ($sensors as $sensor)
+                        <x-accordion-wrapper id="openSourceAccordion">
+                            <x-accordion-head data-accordion-target="#openSource" aria-expanded="false" class="!p-0" >
+                                <x-slot name="title" class="text-sm">Open Source</x-slot>
+                                <x-accordion-body id="openSource">
 
-                                @endforeach
-                            </x-accordion-body>
-                        </x-accordion-head>
+                                    @foreach ($sensors as $sensor)
+                                        <x-switch-select>{{$sensor->sensor_id}}</x-switch-select>
+                                    @endforeach
+                                </x-accordion-body>
+                            </x-accordion-head>
+                        </x-accordion-wrapper>
                     </li>
                 </div>
+                @if (Auth::user() != null)
+                    <div class="flex items-center text-s text-gray-400 flex-row pt-2">
+                        <li class="flex flex-row w-full justify-between opacity-0">
+                            <x-accordion-wrapper id="mySensorAccordion">
+                                <x-accordion-head data-accordion-target="#mySensors" aria-expanded="false" class="!p-0" >
+                                    <x-slot name="title" class="text-sm">My Sensors</x-slot>
+                                    <x-accordion-body id="mySensors">
+                                        @foreach ($ownedSensors as $ownedSensor)
+                                            <x-switch-select>{{$ownedSensor->sensor_id}}</x-switch-select>
+                                        @endforeach
+                                    </x-accordion-body>
+                                </x-accordion-head>
+                            </x-accordion-wrapper>
+                        </li>
+                    </div>
+                @endif
                 <div class="flex items-center text-s text-gray-400">
                     <li class="flex flex-row w-full justify-between opacity-0">
-                        <p class="none">ewdhqwuhd</p>
+
                     </li>
                 </div>
             </ul>

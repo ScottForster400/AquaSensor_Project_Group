@@ -7,6 +7,7 @@ use App\Models\Sensor;
 use App\Models\Sensor_Data;
 use Illuminate\Http\Request;
 use PhpMqtt\Client\Facades\MQTT;
+use Illuminate\Support\Facades\Auth;
 
 class SensorDataController extends Controller
 {
@@ -155,8 +156,19 @@ class SensorDataController extends Controller
     }
 
     public function sensor_data_index(){
-        $sensors = Sensor::where('activated',1)->where('opensource',1)->get();
-        return view('sensor_data')->with('sensors',$sensors);
+
+
+        if(Auth::user() != null){
+            $sensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id','!=',Auth::id())->get();
+            $SensorIdsWithData =Sensor_Data::select('sensor_id')->get();
+            $ownendSenorsWithData=Sensor::whereIn('sensor_id',$SensorIdsWithData)->where('user_id',Auth::id())->where('activated',1)->get();
+            return view('sensor_data')->with('sensors',$sensors)->with('ownedSensors',$ownendSenorsWithData);
+        }
+        else{
+            $sensors = Sensor::where('activated',1)->where('opensource',1)->get();
+            return view('sensor_data')->with('sensors',$sensors);
+        }
+
     }
     /**
      * Show the form for creating a new resource.

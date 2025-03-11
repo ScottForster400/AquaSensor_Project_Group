@@ -1,6 +1,6 @@
 {{-- @props(['title']) --}}
 
-<div id="accordion-flush" data-accordion="collapse"  data-inactive-classes="text-gray-500 dark:text-gray-400" class="w-full">
+
     <h2 id="accordion-flush-heading-1">
       <button {{ $attributes->merge([ 'type'=>'button', 'class' => 'flex items-center justify-between w-full py-2 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3', 'data-accordion-target' => '#accordion-flush-body-1', 'aria-expanded' => 'false', 'aria-controls' => 'accordion-flush-body-1'])}}>
         <span class="text-sm text-grey-">{{$title}}</span>
@@ -10,4 +10,4 @@
       </button>
     </h2>
     {{$slot}}
-</div>
+
