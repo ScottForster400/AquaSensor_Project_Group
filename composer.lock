@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d20b055c72847e3daffcaf49667dff1",
+    "content-hash": "cfd4a28bdbfb2ef39d7ed0e6c35e8586",
     "packages": [
         {
             "name": "brick/math",
@@ -2627,6 +2627,71 @@
                 "source": "https://github.com/php-mqtt/client/tree/v2.2.0"
             },
             "time": "2024-11-24T20:54:32+00:00"
+        },
+        {
+            "name": "php-mqtt/laravel-client",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-mqtt/laravel-client.git",
+                "reference": "54b2fc0cf3aedfb9ddf50429ece670ee7343bd37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-mqtt/laravel-client/zipball/54b2fc0cf3aedfb9ddf50429ece670ee7343bd37",
+                "reference": "54b2fc0cf3aedfb9ddf50429ece670ee7343bd37",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": "^7.4|^8.0",
+                "php-mqtt/client": "^1.3.0|^2.0"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "MQTT": "PhpMqtt\\Client\\Facades\\MQTT"
+                    },
+                    "providers": [
+                        "PhpMqtt\\Client\\MqttClientServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpMqtt\\Client\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marvin Mall",
+                    "email": "marvin-mall@msn.com",
+                    "role": "developer"
+                }
+            ],
+            "description": "A wrapper for the php-mqtt/client library for Laravel.",
+            "homepage": "https://github.com/php-mqtt/laravel-client",
+            "keywords": [
+                "client",
+                "laravel",
+                "mqtt",
+                "publish",
+                "subscribe"
+            ],
+            "support": {
+                "issues": "https://github.com/php-mqtt/laravel-client/issues",
+                "source": "https://github.com/php-mqtt/laravel-client/tree/v1.5.0"
+            },
+            "time": "2024-02-27T18:41:04+00:00"
         },
         {
             "name": "phpoption/phpoption",

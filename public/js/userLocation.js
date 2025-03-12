@@ -12,12 +12,12 @@ if (navigator.geolocation) {
                 var SensorLongitude = sensor.longitude;
                 const dLat = (SensorLatitude - UserLatitude) * (Math.PI / 180);
                 const dLon = (SensorLongitude - UserLongitude) * (Math.PI / 180);
-                
-                const a = 
+
+                const a =
                     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(UserLatitude * (Math.PI / 180)) * Math.cos(SensorLatitude * (Math.PI / 180)) * 
+                    Math.cos(UserLatitude * (Math.PI / 180)) * Math.cos(SensorLatitude * (Math.PI / 180)) *
                     Math.sin(dLon / 2) * Math.sin(dLon / 2);
-                
+
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
                 let Distance = Radius * c;
                 let roundedDistance = Number(Distance.toFixed(2));
@@ -73,12 +73,12 @@ if (navigator.geolocation) {
             suggestionsList.classList.add('hidden');  // Hide the suggestions
             console.log('Selected Sensor ID:', sensorId);
         }
-        
+
 
         // Close the suggestions list if clicking outside the search bar or the suggestions
         document.addEventListener('click', (event) => {
             if (!searchBar.contains(event.target) && !suggestionsList.contains(event.target)) {
-                suggestionsList.classList.add('hidden'); 
+                suggestionsList.classList.add('hidden');
             }
         });
 
@@ -133,7 +133,7 @@ if (navigator.geolocation) {
     // Close the suggestions list if clicking outside the search bar or the suggestions
     document.addEventListener('click', (event) => {
         if (!searchBar.contains(event.target) && !suggestionsList.contains(event.target)) {
-            suggestionsList.classList.add('hidden'); 
+            suggestionsList.classList.add('hidden');
         }
     });
 

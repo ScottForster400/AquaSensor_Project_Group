@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('sensorData.index', absolute: false));
+        return redirect()->intended(route('sensors.index', absolute: false));
     }
 
     /**

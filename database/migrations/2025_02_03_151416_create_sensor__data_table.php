@@ -14,10 +14,15 @@ return new class extends Migration
     {
         Schema::create('sensor__data', function (Blueprint $table) {
             $table->id('sensor_data_id');
-            $table->foreignIdFor(Sensor::class,'sensor_id');
-            $table->dateTime('sensor_data_date');
-            $table->float('dissolved_oxygen');
+            $table->string('sensor_name');
+            $table->string('sensor_id')->foreignIdFor(Sensor::class);
+            $table->string('sensor_data_date');
+            $table->time('sensor_data_time');
+            $table->integer('packet_counter');
             $table->float('temperature');
+            $table->float('%dissolved_oxygen');
+            $table->float('mgl_dissolved_oxygen');
+            $table->longText('data')->nullable();
             $table->timestamps();
         });
     }
