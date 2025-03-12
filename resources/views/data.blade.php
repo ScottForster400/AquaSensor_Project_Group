@@ -8,7 +8,7 @@
     @if(isset($currentSensorData))
         <div class="py-12 flex justify-center z-10 pb-1">
             <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-10 ">
-                <form action="{{route('sensorData.search')}}" class = "w-10/12">
+                <form id="SearchBarForm" action="{{route('sensorData.search')}}" class = "w-10/12">
                     @include('layouts.searchbar')
                 </form>
                 <x-card class="mb-2 !px-4 !py-6 z-10">

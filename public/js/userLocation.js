@@ -3,7 +3,6 @@ if (navigator.geolocation) {
         var UserLatitude = position.coords.latitude;
         var UserLongitude = position.coords.longitude;
 
-        console.log("latitude: " + UserLatitude + " longitude: " + UserLongitude);
         const Radius = 6371;
         let SensorDictionary = new Map();
         if (window.SensorsJS){
@@ -21,26 +20,26 @@ if (navigator.geolocation) {
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
                 let Distance = Radius * c;
                 let roundedDistance = Number(Distance.toFixed(2));
-                console.log(Distance);
                 SensorDictionary.set(sensor.sensor_id, [roundedDistance, sensor.body_of_water])
             });
         }
-        console.log(SensorDictionary);
         let SortedSensorDictionary = new Map([...SensorDictionary.entries()].sort((a, b) => a[1][0] - b[1][0]));
-        console.log(SortedSensorDictionary);
-        let ClosestSensorID = SortedSensorDictionary[0].key;
+        let ClosestSensorID = SortedSensorDictionary.keys().next().value;
         const suggestions = [];
 
         SortedSensorDictionary.forEach((value, key) => {
-            let SortedSensor = "Sensor ID - " + key.toString() + ", Distance - " + value[0].toString() + "km, Body Of Water - " + value[1].toString();
-            console.log(SortedSensor);
+            let SortedSensor = key.toString() + ", " + value[0].toString() + "km, " + value[1].toString();
             suggestions.push(SortedSensor);
         });
 
-        console.log(suggestions);  // Check if the suggestions array is receiving data correctly
-
         const searchBar = document.getElementById('search-bar');
         const suggestionsList = document.getElementById('suggestions-list');
+        const ClosestSensorButton = document.getElementById('ClosestSensorButton');
+        
+        ClosestSensorButton.onclick = () => {
+            searchBar.value = ClosestSensorID;
+            document.getElementById('SearchBarForm').submit();
+        }
 
         // Show suggestions when search bar is clicked by the user
         function openSuggestions() {
@@ -71,7 +70,6 @@ if (navigator.geolocation) {
             let sensorId = suggestion.split(" - ")[1].split(",")[0]; // Get the ID part
             searchBar.value = sensorId;  // Set only the Sensor ID in the search bar
             suggestionsList.classList.add('hidden');  // Hide the suggestions
-            console.log('Selected Sensor ID:', sensorId);
         }
 
 
@@ -93,8 +91,6 @@ if (navigator.geolocation) {
             suggestions.push(sensor.sensor_id.toString());  // Ensure sensor_id is a string for searching
         });
     }
-
-    console.log(suggestions);  // Check if the suggestions array is receiving data correctly
 
     const searchBar = document.getElementById('search-bar');
     const suggestionsList = document.getElementById('suggestions-list');
@@ -127,7 +123,6 @@ if (navigator.geolocation) {
     function handleSelection(suggestion) {
         searchBar.value = suggestion;  // Set the search bar to the selected suggestion
         suggestionsList.classList.add('hidden');
-        console.log('Selected:', suggestion);
     }
 
     // Close the suggestions list if clicking outside the search bar or the suggestions
