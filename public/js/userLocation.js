@@ -67,7 +67,7 @@ if (navigator.geolocation) {
         }
 
         function handleSelection(suggestion) {
-            let sensorId = suggestion.split(" - ")[1].split(",")[0]; // Get the ID part
+            let sensorId = suggestion.split(",")[0]; // Get the ID part
             searchBar.value = sensorId;  // Set only the Sensor ID in the search bar
             suggestionsList.classList.add('hidden');  // Hide the suggestions
         }
