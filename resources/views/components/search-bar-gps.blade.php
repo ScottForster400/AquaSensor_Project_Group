@@ -6,7 +6,7 @@
     </a>
     <input type="search" id="search" name="search" class="z-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required {{$attributes->merge(['placeholder' => ''])}}/>
     <input type="search" class="z-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required {{$attributes->merge(['placeholder' => ''])}}/>
-    <ul id="suggestions-list" class="absolute hidden left-1/2 transform -translate-x-1/2 mt-2 w-4/5 max-h-64 overflow-y-auto border border-gray-300 bg-white rounded-lg shadow-lg z-50">
+    <ul id="suggestions-list" class="absolute hidden left-1/2 transform -translate-x-1/2 mt-2 w-full max-h-64 overflow-y-auto border border-gray-300 bg-white rounded-lg shadow-lg z-50">
         @if ($Sensors && $Sensors->count() > 0)
             @foreach ($Sensors as $Sensor)
                 <li class="px-4 py-2 hover:bg-gray-100">
