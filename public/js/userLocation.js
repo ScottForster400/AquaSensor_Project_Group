@@ -28,7 +28,7 @@ if (navigator.geolocation) {
         console.log(SensorDictionary);
         let SortedSensorDictionary = new Map([...SensorDictionary.entries()].sort((a, b) => a[1][0] - b[1][0]));
         console.log(SortedSensorDictionary);
-
+        let ClosestSensorID = SortedSensorDictionary[0].key;
         const suggestions = [];
 
         SortedSensorDictionary.forEach((value, key) => {
