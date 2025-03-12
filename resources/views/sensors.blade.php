@@ -13,7 +13,7 @@
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
 
             <form action="{{route('sensors.search')}}" method="GET" class = "w-4/5">
-                <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
+                @include('layouts.searchbar')
             </form>
 
 
@@ -121,5 +121,9 @@
 
         </div>
     </div>
-    @include("layouts.maps")
+    {{-- @include("layouts.maps") --}}
+    <script>
+        window.SensorsJS = @json($Sensors);
+    </script>
+    <script src="{{ asset('js/userLocation.js') }}"></script>
 </x-app-layout>

@@ -26,9 +26,9 @@ class SensorController extends Controller
 
         //gets all open source and activated sensors
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
+        $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
 
-
-        return view('sensors',compact('opensource','user_sensors'));
+        return view('sensors',compact('opensource','user_sensors'))->with('Sensors',$sensors);
 
     }
 
@@ -54,12 +54,12 @@ class SensorController extends Controller
             ->where('user_id',$current_user)
             ->paginate(5)->withQueryString();
 
-
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors);
+            $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors);
 
         }
-
-        return view('sensors')->with('opensource',$opensource_searchedSensors);
+        $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
+        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors',$sensors);;
     }
 
     public function sort(){
@@ -79,7 +79,8 @@ class SensorController extends Controller
 
 
         }
-        return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors);
+        $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
+        return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
     }
 
     public function activate(Request $request)
