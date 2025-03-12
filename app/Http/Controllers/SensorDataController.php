@@ -133,7 +133,7 @@ class SensorDataController extends Controller
                 $time = "{$i}:00";
                 $timeLabel->push($time);
             }
-
+            $sensors = Sensor::where('opensource',1)->get();
 
             return view('data')
                 ->with('mobileAveragedData',$mobileAveragedData)
@@ -144,7 +144,8 @@ class SensorDataController extends Controller
                 ->with('weekDay',$weekDay)
                 ->with('flipCardDataTemp', $averagedFlipData[0])
                 ->with('hourlyAverages',$hourlyAverages)
-                ->with('timeLabel',$timeLabel);
+                ->with('timeLabel',$timeLabel)
+                ->with('Sensors',$sensors);
         }
         else{
 
