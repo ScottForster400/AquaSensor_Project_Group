@@ -7,7 +7,6 @@
     const tempHourJson = {!! json_encode($hourlyAverages[0]) !!};
     const doHourJson = {!! json_encode($hourlyAverages[1]) !!};
     const timeJson = {!! json_encode($timeLabel) !!};
-    console.dir(doHourJson);
 
     const data = {
     labels: dateJson,

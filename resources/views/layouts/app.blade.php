@@ -25,12 +25,14 @@
             <script src="{{ asset('/js/dataPage.js') }} " defer></script>
             {{-- <script src="{{asset('/js/charts.js')}}" defer></script> --}}
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="path/to/chartjs/dist/chart.min.js"></script>
+            {{-- <script src="path/to/chartjs/dist/chart.min.js"></script> --}}
             <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
-            <script src="path/to/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>
+            {{-- <script src="path/to/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script> --}}
+        @endif
+        @if ($currentRoute =="sensor_data.index")
+            <script src="{{ asset('/js/sidebar.js') }} " defer></script>
         @endif
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script src="{{ asset('/js/sidebar.js') }} " defer></script>
 
     </head>
     <body class="font-sans antialiased">

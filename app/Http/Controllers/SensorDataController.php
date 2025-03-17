@@ -162,11 +162,13 @@ class SensorDataController extends Controller
             $sensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id','!=',Auth::id())->get();
             $SensorIdsWithData =Sensor_Data::select('sensor_id')->get();
             $ownendSenorsWithData=Sensor::whereIn('sensor_id',$SensorIdsWithData)->where('user_id',Auth::id())->where('activated',1)->get();
+
             return view('sensor_data')->with('sensors',$sensors)->with('ownedSensors',$ownendSenorsWithData);
         }
         else{
+            $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
             $sensors = Sensor::where('activated',1)->where('opensource',1)->get();
-            return view('sensor_data')->with('sensors',$sensors);
+            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater);
         }
 
     }

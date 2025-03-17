@@ -1,22 +1,22 @@
 <div id="sidebar-cont" class=" flex flex-col w-8 h-full z-30">
     <div id ="sidebar" class="sidebar sticky w-full h-full  bg-white z-30 shadow-[rgba(0,0,0,0.1)_1px_4px_4px_0px] transition-all overflow-y-auto flex justify-center flex-row">
-        <div id="list-cont" class="w-full max-w-40 hidden opacity-0 bg-slate-50 py-3 pl-3 pr-1">
+        <div id="list-cont" class="w-full max-w-40 h-full hidden opacity-0 bg-slate-50 py-3 pl-3 pr-1">
             <h2>Sensor Filters</h2>
-            <ul class="flex flex-col gap-1 list-none">
+            <ul class="flex flex-col gap-1 list-none bg-inherit">
                 <div class="flex items-center text-s text-gray-400 pt-2">
                     <li class="flex flex-row w-full justify-between opacity-0">
-                        <x-switch-select>Open Source</x-switch-select>
+                        <x-switch-select id="openSourceToggle" onclick="openSource()">Open Source</x-switch-select>
                     </li>
                 </div>
                 @if (Auth::user() != null)
-                    <div class="flex items-center text-s text-gray-400 pt-2">
+                    <div class="flex items-center text-s text-gray-400 pt-3">
                         <li class="flex flex-row w-full justify-between opacity-0">
-                            <x-switch-select>My Sensors</x-switch-select>
+                            <x-switch-select id="mySensorsToggle" onclick="mySensors()">My Sensors</x-switch-select>
                         </li>
                     </div>
                 @endif
 
-                <div class="flex items-center text-s text-gray-400 flex-row pt-2">
+                <div class="flex items-center text-s text-gray-400 flex-row pt-3">
                     <li class="flex flex-row w-full justify-between opacity-0">
                         <x-accordion-wrapper id="openSourceAccordion">
                             <x-accordion-head data-accordion-target="#openSource" aria-expanded="false" class="!p-0" >
@@ -24,7 +24,7 @@
                                 <x-accordion-body id="openSource">
 
                                     @foreach ($sensors as $sensor)
-                                        <x-switch-select>{{$sensor->sensor_id}}</x-switch-select>
+                                        <x-switch-select class="openSource">{{$sensor->sensor_id}}</x-switch-select>
                                     @endforeach
                                 </x-accordion-body>
                             </x-accordion-head>
@@ -32,14 +32,14 @@
                     </li>
                 </div>
                 @if (Auth::user() != null)
-                    <div class="flex items-center text-s text-gray-400 flex-row pt-2">
+                    <div class="flex items-center text-s text-gray-400 flex-row pt-3">
                         <li class="flex flex-row w-full justify-between opacity-0">
                             <x-accordion-wrapper id="mySensorAccordion">
                                 <x-accordion-head data-accordion-target="#mySensors" aria-expanded="false" class="!p-0" >
                                     <x-slot name="title" class="text-sm">My Sensors</x-slot>
                                     <x-accordion-body id="mySensors">
                                         @foreach ($ownedSensors as $ownedSensor)
-                                            <x-switch-select>{{$ownedSensor->sensor_id}}</x-switch-select>
+                                            <x-switch-select class="mySensor">{{$ownedSensor->sensor_id}}</x-switch-select>
                                         @endforeach
                                     </x-accordion-body>
                                 </x-accordion-head>
@@ -47,9 +47,15 @@
                         </li>
                     </div>
                 @endif
-                <div class="flex items-center text-s text-gray-400">
+                <div class="flex items-center text-s text-gray-400 pt-3">
                     <li class="flex flex-row w-full justify-between opacity-0">
-
+                        <label for="underline_select" class="sr-only">Body Of Water</label>
+                        <select id="underline_select" class="block py-0 px-0 w-full text-sm text-gray-500 font-medium bg-transparent border-0 border-b border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                            <option class="px-0" selected>Body Of Water</option>
+                            @foreach ($bodyOfWater as $body)
+                                <option value="{{$body->body_of_water}}">{{$body->body_of_water}}</option>
+                            @endforeach
+                        </select>
                     </li>
                 </div>
             </ul>
