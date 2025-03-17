@@ -70,6 +70,7 @@ if (navigator.geolocation) {
             let sensorId = suggestion.split(",")[0]; // Get the ID part
             searchBar.value = sensorId;  // Set only the Sensor ID in the search bar
             suggestionsList.classList.add('hidden');  // Hide the suggestions
+            document.getElementById('SearchBarForm').submit();
         }
 
 
@@ -121,8 +122,10 @@ if (navigator.geolocation) {
     }
 
     function handleSelection(suggestion) {
-        searchBar.value = suggestion;  // Set the search bar to the selected suggestion
+        let sensorId = suggestion.split(",")[0];
+        searchBar.value = sensorId;  // Set the search bar to the selected suggestion
         suggestionsList.classList.add('hidden');
+        document.getElementById('SearchBarForm').submit();
     }
 
     // Close the suggestions list if clicking outside the search bar or the suggestions
