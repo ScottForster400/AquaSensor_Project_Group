@@ -17,6 +17,8 @@ class SensorDataController extends Controller
     {
         $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
         //get open source sensor count
+        //dd(!$this->Compare2Dates("09-02-25", "13/03/2025", true) . ", " . $this->Compare2Dates("15-04-25", "13/03/2025", false));
+
         if ($sensorCount > 0) { //if any open source sensors exist
             if (array_key_exists('sensor_id', $_REQUEST)) { //if the user has selected a sensor
                 $activeSensor = $_REQUEST['sensor_id'];
@@ -36,9 +38,25 @@ class SensorDataController extends Controller
             $time=1;
             $mobileAveragedData = collect([collect(), collect(), collect(), collect()]);
             $averagedData = collect([collect(), collect(), collect(), collect()]);
+            $startDate = "01/01/2000"; //api ony uses 2 digits for year so will break after 2100
+            $endDate = "31/12/2099";
+
+            if (Count($request->query) > 0) {
+                $startDate = $_REQUEST['start'];
+                $endDate = $_REQUEST['end'];
+
+                $splitStart = explode("/", $startDate);
+                $splitEnd = explode("/", $endDate);
+
+                $mobileAverageMax = 2000;
+                $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 200;
+                if ($splitEnd[1] - $splitStart[1] == 0) {
+                    $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (20/3);
+                }
+                if ($mobileAverageCount > 2000) { $mobileAverageCount = 2000; }
+            }
 
             $averageCount = 700; //data settings
-            $mobileAverageCount = 2000;
             $dataLength = count($data)/$averageCount;
             $mobileData = $data;
             $mobileDataLength = count($data)/$mobileAverageCount;
@@ -48,32 +66,43 @@ class SensorDataController extends Controller
                     $averageDoData = 0;
 
                     $dataAverager = array_splice($mobileData, 0, $mobileAverageCount); //split the array into sections
-
-                    for ( $j = 0; $j < count($dataAverager); $j++) { //average each array section
-                        if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
-                            $averageTempData += $dataAverager[$j][$temp];
-                            $averageDoData += $dataAverager[$j][$do];
-                        } else { //if the current value is too high to be realistic (an error reading)
-                            array_splice($dataAverager, $j, 1); //remove from array section
+                    if ($this->IsArrayInRange($startDate, $endDate, $dataAverager[0][$date], $dataAverager[Count($dataAverager)-1][$date])) { //if the split is entirly outside date range skip
+                        for ( $j = 0; $j < count($dataAverager); $j++) { //average each array section
+                            if (!$this->IsDateInRange($startDate, $endDate, $dataAverager[$j][$date])) { //if date outside range
+                                array_splice($dataAverager, $j, 1); //remove from array section
+                            } else {
+                                if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
+                                    $averageTempData += $dataAverager[$j][$temp];
+                                    $averageDoData += $dataAverager[$j][$do];
+                                } else { //if the current value is too high to be realistic (an error reading)
+                                    array_splice($dataAverager, $j, 1); //remove from array section
+                                }
+                            }
                         }
+                        $mobileAveragedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
+                        $mobileAveragedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
+                        $mobileAveragedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
+                        $mobileAveragedData[$time]->push($dataAverager[0][$time]); //save averaged data in variable
                     }
-                    $mobileAveragedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
-                    $mobileAveragedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
-                    $mobileAveragedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
-                    $mobileAveragedData[$time]->push($dataAverager[0][$time]); //save averaged data in variable
                 }
 
                 for ($i = 0; $i < $dataLength; $i++) { //do the averaging for desktop (exact same as mobile)
                     $averageTempData = 0;
                     $averageDoData = 0;
 
-                    $dataAverager = array_splice($data, 0, $averageCount);
-                    for ( $j = 0; $j < count($dataAverager); $j++) {
-                        if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
-                            $averageTempData += $dataAverager[$j][$temp];
-                            $averageDoData += $dataAverager[$j][$do];
-                        } else {
-                            array_splice($dataAverager, $j, 1);
+                    $dataAverager = array_splice($data, 0, $averageCount); //split the array into sections
+                    if ($this->IsArrayInRange($startDate, $endDate, $dataAverager[0][$date], $dataAverager[Count($dataAverager)-1][$date])) { //if the split is entirly outside date range skip
+                        for ( $j = 0; $j < count($dataAverager); $j++) {
+                            if (!$this->IsDateInRange($startDate, $endDate, $dataAverager[$j][$date])) { //if date outside range
+                                array_splice($dataAverager, $j, 1); //remove from array section
+                            } else {
+                                if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
+                                    $averageTempData += $dataAverager[$j][$temp];
+                                    $averageDoData += $dataAverager[$j][$do];
+                                } else {
+                                    array_splice($dataAverager, $j, 1);
+                                }
+                            }
                         }
                     }
                     $averagedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3));
@@ -265,5 +294,43 @@ class SensorDataController extends Controller
             return to_route('sensorData.index',compact('sensor_id'));
         }
 
+    }
+
+    //checks if the value is in the date range
+    private function IsDateInRange($lowerRange, $upperRange, $dataPoint) {
+        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("/", $upperRange);
+        $splitDataPoint = explode("-", $dataPoint);
+        $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
+        $splitUpperRange[2] = substr($splitUpperRange[2], 2);
+        
+        $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
+        $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
+        $dataPoint = $splitDataPoint[2].$splitDataPoint[1].$splitDataPoint[0];
+
+        if (($lowerRange - $dataPoint <= 0 && $upperRange - $dataPoint >= 0)) {
+            return true; //if ether point or both points in range
+        } else { return false; }
+    }
+
+    //returns true if the data points are in the range points
+    private function IsArrayInRange($lowerRange, $upperRange, $lowerData, $upperData) {
+        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("/", $upperRange);
+        $splitLowerData = explode("-", $lowerData);
+        $splitUpperData = explode("-", $upperData);
+        $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
+        $splitUpperRange[2] = substr($splitUpperRange[2], 2);
+        
+        $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
+        $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
+        $lowerData = $splitLowerData[2].$splitLowerData[1].$splitLowerData[0];
+        $upperData = $splitUpperData[2].$splitUpperData[1].$splitUpperData[0];
+
+        //printf(($lowerRange - $lowerData <= 0).", ".($upperRange - $lowerData >= 0).", ".($lowerRange - $upperData <= 0).", ".($upperRange - $upperData >= 0)." - - ".
+        //$lowerRange.", ".$upperRange.", ".$lowerData.", ".$upperData."<br>");
+        if (($lowerRange - $lowerData <= 0 && $upperRange - $lowerData >= 0) || ($lowerRange - $upperData <= 0 && $upperRange - $upperData >= 0) || ($upperRange - $lowerData >= 0 && $lowerRange - $upperData <= 0)) {
+            return true; //if ether point or both points in range
+        } else { return false; }
     }
 }
