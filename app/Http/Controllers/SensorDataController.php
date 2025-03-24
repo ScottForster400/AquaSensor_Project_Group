@@ -49,11 +49,15 @@ class SensorDataController extends Controller
                 $splitEnd = explode("/", $endDate);
 
                 $mobileAverageMax = 2000;
-                $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 200;
+                $splitEnd[1] += ($splitEnd[2] - $splitStart[2]) * 12;
+                $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 5;
                 if ($splitEnd[1] - $splitStart[1] == 0) {
-                    $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (20/3);
+                    $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (5/30);
                 }
-                if ($mobileAverageCount > 2000) { $mobileAverageCount = 2000; }
+                if ($mobileAverageCount < 1) { $mobileAverageCount = 1;}
+                if ($mobileAverageCount > 2000) { $mobileAverageCount = 50;}
+            } else {
+                $mobileAverageCount = 50;
             }
 
             $averageCount = 700; //data settings
