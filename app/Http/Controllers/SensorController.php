@@ -64,23 +64,39 @@ class SensorController extends Controller
 
     public function sort(){
 
-        $current_user = Auth::user()->id;
-        if(array_key_exists('sort_by',$_REQUEST)){
-            $sortBy = $_REQUEST['sort_by'];
-            if($sortBy =='alph_asc'){
-                $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
-                $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','asc')->paginate(5);
-            }
-            elseif($sortBy =='alph_des'){
-                $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
-                $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','desc')->paginate(5);
-            }
+        if(Auth::check()){
+            $current_user = Auth::user()->id;
+            if(array_key_exists('sort_by',$_REQUEST)){
+                $sortBy = $_REQUEST['sort_by'];
+                if($sortBy =='alph_asc'){
+                    $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                    $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','asc')->paginate(5);
+                }
+                elseif($sortBy =='alph_des'){
+                    $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                    $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','desc')->paginate(5);
+                }
 
+            }
+            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
+
+        } else{
+
+            if(array_key_exists('sort_by',$_REQUEST)){
+                $sortBy = $_REQUEST['sort_by'];
+                if($sortBy =='alph_asc'){
+                    $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                }
+                elseif($sortBy =='alph_des'){
+                    $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                }
+
+            }
+            return view('sensors')->with('opensource',$sensors)->with('Sensors',$sensors);
 
 
         }
-        $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-        return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
+
     }
 
     public function activate(Request $request)
