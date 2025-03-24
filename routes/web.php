@@ -16,6 +16,7 @@ Route::get('/sensors/search', [SensorController::class, 'search'])->name('sensor
 Route::get('/sensors/sort', [SensorController::class, 'sort'])->name('sensors.sort');
 Route::post('/sensors/activate', [SensorController::class, 'activate'])->name('sensors.activate');
 Route::post('/sensors/update', [SensorController::class, 'update'])->name('sensors.update');
+Route::get('/sensors/sortSearch', [SensorController::class, 'sortSearch'])->name('sensors.sortSearch');
 
 Route::get('/sensorData/search', [SensorDataController::class, 'search'])->name('sensorData.search');
 
