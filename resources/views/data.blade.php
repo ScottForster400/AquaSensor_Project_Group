@@ -129,7 +129,7 @@
                     <h2 class="">
                         Sensor Data
                     </h2>
-                    <form action="" class="w-full flex justify-center">
+                    <form action="{{route('sensors.index')}}" class="w-full flex justify-center">
                         <x-date-time-picker></x-date-time-picker>
                     </form>
                     <div id="graph" class="max-sm:h-60 h-96 flex items-center justify-center  my-2">
