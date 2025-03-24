@@ -133,7 +133,7 @@
                     <form action="{{route('sensorData.index')}}" class="w-full flex justify-center flex-col">
                         <x-date-time-picker></x-date-time-picker>
                         <div class="w-full pt-3">
-                            <x-button-1 class="w-full>Search</x-button-1>
+                            <x-button-1 class="w-full">Search</x-button-1>
                         </div>
                     </form>
                     
