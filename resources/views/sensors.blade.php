@@ -1,3 +1,23 @@
+@php
+    $currentRoute = Route::currentRouteName();
+    $sortRoute = 'sensors.sort';
+    $searchRoute ='sensors.search';
+    $search=$_REQUEST;
+    $isSortRoute = 'false';
+    if($currentRoute == 'sensors.search' || $currentRoute == 'sensors.sortSearch'){
+        $sortRoute = 'sensors.sortSearch';
+    };
+    if ($currentRoute == 'sensors.sortSearch') {
+        $search = $_REQUEST['search'];
+    }
+    if($currentRoute == 'sensors.sort' || $currentRoute == 'sensors.sortSearch'){
+
+        $isSortRoute = 'true';
+    }
+@endphp
+
+
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -79,10 +99,10 @@
                             <div>
                                 <x-dropdown-button-body>
                                     <x-dropdown-button-li class="w-full">
-                                        <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_asc'] )}}">A to Z</x-dropdown-button-a>
+                                        <x-dropdown-button-a href="{{route($sortRoute, ['sort_by'=>'alph_asc', 'search'=>$search] )}}">A to Z</x-dropdown-button-a>
                                     </x-dropdown-button-li>
                                     <x-dropdown-button-li class="w-full">
-                                        <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_des'])}}">Z to A</x-dropdown-button-a>
+                                        <x-dropdown-button-a href="{{route($sortRoute, ['sort_by'=>'alph_des', 'search'=>$search])}}">Z to A</x-dropdown-button-a>
                                     </x-dropdown-button-li>
                                 </x-dropdown-button-body>
                             </div>
@@ -95,10 +115,10 @@
                         <div>
                             <x-dropdown-button-body>
                                 <x-dropdown-button-li class="w-full">
-                                    <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_asc'] )}}">A to Z</x-dropdown-button-a>
+                                    <x-dropdown-button-a href="{{route($sortRoute, ['sort_by'=>'alph_asc', 'search'=>$search] )}}">A to Z</x-dropdown-button-a>
                                 </x-dropdown-button-li>
                                 <x-dropdown-button-li class="w-full">
-                                    <x-dropdown-button-a href="{{route('sensors.sort', ['sort_by'=>'alph_des'])}}">Z to A</x-dropdown-button-a>
+                                    <x-dropdown-button-a href="{{route($sortRoute, ['sort_by'=>'alph_des', 'search'=>$search])}}">Z to A</x-dropdown-button-a>
                                 </x-dropdown-button-li>
                             </x-dropdown-button-body>
                         </div>

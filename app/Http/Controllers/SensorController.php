@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 
+use function Laravel\Prompts\search;
 
 class SensorController extends Controller
 {
@@ -64,23 +65,138 @@ class SensorController extends Controller
 
     public function sort(){
 
-        $current_user = Auth::user()->id;
-        if(array_key_exists('sort_by',$_REQUEST)){
-            $sortBy = $_REQUEST['sort_by'];
-            if($sortBy =='alph_asc'){
-                $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
-                $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','asc')->paginate(5);
+        if(Auth::check()){
+            $current_user = Auth::user()->id;
+            if(array_key_exists('sort_by',$_REQUEST)){
+                $sortBy = $_REQUEST['sort_by'];
+                if($sortBy =='alph_asc'){
+                    $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                    $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                }
+                elseif($sortBy =='alph_des'){
+                    $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                    $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                }
+
             }
-            elseif($sortBy =='alph_des'){
-                $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
-                $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','desc')->paginate(5);
+            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
+
+        } else{
+
+            if(array_key_exists('sort_by',$_REQUEST)){
+                $sortBy = $_REQUEST['sort_by'];
+                if($sortBy =='alph_asc'){
+                    $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                }
+                elseif($sortBy =='alph_des'){
+                    $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                }
+
             }
 
+            return view('sensors')->with('opensource',$sensors)->with('Sensors',$sensors);
 
 
         }
-        $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-        return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
+
+    }
+
+    public function sortSearch(){
+
+
+
+        if(Auth::check()){
+
+            $current_user = Auth::user()->id;
+
+
+            $searchRequestarray = $_REQUEST['search'];
+            $searchRequest = $searchRequestarray['search'];
+
+
+            if(array_key_exists('sort_by',$_REQUEST) && array_key_exists('search',$searchRequestarray)){
+                $sortBy = $_REQUEST['sort_by'];
+                if($sortBy =='alph_asc'){
+                    $opensource_searchedSensors = Sensor::
+                    Where('sensor_name','like',"%$searchRequest%")
+                    ->orWhere('sensor_id','like',"%$searchRequest%")
+                    ->orWhere('location','like',"%$searchRequest%")
+                    ->where('activated',1)
+                    ->where('opensource',1)
+                    ->orderBy('sensor_name','asc')
+                    ->paginate(5)->withQueryString();
+
+                    $users_searchedSensors = Sensor::
+                    Where('sensor_name','like',"%$searchRequest%")
+                    ->orWhere('sensor_id','like',"%$searchRequest%")
+                    ->orWhere('location','like',"%$searchRequest%")
+                    ->where('user_id',$current_user)
+                    ->orderBy('sensor_name','asc')
+                    ->paginate(5)->withQueryString();
+
+
+                }
+                elseif($sortBy =='alph_des'){
+                    $opensource_searchedSensors = Sensor::
+                    Where('sensor_name','like',"%$searchRequest%")
+                    ->orWhere('sensor_id','like',"%$searchRequest%")
+                    ->orWhere('location','like',"%$searchRequest%")
+                    ->where('activated',1)
+                    ->where('opensource',1)
+                    ->orderBy('sensor_name','desc')
+                    ->paginate(5)->withQueryString();
+
+                    $users_searchedSensors = Sensor::
+                    Where('sensor_name','like',"%$searchRequest%")
+                    ->orWhere('sensor_id','like',"%$searchRequest%")
+                    ->orWhere('location','like',"%$searchRequest%")
+                    ->where('user_id',$current_user)
+                    ->orderBy('sensor_name','desc')
+                    ->paginate(5)->withQueryString();
+
+                }
+
+
+            }
+
+            $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors);
+
+        }
+        else{
+
+            $searchRequestarray = $_REQUEST['search'];
+            $searchRequest = $searchRequestarray['search'];
+
+            if(array_key_exists('sort_by',$_REQUEST) && array_key_exists('search',$searchRequestarray)){
+                $sortBy = $_REQUEST['sort_by'];
+                if($sortBy =='alph_asc'){
+                    $opensource_searchedSensors = Sensor::
+                    Where('sensor_name','like',"%$searchRequest%")
+                    ->orWhere('sensor_id','like',"%$searchRequest%")
+                    ->orWhere('location','like',"%$searchRequest%")
+                    ->where('activated',1)
+                    ->where('opensource',1)
+                    ->orderBy('sensor_name','asc')
+                    ->paginate(5)->withQueryString();
+
+                }
+                elseif($sortBy =='alph_des'){
+                    $opensource_searchedSensors = Sensor::
+                    Where('sensor_name','like',"%$searchRequest%")
+                    ->orWhere('sensor_id','like',"%$searchRequest%")
+                    ->orWhere('location','like',"%$searchRequest%")
+                    ->where('activated',1)
+                    ->where('opensource',1)
+                    ->orderBy('sensor_name','desc')
+                    ->paginate(5)->withQueryString();
+
+                }
+            }
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors', $opensource_searchedSensors);
+
+        }
+
     }
 
     public function activate(Request $request)

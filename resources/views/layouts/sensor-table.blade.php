@@ -106,7 +106,9 @@
                     @endforeach
                 </x-table-body>
             </x-table>
-            {{$user_sensors->links()}}
+            @if (Auth::check())
+                {{$user_sensors->links()}}
+            @endif
         </div>
     @endif
 </div>
