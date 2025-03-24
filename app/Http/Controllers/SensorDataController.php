@@ -159,11 +159,30 @@ class SensorDataController extends Controller
 
 
         if(Auth::user() != null){
+            $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
             $sensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id','!=',Auth::id())->get();
             $SensorIdsWithData =Sensor_Data::select('sensor_id')->get();
             $ownendSenorsWithData=Sensor::whereIn('sensor_id',$SensorIdsWithData)->where('user_id',Auth::id())->where('activated',1)->get();
 
-            return view('sensor_data')->with('sensors',$sensors)->with('ownedSensors',$ownendSenorsWithData);
+            $data = $this->GetAndFormatCurl('sensor022');
+            $tempDa = collect();
+            for($i=0; $i < count($data); $i++){
+
+                $wooo = $data[$i];
+
+                $tempDa->push($wooo[2]);
+                // dump($tempDa);
+            }
+            for ( $j = 0; $j < count($tempDa); $j++) {
+                if ($tempDa[$j]<= 10 && $tempDa[$j] >= 30) {
+
+                }
+                else {
+                    $tempDa->splice($j,1);
+                };
+            }
+
+            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('ownedSensors',$ownendSenorsWithData)->with('tempDa',$tempDa);
         }
         else{
             $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
