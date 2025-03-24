@@ -131,8 +131,8 @@
                     </h2>
                     <form action="" class="w-full flex justify-center flex-col">
                         <x-date-time-picker></x-date-time-picker>
-                        <div class="w-full">
-                            <x-primary-button>Search</x-primary-button>
+                        <div class="w-full pt-3">
+                            <x-button-1 class="w-full">Search</x-button-1>
                         </div>
                     </form>
                     <div id="graph" class="max-sm:h-60 h-96 flex items-center justify-center  my-2">
