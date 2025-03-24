@@ -168,7 +168,25 @@ class SensorDataController extends Controller
         else{
             $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
             $sensors = Sensor::where('activated',1)->where('opensource',1)->get();
-            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater);
+            $data = $this->GetAndFormatCurl('sensor022');
+            $tempDa = collect();
+            for($i=0; $i < count($data); $i++){
+
+                $wooo = $data[$i];
+
+                $tempDa->push($wooo[2]);
+                // dump($tempDa);
+            }
+            for ( $j = 0; $j < count($tempDa); $j++) {
+                if ($tempDa[$j]<= 10 && $tempDa[$j] >= 30) {
+
+                }
+                else {
+                    $tempDa->splice($j,1);
+                };
+            }
+
+            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('tempDa',$tempDa);
         }
 
     }

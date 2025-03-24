@@ -32,4 +32,101 @@
         </div>
     </div>
     {{-- @include('layouts.waves') --}}
+    <script defer>
+        // var myChart = echarts.init(document.getElementById('graph-temp'), null,{
+
+        // })
+        // window.addEventListener('resize', function() {
+        //     myChart.resize();
+        // });
+        // document.addEventListener('DOMContentLoaded',function () {
+        //     setTimeout(myChart.resize(),4000)
+        //     console.dir('qewiugfuiewgfiuewgfiuebgwifebgwyulfvwaiylfvbwylvfLWBVFLHEWV')
+        // })
+
+        // // Draw the chart
+        // option = {
+        //     xAxis: {
+        //         type: 'category',
+        //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        //     },
+        //     yAxis: {
+        //         type: 'value'
+        //     },
+        //     grid:{
+        //         height:"60%",
+        //         width: "80%"
+        //     },
+        //     series: [
+        //         {
+        //         data: [820, 932, 901, 934, 1290, 1330, 1320],
+        //         type: 'line',
+        //         smooth: true
+        //         }
+        //     ]
+        // };
+        // myChart.setOption(option);
+        Chart.defaults.elements.bar.borderWidth = 0;
+        const  bu = {!! json_encode($tempDa) !!}
+        console.dir(bu)
+        const data = {
+            labels: bu,
+            datasets: [{
+                pointHitRadius: 20,
+                type: 'line',
+                label: 'Temp: °C',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: bu,
+            },{
+                pointHitRadius: 20,
+                type: 'line',
+                label: 'DO: (mg/L)',
+                backgroundColor: 'rgb(110, 99, 255,0.5)',
+                borderColor: 'rgb(110, 99, 255)',
+                data: bu,
+            }]
+        };
+        const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            //aspectRatio:1,
+            maintainAspectRatio: false,
+            elements:{
+                point:{
+                    radius:0
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 90
+                    }
+                }
+            },
+            hover: {  // <-- to add
+                mode: 'nearest'
+                },
+            tooltips: {
+                mode: 'nearest',
+                intersect: true
+            },
+            interaction: {
+                mode: 'nearest'
+            }
+
+        }
+        };
+
+        const myChart = new Chart(
+        document.getElementById('tempChart'),
+        config // We'll add the configuration details later.
+        );
+    </script>
 </x-app-layout>

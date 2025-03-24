@@ -8,10 +8,10 @@
         </li>
     </ul>
 </div>
-<div id="default-styled-tab-content" class="max-sm:h-44  h-80">
+<div id="default-styled-tab-content" class="max-sm:h-52  h-80">
     <div class="hidden  rounded-lg bg-gray-50 dark:bg-gray-800 h-full w-full" id="temp" role="tabpanel" aria-labelledby="temperature-tab">
-        <div id="graph-temp" class="h-full w-full flex items-center justify-center  my-2">
-            <p>akhdbgi</p>
+        <div id="graph-temp" class="h-full w-full ">
+            <canvas id="tempChart"> </canvas>
         </div>
     </div>
     <div class="hidden p rounded-lg bg-gray-50 dark:bg-gray-800 h-full w-full " id="DO" role="tabpanel" aria-labelledby="dashboard-tab">
