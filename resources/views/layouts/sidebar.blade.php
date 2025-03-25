@@ -59,9 +59,44 @@
                     </li>
                 </div>
 
-                <form action="" class="w-full flex flex-wrap justify-center">
-                    <x-date-time-picker></x-date-time-picker>
-                </form>
+                <div class="flex items-center text-s text-gray-400 flex-row pt-3">
+                    <li class="flex flex-row w-full justify-between opacity-0">
+                        <x-accordion-wrapper id="datetimeAccordion">
+                            <x-accordion-head data-accordion-target="#datetime" aria-expanded="false" class="!p-0" >
+                                <x-slot name="title" class="text-sm">Date Selector</x-slot>
+                                <x-accordion-body id="datetime">
+                                    <!-- Date Time -->
+                                    <form action="" class="w-full flex flex-wrap justify-center">
+                                        <div id="date-range-picker" date-rangepicker datepicker-format="dd/mm/yyyy" datepicker-autohide datepicker-orientation="bottom middle" class="flex flex-col">
+                                            <div class="relative pr-1">
+                                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                </svg>
+                                            </div>
+                                            <input id="datepicker-range-start"  name="start"  type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date start">
+                                            </div>
+
+                                            <div class="relative pr-1 pt-2">
+                                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                </svg>
+                                            </div>
+                                            <input id="datepicker-range-end" name="end"  type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date end">
+                                        </div>
+                                        </div>
+                                    </form>
+                                </x-accordion-body>
+                            </x-accordion-head>
+                        </x-accordion-wrapper>
+                    </li>
+                </div>
+
+                <div class="flex justify-center text-s text-gray-400 flex-row pt-3">
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-4/5 pt-2 flex justify-center">Submit</button>
+                </div>
+
 
 
             </ul>

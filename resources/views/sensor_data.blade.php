@@ -5,14 +5,14 @@
         </h2>
     </x-slot>
 
-    <div class=" flex flex-row w-full h-screen max-sm:max-h-96">
+    <div class=" flex flex-row w-full h-screen max-sm:max-h-9/10">
 
         @include('layouts.sidebar')
         <div class="py-0 flex justify-center basis-11/12 z-10 pb-1">
-            <div class="flex items-center justify-center flex-col  mx-auto sm:px-6 lg:px-8 w-full z-10 ">
+            <div class="flex items-center justify-center flex-col  mx-auto sm:px-6 lg:px-8 w-full z-10 h-80 pt-4">
 
 
-                <x-card class="mb-2 !px-4  z-10">
+                <x-card class="mb-2 !px-4  z-10 h-80 pt-4">
                     @include('layouts.sensor-data-tab')
                 </x-card>
 
