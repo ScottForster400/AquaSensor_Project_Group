@@ -7,121 +7,150 @@ use App\Models\Sensor;
 use App\Models\Sensor_Data;
 use Illuminate\Http\Request;
 use PhpMqtt\Client\Facades\MQTT;
-use Illuminate\Support\Facades\Auth;
 
 class SensorDataController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
         $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
+        //get open source sensor count
+        //dd(!$this->Compare2Dates("09-02-25", "13/03/2025", true) . ", " . $this->Compare2Dates("15-04-25", "13/03/2025", false));
 
-        if ($sensorCount > 0) {
-            if (array_key_exists('sensor_id', $_REQUEST)) {
+        if ($sensorCount > 0) { //if any open source sensors exist
+            if (array_key_exists('sensor_id', $_REQUEST)) { //if the user has selected a sensor
                 $activeSensor = $_REQUEST['sensor_id'];
-                $data = $this->GetAndFormatCurl($activeSensor);
-                $sensor_id = $_REQUEST['sensor_id'];
-            } else {
+                $data = $this->GetAndFormatCurl($activeSensor); //get all data related to that sensor
+                $sensor_id = $_REQUEST['sensor_id']; //save id for later
+            } else { //if no specific sensor selected
                 $allSensors = Sensor::where('opensource', 1)->where('activated', 1)->get();
-                $randomSensors = $allSensors[random_int(0, count($allSensors) -1)];
+                $randomSensors = $allSensors[random_int(0, count($allSensors) -1)]; //select a random sensor
                 $sensor_id = $randomSensors->sensor_id;
-                $activeSensor = $sensor_id;
-                $data = $this->GetAndFormatCurl($activeSensor);
+                $activeSensor = $sensor_id; //save id for later
+                $data = $this->GetAndFormatCurl($activeSensor); //get related data
             }
 
-            $temp=2;
+            $temp=2; //setup values
             $do=3;
             $date=0;
             $time=1;
             $mobileAveragedData = collect([collect(), collect(), collect(), collect()]);
             $averagedData = collect([collect(), collect(), collect(), collect()]);
+            $startDate = "01/01/2000"; //api ony uses 2 digits for year so will break after 2100
+            $endDate = "31/12/2099";
 
-            $averageCount = 700;
-            $mobileAverageCount = 2000;
+            if (Count($request->query) > 0) {
+                $startDate = $_REQUEST['start'];
+                $endDate = $_REQUEST['end'];
+
+                $splitStart = explode("/", $startDate);
+                $splitEnd = explode("/", $endDate);
+
+                $mobileAverageMax = 2000;
+                $splitEnd[1] = (int)$splitEnd[1] + ($splitEnd[2] - $splitStart[2]) * 12;
+                $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 5;
+                if ($splitEnd[1] - $splitStart[1] == 0) {
+                    $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (5/30);
+                }
+                if ($mobileAverageCount < 1) { $mobileAverageCount = 1;}
+                if ($mobileAverageCount > 2000) { $mobileAverageCount = 50;}
+            } else {
+                $mobileAverageCount = 50;
+            }
+
+            $averageCount = 700; //data settings
             $dataLength = count($data)/$averageCount;
             $mobileData = $data;
             $mobileDataLength = count($data)/$mobileAverageCount;
-            for ($i = 0; $i < $mobileDataLength; $i++) {
-                $averageTempData = 0;
-                $averageDoData = 0;
+            if ($data > 0) {
+                for ($i = 0; $i < $mobileDataLength; $i++) { //do the averaging for moblile
+                    $averageTempData = 0;
+                    $averageDoData = 0;
 
-                $dataAverager = array_splice($mobileData, 0, $mobileAverageCount);
-
-                for ( $j = 0; $j < count($dataAverager); $j++) {
-                    if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
-                        $averageTempData += $dataAverager[$j][$temp];
-                        $averageDoData += $dataAverager[$j][$do];
-                    } else {
-                        array_splice($dataAverager, $j, 1);
+                    $dataAverager = array_splice($mobileData, 0, $mobileAverageCount); //split the array into sections
+                    if ($this->IsArrayInRange($startDate, $endDate, $dataAverager[0][$date], $dataAverager[Count($dataAverager)-1][$date])) { //if the split is entirly outside date range skip
+                        for ( $j = 0; $j < count($dataAverager); $j++) { //average each array section
+                            if (!$this->IsDateInRange($startDate, $endDate, $dataAverager[$j][$date])) { //if date outside range
+                                array_splice($dataAverager, $j, 1); //remove from array section
+                            } else {
+                                if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
+                                    $averageTempData += $dataAverager[$j][$temp];
+                                    $averageDoData += $dataAverager[$j][$do];
+                                } else { //if the current value is too high to be realistic (an error reading)
+                                    array_splice($dataAverager, $j, 1); //remove from array section
+                                }
+                            }
+                        }
+                        $mobileAveragedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
+                        $mobileAveragedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
+                        $mobileAveragedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
+                        $mobileAveragedData[$time]->push($dataAverager[0][$time]); //save averaged data in variable
                     }
                 }
-                $mobileAveragedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3, '.', ''));
-                $mobileAveragedData[$do]->push(number_format($averageDoData/count($dataAverager), 3, '.', ''));
-                $mobileAveragedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
-                $mobileAveragedData[$time]->push($dataAverager[0][$time]);
-            }
 
+                for ($i = 0; $i < $dataLength; $i++) { //do the averaging for desktop (exact same as mobile)
+                    $averageTempData = 0;
+                    $averageDoData = 0;
 
-            for ($i = 0; $i < $dataLength; $i++) {
-                $averageTempData = 0;
-                $averageDoData = 0;
-
-                $dataAverager = array_splice($data, 0, $averageCount);
-                for ( $j = 0; $j < count($dataAverager); $j++) {
-                    if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
-                        $averageTempData += $dataAverager[$j][$temp];
-                        $averageDoData += $dataAverager[$j][$do];
-                    } else {
-                        array_splice($dataAverager, $j, 1);
+                    $dataAverager = array_splice($data, 0, $averageCount); //split the array into sections
+                    if ($this->IsArrayInRange($startDate, $endDate, $dataAverager[0][$date], $dataAverager[Count($dataAverager)-1][$date])) { //if the split is entirly outside date range skip
+                        for ( $j = 0; $j < count($dataAverager); $j++) {
+                            if (!$this->IsDateInRange($startDate, $endDate, $dataAverager[$j][$date])) { //if date outside range
+                                array_splice($dataAverager, $j, 1); //remove from array section
+                            } else {
+                                if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
+                                    $averageTempData += $dataAverager[$j][$temp];
+                                    $averageDoData += $dataAverager[$j][$do];
+                                } else {
+                                    array_splice($dataAverager, $j, 1);
+                                }
+                            }
+                        }
                     }
+                    $averagedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3));
+                    $averagedData[$do]->push(number_format($averageDoData/count($dataAverager), 3));
+                    $averagedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
+                    $averagedData[$time]->push($dataAverager[0][$time]);
                 }
-                $averagedData[$temp]->push(number_format($averageTempData/count($dataAverager), 3));
-                $averagedData[$do]->push(number_format($averageDoData/count($dataAverager), 3));
-                $averagedData[$date]->push($dataAverager[0][$date] . " - " . $dataAverager[count($dataAverager)-1][$date]);
-                $averagedData[$time]->push($dataAverager[0][$time]);
+
+                $flipCardData = [ //get the initial data for the averages on the flip cards
+                    $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y') . "&todate=" . date('d-m-y')),
+                    $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('w')-1).' days')) . "&todate=" . date('d-m-y')),
+                    $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
+                ];
+                $averagedFlipData = [[0, 0, 0], [0, 0, 0]]; //setup
+                for ($i=0; $i<count($flipCardData); $i++) { //average data for flip cards
+                    $tempAverager = 0;
+                    $doAverager = 0;
+                    for ($j= 0; $j<count($flipCardData); $j++) { //get the total of data
+                        $tempAverager += $flipCardData[$i][$j][$temp];
+                        $doAverager += $flipCardData[$i][$j][$do];
+                    }
+                    $averagedFlipData[0][$i] = number_format($tempAverager/count($flipCardData[$i][$j]), 3);
+                    $averagedFlipData[1][$i] = number_format($doAverager/count($flipCardData[$i][$j]), 3);
+                }   //save averages
+            } else {
+                $mobileAveragedData = collect([[0], [0], [0], [0]]);
+                $averagedData = collect([[0], [0], [0], [0]]);
+                $averagedFlipData = [[0, 0, 0], [0, 0, 0]];
             }
 
-
-            $flipCardData = [
-                $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y') . "&todate=" . date('d-m-y')),
-                $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('w')-1).' days')) . "&todate=" . date('d-m-y')),
-                $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
-            ];
-            $averagedFlipData = [[0, 0, 0], [0, 0, 0]];
-            for ($i=0; $i<count($flipCardData); $i++) {
-                $tempAverager = 0;
-                $doAverager = 0;
-                for ($j= 0; $j<count($flipCardData); $j++) {
-                    $tempAverager += $flipCardData[$i][$j][$temp];
-                    $doAverager += $flipCardData[$i][$j][$do];
-                }
-                $averagedFlipData[0][$i] = number_format($tempAverager/count($flipCardData[$i][$j]), 3);
-                $averagedFlipData[1][$i] = number_format($doAverager/count($flipCardData[$i][$j]), 3);
-            }
-
-            $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first();
-            $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
-
-            $dt = Carbon::now();
-            $weekDay=($dt->englishDayOfWeek);
-
-            $hourlyAverages = [[], []];
+            $hourlyAverages = [[], []]; //setup
             $currentData = 0;
-            for ($j= 0; $j<24; $j++) {
+            for ($j= 0; $j<24; $j++) { //for every hour
                 $timedTemp = 0;
                 $timedDO = 0;
                 $totalReadingsInCurrentHour = 0;
-                while ($currentData < Count($flipCardData[0])) {
-                    $hour = (int)explode(":", $flipCardData[0][$currentData][$time])[0];
+                while ($currentData < Count($flipCardData[0])) { //use while as actual count is unknown
+                    $hour = (int)explode(":", $flipCardData[0][$currentData][$time])[0]; //split string into sections
                     $data = $flipCardData[0][$currentData];
-                    if ($hour == $j) {
+                    if ($hour == $j) { //if the hours the same average data
                         $timedTemp += $data[$temp];
                         $timedDO += $data[$do];
                         $totalReadingsInCurrentHour++;
-                    } else {
+                    } else { //on hour change save averages and stop this hour
                         $hourlyAverages[0][$j] = number_format($timedTemp/$totalReadingsInCurrentHour, 3);
                         $hourlyAverages[1][$j] = number_format($timedDO/$totalReadingsInCurrentHour, 3);
                         break;
@@ -129,12 +158,19 @@ class SensorDataController extends Controller
                     $currentData++;
                 }
             }
+
+            $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first(); //get latest values
+            $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
+
+            $dt = Carbon::now();
+            $weekDay=($dt->englishDayOfWeek); //get current day of the week
+            
             $timeLabel=collect();
-            for($i = 0; $i < count($hourlyAverages[0]); ++$i) {
+            for($i = 0; $i < count($hourlyAverages[0]); ++$i) { //hourly labels
                 $time = "{$i}:00";
                 $timeLabel->push($time);
             }
-
+            $sensors = Sensor::where('opensource',1)->get(); //get opensource sensor count
 
             return view('data')
                 ->with('mobileAveragedData',$mobileAveragedData)
@@ -145,7 +181,8 @@ class SensorDataController extends Controller
                 ->with('weekDay',$weekDay)
                 ->with('flipCardDataTemp', $averagedFlipData[0])
                 ->with('hourlyAverages',$hourlyAverages)
-                ->with('timeLabel',$timeLabel);
+                ->with('timeLabel',$timeLabel)
+                ->with('Sensors',$sensors);
         }
         else{
 
@@ -155,60 +192,6 @@ class SensorDataController extends Controller
 
     }
 
-    public function sensor_data_index(){
-
-
-        if(Auth::user() != null){
-            $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
-            $sensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id','!=',Auth::id())->get();
-            $SensorIdsWithData =Sensor_Data::select('sensor_id')->get();
-            $ownendSenorsWithData=Sensor::whereIn('sensor_id',$SensorIdsWithData)->where('user_id',Auth::id())->where('activated',1)->get();
-
-            $data = $this->GetAndFormatCurl('sensor022');
-            $tempDa = collect();
-            for($i=0; $i < count($data); $i++){
-
-                $wooo = $data[$i];
-
-                $tempDa->push($wooo[2]);
-                // dump($tempDa);
-            }
-            for ( $j = 0; $j < count($tempDa); $j++) {
-                if ($tempDa[$j]<= 10 && $tempDa[$j] >= 30) {
-
-                }
-                else {
-                    $tempDa->splice($j,1);
-                };
-            }
-
-            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('ownedSensors',$ownendSenorsWithData)->with('tempDa',$tempDa);
-        }
-        else{
-            $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
-            $sensors = Sensor::where('activated',1)->where('opensource',1)->get();
-            $data = $this->GetAndFormatCurl('sensor022');
-            $tempDa = collect();
-            for($i=0; $i < count($data); $i++){
-
-                $wooo = $data[$i];
-
-                $tempDa->push($wooo[2]);
-                // dump($tempDa);
-            }
-            for ( $j = 0; $j < count($tempDa); $j++) {
-                if ($tempDa[$j]<= 10 && $tempDa[$j] >= 30) {
-
-                }
-                else {
-                    $tempDa->splice($j,1);
-                };
-            }
-
-            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('tempDa',$tempDa);
-        }
-
-    }
     /**
      * Show the form for creating a new resource.
      */
@@ -315,5 +298,43 @@ class SensorDataController extends Controller
             return to_route('sensorData.index',compact('sensor_id'));
         }
 
+    }
+
+    //checks if the value is in the date range
+    private function IsDateInRange($lowerRange, $upperRange, $dataPoint) {
+        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("/", $upperRange);
+        $splitDataPoint = explode("-", $dataPoint);
+        $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
+        $splitUpperRange[2] = substr($splitUpperRange[2], 2);
+        
+        $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
+        $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
+        $dataPoint = $splitDataPoint[2].$splitDataPoint[1].$splitDataPoint[0];
+
+        if (($lowerRange - $dataPoint <= 0 && $upperRange - $dataPoint >= 0)) {
+            return true; //if ether point or both points in range
+        } else { return false; }
+    }
+
+    //returns true if the data points are in the range points
+    private function IsArrayInRange($lowerRange, $upperRange, $lowerData, $upperData) {
+        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("/", $upperRange);
+        $splitLowerData = explode("-", $lowerData);
+        $splitUpperData = explode("-", $upperData);
+        $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
+        $splitUpperRange[2] = substr($splitUpperRange[2], 2);
+        
+        $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
+        $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
+        $lowerData = $splitLowerData[2].$splitLowerData[1].$splitLowerData[0];
+        $upperData = $splitUpperData[2].$splitUpperData[1].$splitUpperData[0];
+
+        //printf(($lowerRange - $lowerData <= 0).", ".($upperRange - $lowerData >= 0).", ".($lowerRange - $upperData <= 0).", ".($upperRange - $upperData >= 0)." - - ".
+        //$lowerRange.", ".$upperRange.", ".$lowerData.", ".$upperData."<br>");
+        if (($lowerRange - $lowerData <= 0 && $upperRange - $lowerData >= 0) || ($lowerRange - $upperData <= 0 && $upperRange - $upperData >= 0) || ($upperRange - $lowerData >= 0 && $lowerRange - $upperData <= 0)) {
+            return true; //if ether point or both points in range
+        } else { return false; }
     }
 }
