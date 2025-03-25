@@ -6,6 +6,7 @@
                     {{ __('Data') }}
                 </h2>
             </div>
+
             <div>
                 <x-switch-select class="flex justify-center" id="mySensorsToggle" onclick="background()">Day/Night</x-switch-select>
             </div>

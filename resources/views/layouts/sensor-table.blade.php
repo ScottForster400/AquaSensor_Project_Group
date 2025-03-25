@@ -49,10 +49,10 @@
                             <x-th class="border-b border-gray-300 w-full !px-1">
                                 <div class="flex-col !px-0">
                                     <div class="!px-0">
-                                        <x-modal-toggle data-modal-target="editsensor" data-modal-toggle="editsensor">Edit</x-modal-toggle>
+                                        <x-modal-toggle data-modal-target="edit{{$sensor1}}" data-modal-toggle="edit{{$sensor1}}">Edit</x-modal-toggle>
                                     <!-- Modal to edit Sensor -->
-                                        <x-modal id="editsensor" class="bg-gray-500 bg-opacity-75 h-full">
-                                            <x-modal-header data-modal-hide="editsensor">Edit Sensor</x-modal-header>
+                                        <x-modal id="edit{{$sensor1}}" class="bg-gray-500 bg-opacity-75 h-full">
+                                            <x-modal-header data-modal-hide="edit{{$sensor1}}">Edit Sensor</x-modal-header>
                                             <x-modal-body>
                                                 <form method="post" action="{{ route('sensors.update',$sensor1) }}" class="mt-6 space-y-6">
                                                     @method('put')
