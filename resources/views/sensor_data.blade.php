@@ -67,24 +67,26 @@
         // };
         // myChart.setOption(option);
         Chart.defaults.elements.bar.borderWidth = 0;
-        const  bu = {!! json_encode($tempDa) !!}
-        console.dir(bu)
+        const  temp = {!! json_encode($temperature) !!}
+        const  disolved = {!! json_encode($disolvedO2) !!}
+        const  date = {!! json_encode($date) !!}
+        console.dir(temp)
         const data = {
-            labels: bu,
+            labels: date,
             datasets: [{
                 pointHitRadius: 20,
                 type: 'line',
                 label: 'Temp: °C',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: bu,
+                data: temp,
             },{
                 pointHitRadius: 20,
                 type: 'line',
                 label: 'DO: (mg/L)',
                 backgroundColor: 'rgb(110, 99, 255,0.5)',
                 borderColor: 'rgb(110, 99, 255)',
-                data: bu,
+                data: disolved,
             }]
         };
         const config = {
