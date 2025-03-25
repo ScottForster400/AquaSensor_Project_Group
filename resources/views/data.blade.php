@@ -180,10 +180,31 @@
                             </div>
                         </x-card-flippable-backface>
                     </x-card-flippable>
+
+
+                    <x-card-flippable class="ml-2 max-w-64 bg-sky-50" onclick="background()">
+                        <x-card-flippable-frontface>
+                            <div class="h-8 w-8 flex justify-center items-center ">
+                                <img src="{{URL::asset('imgs/sun.svg')}}" alt="sun" class="w-full h-full">
+                            </div>
+                            <h>Day</h>
+                        </x-card-flippable-frontface>
+                        <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly">
+                            <div class="h-8 w-8 flex justify-center items-center ">
+                                <img src="{{URL::asset('imgs/moon.svg')}}" alt="moon" class="w-full h-full">
+                            </div>
+                            <h>Night</h>
+                        </x-card-flippable-backface>
+                    </x-card-flippable>
+
+
+
+
+
                     <x-card-flippable class="ml-2 max-w-64">
                         <x-card-flippable-frontface>
                             <div class="h-9 w-9 flex justify-center items-center ">
-                                <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
+                                <img src="{{URL::asset('imgs/DO.svg')}}" alt="dissolved_oxygen" class="w-full h-full">
                             </div>
                             <h3>{{$currentSensorData->mgl_dissolved_oxygen}} mg/l</h3>
                             <p class="text-gray-500 text-xs">Dissolved Oxygen</p>
@@ -229,3 +250,5 @@
     @endif
     @include('layouts.waves')
 </x-app-layout>
+
+<?

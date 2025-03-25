@@ -20,3 +20,16 @@ function flipCard(item){
         item.classList.add("my-rotate-y-180")
     }
 }
+
+function background(){
+    if(document.getElementById("normal_background").classList.contains("bg-gray-100")){
+
+        document.getElementById("normal_background").classList.add("bg-gray-500")
+
+    }
+    else{
+        document.getElementById("normal_background").classList.remove("bg-gray-500")
+        document.getElementById("normal_background").classList.add("bg-gray-100")
+
+    }
+}
