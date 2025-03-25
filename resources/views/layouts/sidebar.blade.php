@@ -58,6 +58,12 @@
                         </select>
                     </li>
                 </div>
+
+                <form action="" class="w-full flex flex-wrap justify-center">
+                    <x-date-time-picker></x-date-time-picker>
+                </form>
+
+
             </ul>
         </div>
         <div class=" h-full min-w-8 w-8 flex flex-col max-w-8 justify-between items-center py-3" onclick="sidebarToggle()">

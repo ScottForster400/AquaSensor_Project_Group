@@ -1,8 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Data') }}
-        </h2>
+        <div class="flex justify-between">
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Data') }}
+                </h2>
+            </div>
+            <div>
+                <x-switch-select class="flex justify-center" id="mySensorsToggle" onclick="background()">Day/Night</x-switch-select>
+            </div>
+        </div>
     </x-slot>
 
     @if(isset($currentSensorData))
@@ -182,7 +189,7 @@
                     </x-card-flippable>
 
 
-                    <x-card-flippable class="ml-2 max-w-64 bg-sky-50" onclick="background()">
+                    <x-card-flippable class="ml-2 max-w-64  max-sm:hidden" onclick="background()">
                         <x-card-flippable-frontface>
                             <div class="h-8 w-8 flex justify-center items-center ">
                                 <img src="{{URL::asset('imgs/sun.svg')}}" alt="sun" class="w-full h-full">
