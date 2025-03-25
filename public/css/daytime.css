@@ -1,0 +1,7 @@
+.daynightbackground{
+    display:flex;
+    height:100vh;
+    justify-content: center;
+    align-items: center;
+    background: url(imgs/day.png) no-repeat;
+}

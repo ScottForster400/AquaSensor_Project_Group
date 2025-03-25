@@ -1,4 +1,6 @@
 <x-app-layout>
+
+
     <x-slot name="header">
         <div class="flex justify-between">
             <div>
