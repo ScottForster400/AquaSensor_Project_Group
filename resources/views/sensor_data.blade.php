@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class=" flex flex-row w-full h-screen max-sm:max-h-9/10">
+    <div class=" flex flex-row w-full h-screen max-sm:max-h-1/2">
 
         @include('layouts.sidebar')
         <div class="py-0 flex justify-center basis-11/12 z-10 pb-1">
