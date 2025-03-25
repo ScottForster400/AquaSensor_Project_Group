@@ -16,6 +16,7 @@ class SensorGraphController extends Controller
      */
     public function index(Request $request)
     {
+        //dd($request);
         $temp=2; //setup values
         $do=3;
         $date=0;
@@ -28,14 +29,33 @@ class SensorGraphController extends Controller
         $visableSensors = Sensor::where('activated',1)->where('opensource',1)->get();
 
         if(Auth::user() != null) { //if user logged in
-            $ownendSenorsWithData=Sensor::whereIn('sensor_id',$allSensors)->where('user_id',Auth::id())->where('activated',1)->get();
+            $ownedSensorsWithData=Sensor::whereIn('sensor_id',$allSensors)->where('user_id',Auth::id())->where('activated',1)->get();
         }
 
-        $data = $this->GetAndFormatCurl('sensor022');
+        $selectedSensor = 'sensor022';
+        if ($request->query() != null) {
+            if ($_REQUEST['start'] != null && $_REQUEST['end'] != null) {
+                //do time constrain stuffs
+            }
+            for ($k = 0; $k < count($visableSensors); $k++) {
+                if (isset($_REQUEST[$visableSensors[$k]['sensor_id']])) {
+                    $selectedSensor = $visableSensors[$k]['sensor_id'];
+                }
+            }
+            if (Auth::user() != null) {
+                for ($k = 0; $k < count($ownedSensorsWithData); $k++) {
+                    if (isset($_REQUEST[$ownedSensorsWithData[$k]['sensor_id']])) {
+                        $selectedSensor = $ownedSensorsWithData[$k]['sensor_id'];
+                    }
+                }
+            }
+        }
+
+        $data = $this->GetAndFormatCurl($selectedSensor); //get sensor info
         $filterdData = [collect(), collect(), collect(), collect()];
-        for ($i = 0; $i < count($data); $i++) {
-            if ($data[$i][$temp] >= -30 && $data[$i][$temp] <= 120 && $data[$i][$do] >= 0 && $data[$i][$do] <= 65) {
-                $filterdData[$date]->push($data[$i][$date]);
+        for ($i = 0; $i < count($data); $i++) { //for all the data
+            if ($data[$i][$temp] > 0 && $data[$i][$temp] <= 40 && $data[$i][$do] > 0 && $data[$i][$do] <= 65) { //filter it
+                $filterdData[$date]->push($data[$i][$date]); //store it in a quad list array
                 $filterdData[$time]->push($data[$i][$time]);
                 $filterdData[$temp]->push($data[$i][$temp]);
                 $filterdData[$do]->push($data[$i][$do]);
@@ -46,115 +66,17 @@ class SensorGraphController extends Controller
             return view('sensor_data')
                 ->with('sensors',$visableSensors)
                 ->with('bodyOfWater',$bodysOfwater)
-                ->with('ownedSensors',$ownendSenorsWithData)
+                ->with('ownedSensors',$ownedSensorsWithData)
                 ->with('temperature',$filterdData[$temp])
                 ->with('date',$filterdData[$date])
                 ->with('disolvedO2',$filterdData[$do]);
         }
-        return view('sensor_data')
+        return view('sensor_data') //else just send the rest of the data
             ->with('sensors',$visableSensors)
             ->with('bodyOfWater',$bodysOfwater)
             ->with('temperature',$filterdData[$temp])
             ->with('date',$filterdData[$date])
             ->with('disolvedO2',$filterdData[$do]);
-        
-        /*if(Auth::user() != null){
-            $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
-            $sensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id','!=',Auth::id())->get();
-            $SensorIdsWithData =Sensor_Data::select('sensor_id')->get();
-            $ownendSenorsWithData=Sensor::whereIn('sensor_id',$SensorIdsWithData)->where('user_id',Auth::id())->where('activated',1)->get();
-
-            $data = $this->GetAndFormatCurl('sensor022');
-            $tempDa = collect(); //setup
-            for($i=0; $i < count($data); $i++){
-
-                $wooo = $data[$i];
-
-                $tempDa->push($wooo[2]); //save all temperature data
-                // dump($tempDa);
-            }
-            for ( $j = 0; $j < count($tempDa); $j++) {
-                if ($tempDa[$j]<= 10 && $tempDa[$j] >= 30) {
-
-                }
-                else {
-                    $tempDa->splice($j,1); //remove anomolous data
-                };
-            }
-
-            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('ownedSensors',$ownendSenorsWithData)->with('tempDa',$tempDa);
-        }
-        else{
-            $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
-            $sensors = Sensor::where('activated',1)->where('opensource',1)->get();
-            $data = $this->GetAndFormatCurl('sensor022');
-            $tempDa = collect();
-            for($i=0; $i < count($data); $i++){
-
-                $wooo = $data[$i];
-
-                $tempDa->push($wooo[2]);
-                // dump($tempDa);
-            }
-            for ( $j = 0; $j < count($tempDa); $j++) {
-                if ($tempDa[$j]<= 10 && $tempDa[$j] >= 30) {
-
-                }
-                else {
-                    $tempDa->splice($j,1);
-                };
-            }
-
-            return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('tempDa',$tempDa);
-        }*/
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Sensor $sensor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sensor $sensor)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Sensor $sensor)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Sensor $sensor)
-    {
-        //
     }
 
     private function GetAndFormatCurl($search) {
