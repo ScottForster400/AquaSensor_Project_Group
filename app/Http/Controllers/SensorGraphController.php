@@ -14,21 +14,63 @@ class SensorGraphController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if(Auth::user() != null){
+        $temp=2; //setup values
+        $do=3;
+        $date=0;
+        $time=1;
+        $visableSensors = 0;
+
+        //get important database values
+        $bodysOfwater = Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
+        $allSensors = Sensor_Data::select('sensor_id')->get();
+        $visableSensors = Sensor::where('activated',1)->where('opensource',1)->get();
+
+        if(Auth::user() != null) { //if user logged in
+            $ownendSenorsWithData=Sensor::whereIn('sensor_id',$allSensors)->where('user_id',Auth::id())->where('activated',1)->get();
+        }
+
+        $data = $this->GetAndFormatCurl('sensor022');
+        $filterdData = [collect(), collect(), collect(), collect()];
+        for ($i = 0; $i < count($data); $i++) {
+            if ($data[$i][$temp] >= -30 && $data[$i][$temp] <= 120 && $data[$i][$do] >= 0 && $data[$i][$do] <= 65) {
+                $filterdData[$date]->push($data[$i][$date]);
+                $filterdData[$time]->push($data[$i][$time]);
+                $filterdData[$temp]->push($data[$i][$temp]);
+                $filterdData[$do]->push($data[$i][$do]);
+            }
+        }
+
+        if (Auth::user() != null) { //if logged in pass owned sensors too
+            return view('sensor_data')
+                ->with('sensors',$allSensors)
+                ->with('bodyOfWater',$bodysOfwater)
+                ->with('ownedSensors',$ownendSenorsWithData)
+                ->with('temperature',$filterdData[$temp])
+                ->with('date',$filterdData[$date])
+                ->with('disolvedO2',$filterdData[$do]);
+        }
+        return view('sensor_data')
+            ->with('sensors',$allSensors)
+            ->with('bodyOfWater',$bodysOfwater)
+            ->with('temperature',$filterdData[$temp])
+            ->with('date',$filterdData[$date])
+            ->with('disolvedO2',$filterdData[$do]);
+        
+        /*if(Auth::user() != null){
             $bodysOfwater =Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
             $sensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id','!=',Auth::id())->get();
             $SensorIdsWithData =Sensor_Data::select('sensor_id')->get();
             $ownendSenorsWithData=Sensor::whereIn('sensor_id',$SensorIdsWithData)->where('user_id',Auth::id())->where('activated',1)->get();
 
             $data = $this->GetAndFormatCurl('sensor022');
-            $tempDa = collect();
+            $tempDa = collect(); //setup
             for($i=0; $i < count($data); $i++){
 
                 $wooo = $data[$i];
 
-                $tempDa->push($wooo[2]);
+                $tempDa->push($wooo[2]); //save all temperature data
                 // dump($tempDa);
             }
             for ( $j = 0; $j < count($tempDa); $j++) {
@@ -36,7 +78,7 @@ class SensorGraphController extends Controller
 
                 }
                 else {
-                    $tempDa->splice($j,1);
+                    $tempDa->splice($j,1); //remove anomolous data
                 };
             }
 
@@ -64,7 +106,7 @@ class SensorGraphController extends Controller
             }
 
             return view('sensor_data')->with('sensors',$sensors)->with('bodyOfWater',$bodysOfwater)->with('tempDa',$tempDa);
-        }
+        }*/
     }
 
     /**
