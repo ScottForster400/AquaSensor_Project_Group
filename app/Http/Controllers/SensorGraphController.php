@@ -44,7 +44,7 @@ class SensorGraphController extends Controller
 
         if (Auth::user() != null) { //if logged in pass owned sensors too
             return view('sensor_data')
-                ->with('sensors',$allSensors)
+                ->with('sensors',$visableSensors)
                 ->with('bodyOfWater',$bodysOfwater)
                 ->with('ownedSensors',$ownendSenorsWithData)
                 ->with('temperature',$filterdData[$temp])
@@ -52,7 +52,7 @@ class SensorGraphController extends Controller
                 ->with('disolvedO2',$filterdData[$do]);
         }
         return view('sensor_data')
-            ->with('sensors',$allSensors)
+            ->with('sensors',$visableSensors)
             ->with('bodyOfWater',$bodysOfwater)
             ->with('temperature',$filterdData[$temp])
             ->with('date',$filterdData[$date])
