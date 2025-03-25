@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SensorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SensorDataController;
+use App\Http\Controllers\SensorGraphController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Models\Sensor_Data;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ Route::get('/sensors/search', [SensorController::class, 'search'])->name('sensor
 Route::get('/sensors/sort', [SensorController::class, 'sort'])->name('sensors.sort');
 Route::post('/sensors/activate', [SensorController::class, 'activate'])->name('sensors.activate');
 Route::post('/sensors/update', [SensorController::class, 'update'])->name('sensors.update');
-Route::get('/sensor_graph_data',[SensorDataController::class,'sensor_data_index'])->name('sensor_data.index');
+Route::get('/sensor_graph_data',[SensorGraphController::class,'index'])->name('sensor_data.index');
 Route::get('/sensorData/search', [SensorDataController::class, 'search'])->name('sensorData.search');
 
 
