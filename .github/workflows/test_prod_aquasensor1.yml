@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy PHP app to Azure Web App - aquasensor1
+name: Build and deploy Laravel app to Azure Web App - aquasensor1
 
 on:
   push:
@@ -60,7 +60,7 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -75,4 +75,3 @@ jobs:
           app-name: 'aquasensor1'
           slot-name: 'Production'
           package: .
-          
