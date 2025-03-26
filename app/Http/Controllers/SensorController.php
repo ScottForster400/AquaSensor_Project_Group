@@ -84,6 +84,16 @@ class SensorController extends Controller
 
     public function activate(Request $request)
     {
+        $inappropriate_language = file_get_contents(resource_path('textfiles\offensive_language.txt'));
+        $words = explode("\n", $inappropriate_language);
+        foreach($words as $word){
+            if($request->sensor_name == $word){
+                session()->flash('warning','Inappropriate Language is not Tolerated');
+                return to_route('sensors.index');
+            }
+        }
+
+
 
         $request->validate([
              'sensor_name' => 'required|Max:255',
@@ -122,6 +132,15 @@ class SensorController extends Controller
 
     public function update(Request $request, Sensor $sensor)
     {
+
+        $inappropriate_language = file_get_contents(resource_path('textfiles\offensive_language.txt'));
+        $words = explode("\n", $inappropriate_language);
+        foreach($words as $word){
+            if($request->sensor_name == $word){
+                session()->flash('warning','Inappropriate Language is not Tolerated');
+                return to_route('sensors.index');
+            }
+        }
 
         $request->validate([
              'sensor_name' => 'required|Max:255',
