@@ -7,18 +7,23 @@
                 </h2>
             </div>
 
-            <div class="flex justify-right">
+            <div class="flex justify-right sm:hidden">
                 <b class="pr-2 pb-1">Day/Night:</b>
                 <label>
-                    <input type="checkbox">
+                    <input type="checkbox" name="check" value="check" id="check">
                     <span class="check" ></span>
                 </label>
             </div>
+        </div>
+        <label>
+            <input type="checkbox" name="check2" value="check2" id="check2">
+            <span class="check2" ></span>
+        </label>
     </x-slot>
 
     @if(isset($currentSensorData))
         <div class="py-12 flex justify-center z-10 pb-1">
-            <div class="flex items-center flex-col max-w-6xl mx-auto sm:px-6 lg:px-8 w-full z-10 ">
+            <div class="flex items-center flex-col max-w-6xl mx-auto sm:px-6 lg:px-8 w-full">
                 <form action="{{route('sensorData.search')}}" class = "w-10/12">
                     <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
                 </form>
@@ -168,7 +173,7 @@
                 </div>
 
                 <div class="flex flex-row justify-evenly sm:justify-between w-10/12 h-28 sm:h-40">
-                    <x-card-flippable class="mr-2 max-w-64">
+                    <x-card-flippable class="mr-2 max-w-64 z-10">
                         <x-card-flippable-frontface>
                             <div class="h-8 w-8 flex justify-center items-center ">
                                 <img src="{{URL::asset('imgs/temp.svg')}}"" alt="dissolved_oxygen" class="w-full h-full">
@@ -193,7 +198,7 @@
                     </x-card-flippable>
 
 
-                    <x-card-flippable class="ml-2 max-w-64  max-sm:hidden" onclick="background()">
+                    <x-card-flippable class="ml-2 max-w-64  max-sm:hidden z-10" onclick="desktopdaynight()">
                         <x-card-flippable-frontface>
                             <div class="h-8 w-8 flex justify-center items-center ">
                                 <img src="{{URL::asset('imgs/sun.svg')}}" alt="sun" class="w-full h-full">
@@ -212,7 +217,7 @@
 
 
 
-                    <x-card-flippable class="ml-2 max-w-64">
+                    <x-card-flippable class="ml-2 max-w-64 z-10">
                         <x-card-flippable-frontface>
                             <div class="h-9 w-9 flex justify-center items-center ">
                                 <img src="{{URL::asset('imgs/DO.svg')}}" alt="dissolved_oxygen" class="w-full h-full">
@@ -236,7 +241,7 @@
                         </x-card-flippable-backface>
                     </x-card-flippable>
                 </div>
-                <x-card class="px-2 !my-3 !pb-1">
+                <x-card class="px-2 !my-3 !pb-1 z-10">
                     <h2 class="">
                         Sensor Data
                     </h2>
