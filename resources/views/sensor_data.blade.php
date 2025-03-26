@@ -68,28 +68,39 @@
         // myChart.setOption(option);
         
         // temp = 0  do = 1
-        dataToDisplay = 0
         Chart.defaults.elements.bar.borderWidth = 0;
         console.dir({!!$data!!})
         console.dir({!!$dates!!})
         var sensorData = {!! json_encode($data) !!}
-        var sensorLine = [];
+        var tempSensorLine = [];
+        var doSensorLine = [];
         for (var i = 0; i < {!! count($data) !!}; i++) {
             const color = [Math.random()*255, Math.random()*255, Math.random()*255]
-            sensorLine.push({pointHitRadius: 20,
+            tempSensorLine.push({pointHitRadius: 20,
                 type: 'line',
                 label: sensorData[i][2],
                 backgroundColor: "rgba("+color[0]+", "+color[1]+", "+color[2]+", 0.5)",
                 borderColor: 'rgba('+color[0]+', '+color[1]+', '+color[2]+')',
-                data: sensorData[i][dataToDisplay]});
-        }
-        const data = { 
-            labels: {!! json_encode($dates) !!},
-            datasets: sensorLine};
+                data: sensorData[i][0]});
 
-        const config = {
+            doSensorLine.push({pointHitRadius: 20,
+                type: 'line',
+                label: sensorData[i][2],
+                backgroundColor: "rgba("+color[0]+", "+color[1]+", "+color[2]+", 0.5)",
+                borderColor: 'rgba('+color[0]+', '+color[1]+', '+color[2]+')',
+                data: sensorData[i][1]});
+        }
+        const tempData = { 
+            labels: {!! json_encode($dates) !!},
+            datasets: tempSensorLine};
+        const doData = { 
+            labels: {!! json_encode($dates) !!},
+            datasets: doSensorLine};
+
+
+        const tempConfig = {
         type: 'line',
-        data: data,
+        data: tempData,
         options: {
             responsive: true,
             //aspectRatio:1,
@@ -124,9 +135,50 @@
         }
         };
 
-        const myChart = new Chart(
+        const doConfig = {
+        type: 'line',
+        data: doData,
+        options: {
+            responsive: true,
+            //aspectRatio:1,
+            maintainAspectRatio: false,
+            elements:{
+                point:{
+                    radius:0
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 90
+                    }
+                }
+            },
+            hover: {  // <-- to add
+                mode: 'nearest'
+                },
+            tooltips: {
+                mode: 'nearest',
+                intersect: true
+            },
+            interaction: {
+                mode: 'nearest'
+            }
+
+        }
+        };
+
+        const myTempChart = new Chart(
         document.getElementById('tempChart'),
-        config // We'll add the configuration details later.
+        tempConfig // We'll add the configuration details later.
+        );
+        const myDoChart = new Chart(
+        document.getElementById('doChart'),
+        doConfig // We'll add the configuration details later.
         );
     </script>
 </x-app-layout>

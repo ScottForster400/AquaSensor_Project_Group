@@ -94,7 +94,7 @@ class SensorGraphController extends Controller
         
         if (count($data) > 0) {
             $dateDivisions = "day";
-            if ($_REQUEST['start'] == null && $_REQUEST['end'] == null) {
+            if ($request->query() == null || ($_REQUEST['start'] == null && $_REQUEST['end'] == null)) {
                 $splitStartDate = explode('-', $data[0][0][$date]);
                 $splitEndDate = explode('-', $data[0][count($data[0])-1][$date]); //rearange the dates
                 $startDate = $splitStartDate[2].'-'.$splitStartDate[1].'-'.$splitStartDate[0];
@@ -159,6 +159,13 @@ class SensorGraphController extends Controller
                             }
                         }
                         
+                        if ($i > 0) {
+                            if (strtotime($data[$y][$i-1][$date]) - strtotime($data[$y][$i][$date]) > 604800 || 
+                            explode('-', $data[$y][$i-1][$date])[1] != explode('-', $data[$y][$i][$date])[1]) {
+                                $filterdData[$y][$ftemp]->push([null, null]);
+                                $filterdData[$y][$fdo]->push([null, null]);
+                            }
+                        }
                         $filterdData[$y][$ftemp]->push([$data[$y][$i][$date], $data[$y][$i][$temp]]); //store it in a nested array list array
                         $filterdData[$y][$fdo]->push([$data[$y][$i][$date], $data[$y][$i][$do]]);
                     }
