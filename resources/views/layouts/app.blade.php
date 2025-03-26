@@ -16,7 +16,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
         <link rel="stylesheet" href="{{ asset('/css/waves/waves.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('/css/daytime.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('/css/daynight/daynight.css') }}"/>
         <link rel="stylesheet" href="{{ asset('/css/sidebar.css') }}"/>
 
 
@@ -41,7 +41,7 @@
 
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900" id="normal_background">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->

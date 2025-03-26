@@ -1,6 +1,4 @@
 <x-app-layout>
-
-
     <x-slot name="header">
         <div class="flex justify-between">
             <div>
@@ -9,10 +7,13 @@
                 </h2>
             </div>
 
-            <div>
-                <x-switch-select class="flex justify-center" id="mySensorsToggle" onclick="background()">Day/Night</x-switch-select>
+            <div class="flex justify-right">
+                <b class="pr-2 pb-1">Day/Night:</b>
+                <label>
+                    <input type="checkbox">
+                    <span class="check" ></span>
+                </label>
             </div>
-        </div>
     </x-slot>
 
     @if(isset($currentSensorData))
