@@ -71,6 +71,7 @@
         dataToDisplay = 0
         Chart.defaults.elements.bar.borderWidth = 0;
         console.dir({!!$data!!})
+        console.dir({!!$dates!!})
         var sensorData = {!! json_encode($data) !!}
         var sensorLine = [];
         for (var i = 0; i < {!! count($data) !!}; i++) {

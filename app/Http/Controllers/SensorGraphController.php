@@ -105,7 +105,6 @@ class SensorGraphController extends Controller
                         $splitEndCompDate = explode('-', $data[$y][count($data[$y])-1][$date]); //rearange the dates
                         $startCompDate = $splitStartCompDate[2].'-'.$splitStartCompDate[1].'-'.$splitStartCompDate[0];
                         $endCompDate = $splitEndCompDate[2].'-'.$splitEndCompDate[1].'-'.$splitEndCompDate[0];
-
                         if (strtotime($endDate) < strtotime($endCompDate)) { $endDate = $endCompDate; } //getting the highest end date
                         if (strtotime($startDate) > strtotime($startCompDate)) { $startDate = $startCompDate; } //and lowest start date
                     }
@@ -138,6 +137,8 @@ class SensorGraphController extends Controller
                             $dates->push($value->format('d-m-y').', '.floor($u/60).':'.($u%60));
                         }
                     }
+                } else {
+                    $dates->push($value->format('d-m-y'));
                 }
             }
         } else {
@@ -149,7 +150,7 @@ class SensorGraphController extends Controller
             for ($i = 0; $i < count($data[$y]); $i++) { //for all the data
                 if ($data[$y][$i][$temp] > 0 && $data[$y][$i][$temp] <= 40 && $data[$y][$i][$do] > 0 && $data[$y][$i][$do] <= 65) { //filter it
                     if ($this->IsDateInRange($startDateRange, $endDateRange, $data[$y][$i][$date])) {
-                        if ($dateDivisions != "day") { //add time values to the date
+                        if ($dateDivisions != "day") { //add time values to the date if it not day sorted
                             if ($dateDivisions == "hour") { //put the right hour into the date 
                                 $data[$y][$i][$date] .= ', '.floor(explode(':', $data[$y][$i][$time])[0]).':0';
                             } else {
@@ -227,11 +228,9 @@ class SensorGraphController extends Controller
             return true;
         }
 
-        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
-        $splitUpperRange = explode("/", $upperRange);
+        $splitLowerRange = explode("-", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("-", $upperRange);
         $splitDataPoint = explode("-", $dataPoint);
-        $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
-        $splitUpperRange[2] = substr($splitUpperRange[2], 2);
         
         $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
         $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
