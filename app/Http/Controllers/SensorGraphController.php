@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Sensor;
 use App\Models\Sensor_Data;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Expr\Include_;
-use PHPUnit\TextUI\Configuration\Php;
 
 class SensorGraphController extends Controller
 {
@@ -16,7 +17,10 @@ class SensorGraphController extends Controller
      */
     public function index(Request $request)
     {
+        @ini_set('memory_limit','1000M');
         //dd($request);
+        $ftemp = 0;
+        $fdo = 1;
         $temp=2; //setup values
         $do=3;
         $date=0;
@@ -24,7 +28,8 @@ class SensorGraphController extends Controller
         $visableSensors = 0;
 
         //get important database values
-        $bodysOfwater = Sensor::select('body_of_water')->where('opensource',1)->orderBy('body_of_water')->distinct()->get();
+        $startDateRange = null; $endDateRange = null;
+        $bodysOfwater = Sensor::select('body_of_water')->where('activated',1)->orderBy('body_of_water')->distinct()->get();
         $allSensors = Sensor_Data::select('sensor_id')->get();
         $visableSensors = Sensor::where('activated',1)->where('opensource',1)->get();
 
@@ -32,33 +37,131 @@ class SensorGraphController extends Controller
             $ownedSensorsWithData=Sensor::whereIn('sensor_id',$allSensors)->where('user_id',Auth::id())->where('activated',1)->get();
         }
 
-        $selectedSensor = 'sensor022';
-        if ($request->query() != null) {
-            if ($_REQUEST['start'] != null && $_REQUEST['end'] != null) {
-                //do time constrain stuffs
-            }
-            for ($k = 0; $k < count($visableSensors); $k++) {
-                if (isset($_REQUEST[$visableSensors[$k]['sensor_id']])) {
-                    $selectedSensor = $visableSensors[$k]['sensor_id'];
+        if ($request->query() != null) { //if theres been a query through
+            $requestOutput = collect();
+            foreach (array_keys($_REQUEST) as $requestPart) { //seperate out the individual sensors
+                if ($requestPart != "_token" && $requestPart != "_method" && $requestPart != "waterBody" && $requestPart != "start" && $requestPart != "end") {
+                    $requestOutput->push($requestPart);
                 }
             }
-            if (Auth::user() != null) {
-                for ($k = 0; $k < count($ownedSensorsWithData); $k++) {
-                    if (isset($_REQUEST[$ownedSensorsWithData[$k]['sensor_id']])) {
-                        $selectedSensor = $ownedSensorsWithData[$k]['sensor_id'];
+
+            if ($_REQUEST['start'] != null && $_REQUEST['end'] != null) { //tbd
+                $startDateRange = $_REQUEST['start'];
+                $endDateRange = $_REQUEST['end'];
+            }
+            
+            if (count($requestOutput) > 0 || $_REQUEST['waterBody'] != "None") { //if theres a sensor selection
+                if ($_REQUEST['waterBody'] != "None") { //if its water body
+                    $databaseSearch = Sensor::select('sensor_id')->where('activated', 1)->where('body_of_water', $_REQUEST['waterBody'])->get();
+                    foreach ($databaseSearch as $value) { //find the sensors in that body and add replace the list with them
+                        $requestOutput->push($value['sensor_id']);
+                    }
+                }
+                
+                if (count($requestOutput) > 0) { //for all sensors in the display list
+                    $selectedSensors = collect();
+                    for ($t = 0; $t < count($requestOutput); $t++) { //if the sensors are publicly visable
+                        for ($k = 0; $k < count($visableSensors); $k++) {
+                            if ($requestOutput[$t] == $visableSensors[$k]['sensor_id']) {
+                                $selectedSensors->push($visableSensors[$k]['sensor_id']); //add to list
+                            }
+                        }
+                        if (Auth::user() != null) {
+                            for ($k = 0; $k < count($ownedSensorsWithData); $k++) { //if the senors are owned by the user
+                                if ($requestOutput[$t] == $ownedSensorsWithData[$k]['sensor_id']) {
+                                    $selectedSensors->push($ownedSensorsWithData[$k]['sensor_id']); //add to list
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                $selectedSensors = ['sensor022']; //default to sensor022
+            }
+        } else {
+            $selectedSensors = ['sensor022']; //default to sensor022
+        }
+        
+        $data = collect();
+        $filterdData = collect();
+        for ($x = 0; $x < count($selectedSensors); $x++) {
+            $tempData = $this->GetAndFormatCurl($selectedSensors[$x]); //get sensor info
+            if (count($tempData) > 0) { //check if the sensor actualy has data (removes incorrect entries)
+                $data->push($tempData); 
+                $filterdData->push([collect(), collect(), $selectedSensors[$x]]);
+            }
+        }
+        
+        if (count($data) > 0) {
+            $dateDivisions = "day";
+            if ($_REQUEST['start'] == null && $_REQUEST['end'] == null) {
+                $splitStartDate = explode('-', $data[0][0][$date]);
+                $splitEndDate = explode('-', $data[0][count($data[0])-1][$date]); //rearange the dates
+                $startDate = $splitStartDate[2].'-'.$splitStartDate[1].'-'.$splitStartDate[0];
+                $endDate = $splitEndDate[2].'-'.$splitEndDate[1].'-'.$splitEndDate[0];
+                if (count($data) > 1) {
+                    for ($y = 1; $y < count($data); $y++) {
+                        $splitStartCompDate = explode('-', $data[$y][0][$date]);
+                        $splitEndCompDate = explode('-', $data[$y][count($data[$y])-1][$date]); //rearange the dates
+                        $startCompDate = $splitStartCompDate[2].'-'.$splitStartCompDate[1].'-'.$splitStartCompDate[0];
+                        $endCompDate = $splitEndCompDate[2].'-'.$splitEndCompDate[1].'-'.$splitEndCompDate[0];
+
+                        if (strtotime($endDate) < strtotime($endCompDate)) { $endDate = $endCompDate; } //getting the highest end date
+                        if (strtotime($startDate) > strtotime($startCompDate)) { $startDate = $startCompDate; } //and lowest start date
+                    }
+                }
+            } else { //using requested timespans
+                $splitStartDate = explode('/', $_REQUEST['start']);
+                $splitEndDate = explode('/', $_REQUEST['end']); //reformat for graph
+                $startDate = substr($splitStartDate[2], 2, 2).'-'.$splitStartDate[1].'-'.$splitStartDate[0];
+                $endDate = substr($splitEndDate[2], 2, 2).'-'.$splitEndDate[1].'-'.$splitEndDate[0];
+                
+                if (($splitEndDate[1]+($splitEndDate[2]-$splitStartDate[2])*12) - $splitEndDate[1] <= 12) { //selecting the right divisions so you can see the data properly
+                    if (($splitEndDate[1]+($splitEndDate[2]-$splitStartDate[2])*12) - $splitEndDate[1] <= 1) {
+                        $dateDivisions = "min"; //select the apropriate divder for the zoom
+                    } else {
+                        $dateDivisions = "hour";
+                    }
+                }
+            } //make datespan for getting all intermediary dates \/
+            $dateSpan = new DatePeriod( new DateTime($startDate), new DateInterval('P1D'), new DateTime($endDate) );
+
+            $dates = collect(); //format the date span to add all intermediary dates to the array
+            foreach ($dateSpan as $key => $value) {
+                if ($dateDivisions != "day") { //save date values for display
+                    if ($dateDivisions == "hour") {
+                        for ($u = 0; $u < 24; $u++) {
+                            $dates->push($value->format('d-m-y').', '.$u.':0');
+                        }
+                    } else {
+                        for ($u = 0; $u < 1440; $u++) {
+                            $dates->push($value->format('d-m-y').', '.floor($u/60).':'.($u%60));
+                        }
                     }
                 }
             }
+        } else {
+            $dates = [];
         }
 
-        $data = $this->GetAndFormatCurl($selectedSensor); //get sensor info
-        $filterdData = [collect(), collect(), collect(), collect()];
-        for ($i = 0; $i < count($data); $i++) { //for all the data
-            if ($data[$i][$temp] > 0 && $data[$i][$temp] <= 40 && $data[$i][$do] > 0 && $data[$i][$do] <= 65) { //filter it
-                $filterdData[$date]->push($data[$i][$date]); //store it in a quad list array
-                $filterdData[$time]->push($data[$i][$time]);
-                $filterdData[$temp]->push($data[$i][$temp]);
-                $filterdData[$do]->push($data[$i][$do]);
+        $data = $data->jsonserialize();
+        for ($y = 0; $y < count($data); $y++) {
+            for ($i = 0; $i < count($data[$y]); $i++) { //for all the data
+                if ($data[$y][$i][$temp] > 0 && $data[$y][$i][$temp] <= 40 && $data[$y][$i][$do] > 0 && $data[$y][$i][$do] <= 65) { //filter it
+                    if ($this->IsDateInRange($startDateRange, $endDateRange, $data[$y][$i][$date])) {
+                        if ($dateDivisions != "day") { //add time values to the date
+                            if ($dateDivisions == "hour") { //put the right hour into the date 
+                                $data[$y][$i][$date] .= ', '.floor(explode(':', $data[$y][$i][$time])[0]).':0';
+                            } else {
+                                $currentTime = explode(':', $data[$y][$i][$time]);
+                                $data[$y][$i][$date] .= ', '.floor($currentTime[0]).':'.floor($currentTime[1]);
+                            }
+                        }
+                        
+                        $filterdData[$y][$ftemp]->push([$data[$y][$i][$date], $data[$y][$i][$temp]]); //store it in a nested array list array
+                        $filterdData[$y][$fdo]->push([$data[$y][$i][$date], $data[$y][$i][$do]]);
+                    }
+                }
             }
         }
 
@@ -67,16 +170,14 @@ class SensorGraphController extends Controller
                 ->with('sensors',$visableSensors)
                 ->with('bodyOfWater',$bodysOfwater)
                 ->with('ownedSensors',$ownedSensorsWithData)
-                ->with('temperature',$filterdData[$temp])
-                ->with('date',$filterdData[$date])
-                ->with('disolvedO2',$filterdData[$do]);
+                ->with('data',$filterdData)
+                ->with('dates',$dates);
         }
         return view('sensor_data') //else just send the rest of the data
             ->with('sensors',$visableSensors)
             ->with('bodyOfWater',$bodysOfwater)
-            ->with('temperature',$filterdData[$temp])
-            ->with('date',$filterdData[$date])
-            ->with('disolvedO2',$filterdData[$do]);
+            ->with('data',$filterdData)
+            ->with('dates',$dates);
     }
 
     private function GetAndFormatCurl($search) {
@@ -119,5 +220,25 @@ class SensorGraphController extends Controller
         //removes headers as first array entry
         array_shift($data);
         return $data;
+    }
+
+    private function IsDateInRange($lowerRange, $upperRange, $dataPoint) {
+        if ($lowerRange == null && $upperRange == null) {
+            return true;
+        }
+
+        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("/", $upperRange);
+        $splitDataPoint = explode("-", $dataPoint);
+        $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
+        $splitUpperRange[2] = substr($splitUpperRange[2], 2);
+        
+        $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
+        $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
+        $dataPoint = $splitDataPoint[2].$splitDataPoint[1].$splitDataPoint[0];
+
+        if (($lowerRange - $dataPoint <= 0 && $upperRange - $dataPoint >= 0)) {
+            return true; //if ether point or both points in range
+        } else { return false; }
     }
 }

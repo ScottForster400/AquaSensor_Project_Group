@@ -53,8 +53,8 @@
                     <div class="flex items-center text-s text-gray-400 pt-3">
                         <li class="flex flex-row w-full justify-between opacity-0">
                             <label for="underline_select" class="sr-only">Body Of Water</label>
-                            <select id="underline_select" class="block py-0 px-0 w-full text-sm text-gray-500 font-medium bg-transparent border-0 border-b border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                <option class="px-0" selected>Body Of Water</option>
+                            <select name="waterBody" id="underline_select" class="block py-0 px-0 w-full text-sm text-gray-500 font-medium bg-transparent border-0 border-b border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                <option value="None" class="px-0" selected>Body Of Water</option>
                                 @foreach ($bodyOfWater as $body)
                                     <option value="{{$body->body_of_water}}">{{$body->body_of_water}}</option>
                                 @endforeach
