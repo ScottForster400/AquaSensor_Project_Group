@@ -2,4 +2,4 @@
     <div class="py-2 border-b border-gray-200 dark:border-gray-700">
         {{$slot}}
     </div>
-  </div>
+</div>

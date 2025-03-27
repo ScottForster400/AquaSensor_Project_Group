@@ -49,7 +49,8 @@ class SensorDataController extends Controller
                 $splitEnd = explode("/", $endDate);
 
                 $mobileAverageMax = 2000;
-                $splitEnd[1] += ($splitEnd[2] - $splitStart[2]) * 12;
+                $splitEnd[1] = (int)$splitEnd[1] + ($splitEnd[2] - $splitStart[2]) * 12;
+
                 $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 5;
                 if ($splitEnd[1] - $splitStart[1] == 0) {
                     $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (5/30);
@@ -64,7 +65,7 @@ class SensorDataController extends Controller
             $dataLength = count($data)/$averageCount;
             $mobileData = $data;
             $mobileDataLength = count($data)/$mobileAverageCount;
-            if ($data > 0) {
+            if (count($data) > 0) {
                 for ($i = 0; $i < $mobileDataLength; $i++) { //do the averaging for moblile
                     $averageTempData = 0;
                     $averageDoData = 0;
@@ -132,9 +133,7 @@ class SensorDataController extends Controller
                     $averagedFlipData[1][$i] = number_format($doAverager/count($flipCardData[$i][$j]), 3);
                 }   //save averages
             } else {
-                $mobileAveragedData = collect([[0], [0], [0], [0]]);
-                $averagedData = collect([[0], [0], [0], [0]]);
-                $averagedFlipData = [[0, 0, 0], [0, 0, 0]];
+                return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
             }
 
             $hourlyAverages = [[], []]; //setup
@@ -185,8 +184,7 @@ class SensorDataController extends Controller
                 ->with('Sensors',$sensors);
         }
         else{
-
-            return view('data');
+            return view('data')->with('message', "No Sensor Data in system");
         }
 
 
