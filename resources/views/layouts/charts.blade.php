@@ -4,9 +4,10 @@
     const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
     const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};
 
-    const tempHourJson = {!! json_encode($hourlyAverages[0]) !!};
-    const doHourJson = {!! json_encode($hourlyAverages[1]) !!};
+    const tempHourJson = {!! json_encode($daysData[0]) !!};
+    const doHourJson = {!! json_encode($daysData[1]) !!};
     const timeJson = {!! json_encode($timeLabel) !!};
+    console.dir({!! json_encode($daysData) !!})
 
     const data = {
         labels: dateJson,
