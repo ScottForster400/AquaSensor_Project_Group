@@ -33,6 +33,11 @@
         responsive: true,
         //aspectRatio:1,
         maintainAspectRatio: false,
+        elements:{
+                point:{
+                    radius:0
+                }
+            },
         scales: {
             y: {
                 beginAtZero: true

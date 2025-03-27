@@ -23,9 +23,9 @@
 
     @if(isset($currentSensorData))
         <div class="py-12 flex justify-center z-10 pb-1">
-            <div class="flex items-center flex-col max-w-6xl mx-auto sm:px-6 lg:px-8 w-full">
-                <form action="{{route('sensorData.search')}}" class = "w-10/12">
-                    <x-search-bar-gps placeholder="Search for a Sensor..."></x-search-bar-gps>
+            <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-10 ">
+                <form id="SearchBarForm" autocomplete="off" action="{{route('sensorData.search')}}" class = "w-10/12">
+                    @include('layouts.searchbar')
                 </form>
                 <div class="flex justify-between w-10/12 ">
                     <x-card class="mb-2 !px-4 !py-6 z-10 mr-2 w-full">
@@ -245,9 +245,14 @@
                     <h2 class="">
                         Sensor Data
                     </h2>
-                    <form action="" class="w-full flex justify-center">
+                    
+                    <form action="{{route('sensorData.index')}}" class="w-full flex justify-center flex-col">
                         <x-date-time-picker></x-date-time-picker>
+                        <div class="w-full pt-3">
+                            <x-button-1 class="w-full">Search</x-button-1>
+                        </div>
                     </form>
+                    
                     <div id="graph" class="max-sm:h-60 h-96 flex items-center justify-center  my-2">
                         <canvas id="myChart"> </canvas>
                     </div>
@@ -255,6 +260,10 @@
             </div>
         </div>
         @include('layouts.charts')
+        <script>
+            window.SensorsJS = @json($Sensors);
+        </script>
+        <script src="{{ asset('js/userLocation.js') }}"></script>
     @else
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
@@ -265,6 +274,7 @@
     </div>
     @endif
     @include('layouts.waves')
+
 </x-app-layout>
 
 <?

@@ -50,6 +50,7 @@ class SensorDataController extends Controller
 
                 $mobileAverageMax = 2000;
                 $splitEnd[1] = (int)$splitEnd[1] + ($splitEnd[2] - $splitStart[2]) * 12;
+
                 $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 5;
                 if ($splitEnd[1] - $splitStart[1] == 0) {
                     $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (5/30);
