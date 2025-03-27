@@ -136,14 +136,6 @@ class SensorDataController extends Controller
                 return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
             }
 
-            //dd($timeFrameEntries[0][$time]);
-            $reformatedData = [[], []];
-            for ($j= 0; $j<Count($timeFrameEntries[0]); $j++) { //reformat the data
-                $reformatTime = explode(':', $timeFrameEntries[0][$j][$time]);
-                $reformatedData[0][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$temp]];
-                $reformatedData[1][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$do]];
-            }
-
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first(); //get latest values
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
@@ -151,6 +143,16 @@ class SensorDataController extends Controller
             $weekDay=($dt->englishDayOfWeek); //get current day of the week
             
             $sensors = Sensor::where('opensource',1)->get(); //get opensource sensor count
+
+            // day, night and time stuffs
+            $sunRise = '04:00';
+            $sunSet = '20:00';
+            $reformatedData = [[[], []], [[], []]];
+            for ($j= 0; $j<Count($timeFrameEntries[0]); $j++) { //reformat the data
+                $reformatTime = explode(':', $timeFrameEntries[0][$j][$time]);
+                $reformatedData[0][0][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$temp]];
+                $reformatedData[0][1][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$do]];
+            }
 
             $timeLabel=collect();
             $currentTime = explode( ':', date( 'H:i' ));
@@ -162,7 +164,7 @@ class SensorDataController extends Controller
                     else { $timeLabel->push("{$ret}:{$g}"); }
                 } //53.650131, -1.783098
             }
-            for ($g = 0; $g <= $currentTime[1]; ++$g) {
+            for ($g = 0; $g <= $currentTime[1]; ++$g) { //do current hour seperatly
                 if ($g < 10) { $timeLabel->push("{$currentTime[0]}:0{$g}"); }
                 else { $timeLabel->push("{$currentTime[0]}:{$g}"); }
             }
@@ -175,7 +177,8 @@ class SensorDataController extends Controller
                 ->with('currentSensor',$currentSensor)
                 ->with('weekDay',$weekDay)
                 ->with('flipCardDataTemp', $averagedFlipData[0])
-                ->with('daysData',$reformatedData)
+                ->with('daysData',$reformatedData[0])
+                //->with('nightsData' $reformatedData[1])
                 ->with('timeLabel',$timeLabel)
                 ->with('Sensors',$sensors);
         }

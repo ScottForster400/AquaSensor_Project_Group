@@ -31,7 +31,7 @@ class SensorGraphController extends Controller
         $startDateRange = null; $endDateRange = null;
         $bodysOfwater = Sensor::select('body_of_water')->where('activated',1)->orderBy('body_of_water')->distinct()->get();
         $allSensors = Sensor_Data::select('sensor_id')->get();
-        $visableSensors = Sensor::where('activated',1)->where('opensource',1)->get();
+        $visableSensors = Sensor::where('activated',1)->where('opensource',1)->where('user_id', '!=',  Auth::id())->get();
 
         if(Auth::user() != null) { //if user logged in
             $ownedSensorsWithData=Sensor::whereIn('sensor_id',$allSensors)->where('user_id',Auth::id())->where('activated',1)->get();
