@@ -20,7 +20,7 @@
                         <x-th class="border-b border-gray-300 w-full">
                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}">
                                 <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
-                                    <strong class="underline">{{Str::limit($sensor->sensor_id,15)}}</strong>
+                                    <strong class="underline">{{Str::limit($sensor->sensor_name,15)}}</strong>
                                     <p class="text-gray-600">{{Str::limit($sensor->location,20)}}</p>
                                 </x-modal-toggle>
                             </a>

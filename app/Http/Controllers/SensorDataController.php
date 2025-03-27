@@ -36,12 +36,15 @@ class SensorDataController extends Controller
             $do=3;
             $date=0;
             $time=1;
+            $sunRise = explode(':', '04:00');
+            $sunSet = explode(':', '20:00');
+
             $mobileAveragedData = collect([collect(), collect(), collect(), collect()]);
             $averagedData = collect([collect(), collect(), collect(), collect()]);
             $startDate = "01/01/2000"; //api ony uses 2 digits for year so will break after 2100
             $endDate = "31/12/2099";
 
-            if (Count($request->query) > 0) {
+            if (isset($_REQUEST['start']) &&  isset($_REQUEST['end'])) {
                 $startDate = $_REQUEST['start'];
                 $endDate = $_REQUEST['end'];
 
@@ -49,7 +52,8 @@ class SensorDataController extends Controller
                 $splitEnd = explode("/", $endDate);
 
                 $mobileAverageMax = 2000;
-                $splitEnd[1] += ($splitEnd[2] - $splitStart[2]) * 12;
+                $splitEnd[1] = (int)$splitEnd[1] + ($splitEnd[2] - $splitStart[2]) * 12;
+
                 $mobileAverageCount = ($splitEnd[1] - $splitStart[1])+1 * 5;
                 if ($splitEnd[1] - $splitStart[1] == 0) {
                     $mobileAverageCount = ($splitEnd[0]-$splitStart[0])+1 * (5/30);
@@ -64,7 +68,7 @@ class SensorDataController extends Controller
             $dataLength = count($data)/$averageCount;
             $mobileData = $data;
             $mobileDataLength = count($data)/$mobileAverageCount;
-            if ($data > 0) {
+            if (count($data) > 0) {
                 for ($i = 0; $i < $mobileDataLength; $i++) { //do the averaging for moblile
                     $averageTempData = 0;
                     $averageDoData = 0;
@@ -115,48 +119,47 @@ class SensorDataController extends Controller
                     $averagedData[$time]->push($dataAverager[0][$time]);
                 }
 
-                $flipCardData = [ //get the initial data for the averages on the flip cards
-                    $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y') . "&todate=" . date('d-m-y')),
+                $timeFrameEntries = [ //get the initial data for the averages on the flip cards
+                    $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('yesterday')) . "&todate=" . date('d-m-y')),
                     $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('w')-1).' days')) . "&todate=" . date('d-m-y')),
                     $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
                 ];
+
+                $currentTime = explode( ':', date( 'H:i')); //, strtotime('-16 hours')
+                $tempDataStore = []; //filtering current day data for time spans
+                if (($currentTime[0] <= $sunSet[0] && $currentTime[0] >= $sunRise[0]) || //if day
+                    (($currentTime[0] == $sunSet[0] && $currentTime[1] <= $sunSet[1]) || ($currentTime[0] == $sunRise[0] && $currentTime[1] >= $sunRise[1]))) { 
+                    for ($z=0; $z<count($timeFrameEntries[0]); $z++) {
+                      $splitTime = explode(':', $timeFrameEntries[0][$z][$time]); 
+                        if ($sunRise[0] <= $splitTime[0] && $sunSet[0] >= $splitTime[0] && date('d-m-y') == $timeFrameEntries[0][$z][$date]) {
+                            $tempDataStore[count($tempDataStore)] = $timeFrameEntries[0][$z]; //only save data if in the day bounds
+                        }
+                    }
+                } else { //if night
+                    $tempDataStore[0] = $timeFrameEntries[0][0];
+                    /*for ($z=0; $z<count($timeFrameEntries[0]); $z++) {
+                        $splitTime = explode(':', $timeFrameEntries[0][$z][$time]);
+                        if (($sunSet[0] < $splitTime[0] && !date('d-m-y') == $timeFrameEntries[0][$z][$date])) {
+                        //  || ($sunRise[0] > $splitTime[0] && date('d-m-y') == $timeFrameEntries[0][$z][$date])) {
+                            $tempDataStore[$z] = $timeFrameEntries[0][$z]; //only save data if in the night bounds
+                        }
+                    }*/
+                }
+                $timeFrameEntries[0] = $tempDataStore;
+
                 $averagedFlipData = [[0, 0, 0], [0, 0, 0]]; //setup
-                for ($i=0; $i<count($flipCardData); $i++) { //average data for flip cards
+                for ($i=0; $i<count($timeFrameEntries); $i++) { //average data for flip cards
                     $tempAverager = 0;
                     $doAverager = 0;
-                    for ($j= 0; $j<count($flipCardData); $j++) { //get the total of data
-                        $tempAverager += $flipCardData[$i][$j][$temp];
-                        $doAverager += $flipCardData[$i][$j][$do];
+                    for ($j= 0; $j<count($timeFrameEntries[$i]); $j++) { //get the total of data
+                        $tempAverager += $timeFrameEntries[$i][$j][$temp];
+                        $doAverager += $timeFrameEntries[$i][$j][$do];
                     }
-                    $averagedFlipData[0][$i] = number_format($tempAverager/count($flipCardData[$i][$j]), 3);
-                    $averagedFlipData[1][$i] = number_format($doAverager/count($flipCardData[$i][$j]), 3);
+                    $averagedFlipData[0][$i] = number_format($tempAverager/count($timeFrameEntries[$i]), 3);
+                    $averagedFlipData[1][$i] = number_format($doAverager/count($timeFrameEntries[$i]), 3);
                 }   //save averages
             } else {
-                $mobileAveragedData = collect([[0], [0], [0], [0]]);
-                $averagedData = collect([[0], [0], [0], [0]]);
-                $averagedFlipData = [[0, 0, 0], [0, 0, 0]];
-            }
-
-            $hourlyAverages = [[], []]; //setup
-            $currentData = 0;
-            for ($j= 0; $j<24; $j++) { //for every hour
-                $timedTemp = 0;
-                $timedDO = 0;
-                $totalReadingsInCurrentHour = 0;
-                while ($currentData < Count($flipCardData[0])) { //use while as actual count is unknown
-                    $hour = (int)explode(":", $flipCardData[0][$currentData][$time])[0]; //split string into sections
-                    $data = $flipCardData[0][$currentData];
-                    if ($hour == $j) { //if the hours the same average data
-                        $timedTemp += $data[$temp];
-                        $timedDO += $data[$do];
-                        $totalReadingsInCurrentHour++;
-                    } else { //on hour change save averages and stop this hour
-                        $hourlyAverages[0][$j] = number_format($timedTemp/$totalReadingsInCurrentHour, 3);
-                        $hourlyAverages[1][$j] = number_format($timedDO/$totalReadingsInCurrentHour, 3);
-                        break;
-                    }
-                    $currentData++;
-                }
+                return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
             }
 
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first(); //get latest values
@@ -165,12 +168,30 @@ class SensorDataController extends Controller
             $dt = Carbon::now();
             $weekDay=($dt->englishDayOfWeek); //get current day of the week
             
-            $timeLabel=collect();
-            for($i = 0; $i < count($hourlyAverages[0]); ++$i) { //hourly labels
-                $time = "{$i}:00";
-                $timeLabel->push($time);
-            }
             $sensors = Sensor::where('opensource',1)->get(); //get opensource sensor count
+
+            // day, night and time stuffs
+            $reformatedData = [[[], []], [[], []]];
+            for ($j= 0; $j<Count($timeFrameEntries[0]); $j++) { //reformat the data
+                $reformatTime = explode(':', $timeFrameEntries[0][$j][$time]);
+                $reformatedData[0][0][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$temp]];
+                $reformatedData[0][1][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$do]];
+            }
+
+            $timeLabel=collect();
+            $currentTime = explode( ':', date( 'H:i' ));
+            for($i = 0; $i < $currentTime[0]; ++$i) { //hourly labels
+                for($g = 0; $g < 60; ++$g) { //minute lables labels
+                    if ($i < 10) { $ret = '0'.$i; }
+                    else { $ret = $i; }
+                    if ($g < 10) { $timeLabel->push("{$ret}:0{$g}"); }
+                    else { $timeLabel->push("{$ret}:{$g}"); }
+                } //53.650131, -1.783098
+            }
+            for ($g = 0; $g <= $currentTime[1]; ++$g) { //do current hour seperatly
+                if ($g < 10) { $timeLabel->push("{$currentTime[0]}:0{$g}"); }
+                else { $timeLabel->push("{$currentTime[0]}:{$g}"); }
+            }
 
             return view('data')
                 ->with('mobileAveragedData',$mobileAveragedData)
@@ -180,13 +201,13 @@ class SensorDataController extends Controller
                 ->with('currentSensor',$currentSensor)
                 ->with('weekDay',$weekDay)
                 ->with('flipCardDataTemp', $averagedFlipData[0])
-                ->with('hourlyAverages',$hourlyAverages)
+                ->with('daysData',$reformatedData[0])
+                //->with('nightsData' $reformatedData[1])
                 ->with('timeLabel',$timeLabel)
                 ->with('Sensors',$sensors);
         }
         else{
-
-            return view('data');
+            return view('data')->with('message', "No Sensor Data in system");
         }
 
 

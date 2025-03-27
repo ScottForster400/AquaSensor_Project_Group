@@ -28,7 +28,7 @@ class SensorController extends Controller
         //gets all open source and activated sensors
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-
+        //?start=04%2F03%2F2025&end=20%2F03%2F2025
         return view('sensors',compact('opensource','user_sensors'))->with('Sensors',$sensors);
 
     }
@@ -201,6 +201,16 @@ class SensorController extends Controller
 
     public function activate(Request $request)
     {
+        $inappropriate_language = file_get_contents(resource_path('textfiles\offensive_language.txt'));
+        $words = explode("\n", $inappropriate_language);
+        foreach($words as $word){
+            if($request->sensor_name == $word){
+                session()->flash('warning','Inappropriate Language is not Tolerated');
+                return to_route('sensors.index');
+            }
+        }
+
+
 
         $request->validate([
              'sensor_name' => 'required|Max:255',
@@ -239,6 +249,15 @@ class SensorController extends Controller
 
     public function update(Request $request, Sensor $sensor)
     {
+
+        $inappropriate_language = file_get_contents(resource_path('textfiles\offensive_language.txt'));
+        $words = explode("\n", $inappropriate_language);
+        foreach($words as $word){
+            if($request->sensor_name == $word){
+                session()->flash('warning','Inappropriate Language is not Tolerated');
+                return to_route('sensors.index');
+            }
+        }
 
         $request->validate([
              'sensor_name' => 'required|Max:255',

@@ -20,3 +20,32 @@ function flipCard(item){
         item.classList.add("my-rotate-y-180")
     }
 }
+
+
+document.getElementById("check").onchange= function()
+{
+
+if (document.getElementById("check").checked==true)
+{
+document.getElementById("check2").checked=true;
+}
+
+else if (document.getElementById("check").checked==false)
+{
+document.getElementById("check2").checked=false;
+}
+}
+
+function desktopdaynight(){
+    if (document.getElementById("check").checked==true)
+        {
+        document.getElementById("check").checked=false;
+        document.getElementById("check2").checked=false;
+        }
+
+    else if (document.getElementById("check").checked==false)
+        {
+        document.getElementById("check").checked=true;
+        document.getElementById("check2").checked=true;
+        }
+}
