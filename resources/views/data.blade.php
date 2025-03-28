@@ -178,7 +178,7 @@
                                 <p>{{$flipCardDataDO[2]}} mg/L</p>
                             </div>
                         </x-card-flippable-backface>
-                        <x-nightcard-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly ">
+                        <x-nightcard-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Night)</span></h3>
                                 <p>{{$flipCardDataDO[0]}} mg/L</p>
@@ -194,19 +194,22 @@
                         </x-nightcard-flippable-backface>
                     </x-card-flippable>
                 </div>
-                <x-card class="px-2 !my-3 !pb-1 z-10">
-                    <h2 class="">
-                        Sensor Data
-                    </h2>
+                <x-card class="px-2 !my-3 !pb-1  z-10 flex flex-col items-center">
+                    <div class="px-2 h-auto w-full">
+                        <h2 class="w-full text-start ">
+                            Sensor Data
+                        </h2>
 
-                    <form action="{{route('sensorData.index')}}" class="w-full flex justify-center flex-col">
-                        <x-date-time-picker></x-date-time-picker>
-                        <div class="w-full pt-3">
-                            <x-button-1 class="w-full">Search</x-button-1>
-                        </div>
-                    </form>
+                        <form action="{{route('sensorData.index')}}" class=" flex justify-center  flex-col w-full mt-2">
+                            <x-date-time-picker></x-date-time-picker>
+                            <div class="w-full pt-3">
+                                <x-button-1 class="w-full">Search</x-button-1>
+                            </div>
+                            <input type="hidden" name="sensor_id" value="{{$currentSensor->sensor_id}}">
+                        </form>
+                    </div>
 
-                    <div id="graph" class="max-sm:h-60 h-96 flex items-center justify-center  my-2">
+                    <div id="graph" class="max-sm:h-60 h-96 w-full flex items-center justify-center  my-2">
                         <canvas id="myChart"> </canvas>
                     </div>
                 </x-card>

@@ -38,7 +38,7 @@
 
 
                 @if (Auth::check())
-                    <div class="flex justify-around w-4/5 pt-4">
+                    <div class="flex justify-between w-4/5 pt-4">
                         <div>
                             <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Activate Sensor</x-modal-toggle>
                             <!-- Modal to activate Sensor -->
@@ -65,12 +65,12 @@
                                             </div>
                                             <div>
                                                 <x-input-label for="latitude" :value="__('Latitude')" />
-                                                <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" :value="old('latitude')" required autofocus autocomplete="latitude" />
+                                                <x-text-input id="latitude" name="latitude" type="number" step="0.000001" class="mt-1 block w-full" :value="old('latitude')" required autofocus autocomplete="latitude" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('latitude')" />
                                             </div>
                                             <div>
                                                 <x-input-label for="longitude" :value="__('Longitude')" />
-                                                <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
+                                                <x-text-input id="longitude" name="longitude" type="number" step="0.000001" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                                             </div>
                                             <div>
