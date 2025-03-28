@@ -36,8 +36,9 @@ class SensorDataController extends Controller
             $do=3;  //53.650131, -1.783098
             $date=0;
             $time=1;
-            $sunRise = '0400';
-            $sunSet = '2000';
+            $sunDataStuffs = date_sun_info(strtotime('today'), 53.64514516768376, -1.7827930443889428);
+            $sunRise = date('Hi', $sunDataStuffs['sunrise']);
+            $sunSet = date('Hi', $sunDataStuffs['sunset']);
 
             $mobileAveragedData = collect([collect(), collect(), collect(), collect()]);
             $averagedData = collect([collect(), collect(), collect(), collect()]);
@@ -138,15 +139,15 @@ class SensorDataController extends Controller
                         $nightTimeSplitData[0][count($nightTimeSplitData[0])] = $timeFrameEntries[0][$z]; //only save data if in the day bounds
                     }
                     $endOfDayCheck = $currentDate == $cumilatedDate && $cumilatedTime >= $sunSet; //if current day is past sunset
-                    $startOfDayCheck1 = $cumilatedTime >= $sunSet && $currentDate != $cumilatedDate && $sunSet <= $cumilatedTime && 2400 >= $cumilatedTime; //checks previous day on day chaange
-                    $startOfDayCheck2 = $cumilatedTime <= $sunRise && $currentDate == $cumilatedDate && 0000 <= $cumilatedTime && $sunRise >= $cumilatedTime; //checks current day on day change
+                    $startOfDayCheck1 = $cumilatedTime >= $sunSet && $currentDate != $cumilatedDate && $sunSet <= $cumilatedTime; //checks previous day on day chaange
+                    $startOfDayCheck2 = $cumilatedTime <= $sunRise && $currentDate == $cumilatedDate && $sunRise >= $cumilatedTime; //checks current day on day change
                     if ($startOfDayCheck1 || $startOfDayCheck2 || $endOfDayCheck) {
                         $nightTimeSplitData[1][count($nightTimeSplitData[1])] = $timeFrameEntries[0][$z]; //only save data if in the night bounds
                         //echo "<a>$cumilatedTime; $sunRise; $sunSet --- $currentDate $cumilatedDate --- $startOfDayCheck1:$startOfDayCheck2:$endOfDayCheck</a><br>";
                     }
                 }
 
-                $averagedFlipData = [[0, 0, 0], [0, 0, 0]]; //setup
+                $averagedFlipData = [[[0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0]]]; //setup
                 for ($i=0; $i<count($timeFrameEntries); $i++) { //average data for flip cards
                     $tempAverager = 0;
                     $doAverager = 0;
