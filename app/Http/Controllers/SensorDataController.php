@@ -209,11 +209,11 @@ class SensorDataController extends Controller
             return view('data')
                 ->with('mobileAveragedData',$mobileAveragedData)
                 ->with('desktopAveragedData',$averagedData)
-                ->with('flipCardDataDO', $averagedFlipData[1])
+                ->with('dayFlipCardDataDO', $averagedFlipData[1])//->with('nightFlipCardDataDO', $averagedFlipData[1][1])
+                ->with('dayFlipCardDataTemp', $averagedFlipData[0])//->with('nightFlipCardDataTemp', $averagedFlipData[1][0])
                 ->with('currentSensorData',$currentSensorData)
                 ->with('currentSensor',$currentSensor)
                 ->with('weekDay',$weekDay)
-                ->with('flipCardDataTemp', $averagedFlipData[0])
                 ->with('daysData',$reformatedData[0])->with('nightsData', $reformatedData[1])
                 ->with('daysLabel',$timeLabel[0])->with('nightsLabel',$timeLabel[1])
                 ->with('Sensors',$sensors);
