@@ -144,6 +144,8 @@
     {{-- @include("layouts.maps") --}}
     <script>
         window.SensorsJS = @json($Sensors);
+        window.OwnedSensors = @json($user_sensors);
     </script>
     <script src="{{ asset('js/userLocation.js') }}"></script>
+    <script src="{{ asset('js/LeafletMap.js') }}"></script>
 </x-app-layout>

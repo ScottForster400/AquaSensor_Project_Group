@@ -106,6 +106,11 @@
                     @endforeach
                 </x-table-body>
             </x-table>
+            <div class="flex justify-center pb-10 z-0">
+                <div id="map" style="height: 400px; width: 60%">
+        
+                </div>
+            </div>
             @if (Auth::check())
                 {{$user_sensors->links()}}
             @endif
