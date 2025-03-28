@@ -1,25 +1,30 @@
 <script>
     Chart.defaults.font.size = 12;
+    Chart.defaults.elements.bar.borderWidth = 0;
     const tempJson = {!! json_encode($mobileAveragedData[2]->toArray()) !!};
     const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
     const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};
 
     const tempHourJson = {!! json_encode($daysData[0]) !!};
     const doHourJson = {!! json_encode($daysData[1]) !!};
-    const timeJson = {!! json_encode($timeLabel) !!};
-    console.dir({!! json_encode($daysData) !!})
+    const timeJson = {!! json_encode($daysLabel) !!};
+    const nightTempHourJson = {!! json_encode($nightsData[0]) !!};
+    const nightDoHourJson = {!! json_encode($nightsData[1]) !!};
+    const nightTimeJson = {!! json_encode($nightsLabel) !!};
+
+    console.dir(tempHourJson);
 
     const data = {
         labels: dateJson,
         datasets: [{
-            pointHitRadius: 20,
+            pointHitRadius: 1000,
             type: 'line',
             label: 'Temp: °C',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
             borderColor: 'rgb(255, 99, 132)',
             data: tempJson,
         },{
-            pointHitRadius: 20,
+            pointHitRadius: 1000,
             type: 'line',
             label: 'DO: (mg/L)',
             backgroundColor: 'rgb(110, 99, 255,0.5)',
@@ -64,15 +69,16 @@
     }
     };
 
-    const dataTemp = {
+const dataTemp = {
     labels: timeJson,
     datasets: [{
-        pointHitRadius: 20,
+        pointHitRadius: 1000,
         type: 'line',
         label: 'Temp: °C',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgb(255, 99, 132)',
         data: tempHourJson,
+        radius: 0
     }]
     };
     const tempConfig = {
@@ -102,17 +108,93 @@
     const dataDO = {
     labels: timeJson,
     datasets: [{
-        pointHitRadius: 20,
+        pointHitRadius: 1000,
         type: 'line',
         label: 'DO (mg,L)',
         backgroundColor: 'rgb(110, 99, 255,0.5)',
         borderColor: 'rgb(110, 99, 255)',
         data:doHourJson,
+        radius: 0
     }]
     };
     const DOConfig = {
     type: 'line',
     data: dataDO,
+    options: {
+        events: ['mousemove'],
+        responsive: true,
+        //aspectRatio:1,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        hover: {  // <-- to add
+            mode: 'nearest'
+            },
+        tooltips: {
+            mode: 'nearest',
+            intersect: true
+        },
+        interaction: {
+            mode: 'nearest'
+        }
+    }
+    };
+
+    const dataTempNight = {
+    labels: nightTimeJson,
+        datasets: [{
+            pointHitRadius: 1000,
+            type: 'line',
+            label: 'Temp: °C',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: nightTempHourJson,
+            radius: 0
+        }]
+    };
+    const tempConfigNight = {
+    type: 'line',
+    data: dataTempNight,
+    options: {
+        events: ['mousemove'],
+        responsive: true,
+        //aspectRatio:1,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        hover: {  // <-- to add
+            mode: 'nearest'
+            },
+        tooltips: {
+            mode: 'nearest',
+            intersect: true
+        },
+        interaction: {
+            mode: 'nearest'
+        }
+    }
+    };
+    const dataDONight = {
+    labels: nightTimeJson,
+        datasets: [{
+            pointHitRadius: 1000,
+            type: 'line',
+            label: 'DO (mg,L)',
+            backgroundColor: 'rgb(110, 99, 255,0.5)',
+            borderColor: 'rgb(110, 99, 255)',
+            data:nightDoHourJson,
+            radius: 0
+        }]
+    };
+    const DOConfigNight = {
+    type: 'line',
+    data: dataDONight,
     options: {
         events: ['mousemove'],
         responsive: true,
@@ -149,4 +231,13 @@
     document.getElementById('DOChart'),
     DOConfig // We'll add the configuration details later.
     );
+    const DOChartNight = new Chart(
+    document.getElementById('DOChartNight'),
+    DOConfigNight // We'll add the configuration details later.
+    );
+    const tempChartNight = new Chart(
+    document.getElementById('tempChartNight'),
+    tempConfigNight
+    );
+
 </script>

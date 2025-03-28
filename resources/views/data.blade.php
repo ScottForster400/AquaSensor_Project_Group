@@ -15,7 +15,7 @@
                 </label>
             </div>
         </div>
-        <label>
+        <label onclick="desktopdaynight()">
             <input type="checkbox" name="check2" value="check2" id="check2">
             <span class="check2" ></span>
         </label>
@@ -28,7 +28,7 @@
                     @include('layouts.searchbar')
                 </form>
                 <div class="flex justify-between w-10/12 ">
-                    <x-card class="mb-2 !px-4 !py-6 z-10 mr-2 w-full">
+                    <x-card class="mb-2 !px-4 !py-6 z-10 w-full">
                         <div id="card-top" class="flex flex-row h-20 px-2">
                             <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
                                 @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)
@@ -93,83 +93,8 @@
                             <div class="">
                                 @include('layouts.main-card-tab')
                             </div>
-                            {{-- <div class="max-sm:hidden max-sm:h-44  h-80">
-                                <div class=" rounded-lg bg-gray-50 dark:bg-gray-800 h-full w-full" id="temp" role="tabpanel" aria-labelledby="temperature-tab">
-                                    <div id="graph-temp" class="h-full w-full flex items-center justify-center  my-2">
-                                        <canvas id="tempChart"> </canvas>
-                                    </div>
-                                </div>
-                            </div> --}}
                         </div>
                     </x-card>
-                    {{-- <x-card class="mb-2 !px-4 !py-6 z-10 ml-2 max-sm:hidden">
-                        <div id="card-top" class="flex flex-row h-20 px-2">
-                            <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
-                                @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)
-                                    <h2>{{Str::title($currentSensorData->sensor_id)}}</h2>
-                                @else
-                                    <h2>{{Str::title($currentSensor->sensor_name)}}</h2>
-                                @endif
-                                <div id="DO-data" class=" flex-row items-end">
-                                    <div class="h-8 w-8 ">
-                                        <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -4.5px; position:relative">
-                                    </div>
-                                    <p class="">{{$currentSensorData->mgl_dissolved_oxygen}} mg/l</p>
-                                </div>
-                            </div>
-                            <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
-                                <p>{{$weekDay}}</p>
-                                <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
-                                <div class="flex flex-row items-center">
-                                    <div class="h-5 w-5 mr-2">
-                                        @if($currentSensorData->mgl_dissolved_oxygen<=4)
-                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                            </div>
-                                            <p>Unsafe</p>
-                                        @elseif($currentSensorData->mgl_dissolved_oxygen<=6.5)
-
-                                            @if ($currentSensorData->temperature>=10)
-                                                    <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Caution</p>
-                                            @else
-                                                    <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Unsafe</p>
-                                            @endif
-                                        @else
-
-                                            @if ($currentSensorData->temperature>=14)
-                                                    <img src="{{URL::asset('imgs/safe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Safe</p>
-                                            @elseif($currentSensorData->temperature>=10)
-                                                    <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Caution</p>
-                                            @else
-                                                    <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Unsafe</p>
-                                            @endif
-                                        @endif
-
-                                </div>
-                            </div>
-                        </div>
-                        <div id="card-data">
-                            <div class="sm:hidden">
-                                @include('layouts.main-card-tab')
-                            </div>
-                            <div class="max-sm:hidden max-sm:h-44  h-80">
-                                <div class="p rounded-lg bg-gray-50 dark:bg-gray-800 h-full w-full " id="DO" role="tabpanel" aria-labelledby="dashboard-tab">
-                                    <div id="graph-DO" class="h-full w-full  flex items-center justify-center  my-2">
-                                        <canvas id="DOChart"> </canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </x-card> --}}
                 </div>
 
                 <div class="flex flex-row justify-evenly sm:justify-between w-10/12 h-28 sm:h-40">
@@ -181,20 +106,34 @@
                             <h3>{{$currentSensorData->temperature}}°c</h3>
                             <p class="text-gray-500 text-xs">Temperature</p>
                         </x-card-flippable-frontface>
-                        <x-card-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1">
+                        <x-card-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1 day-card">
                             <div class="text-xs w-full ">
-                                <h3 class="text-gray-500 ">Daily Average</h3>
-                                <p>{{$flipCardDataTemp[0]}}°C</p>
+                                <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Day)</span></h3>
+                                <p>{{$dayFlipCardDataTemp[0]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
-                                <h3 class="text-gray-500 ">Weekley Average</h3>
-                                <p>{{$flipCardDataTemp[1]}}°C</p>
+                                <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Day)</span></h3>
+                                <p>{{$dayFlipCardDataTemp[1]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
-                                <h3 class="text-gray-500 ">Monthly Average</h3>
-                                <p>{{$flipCardDataTemp[2]}}°C</p>
+                                <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Day)</span></h3>
+                                <p>{{$dayFlipCardDataTemp[2]}}°C</p>
                             </div>
                         </x-card-flippable-backface>
+                        <x-nightcard-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1 ">
+                            <div class="text-xs w-full ">
+                                <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Night)</span></h3>
+                                <p>{{$dayFlipCardDataTemp[0]}}°C</p>
+                            </div>
+                            <div class="text-xs w-full">
+                                <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Night)</span></h3>
+                                <p>{{$dayFlipCardDataTemp[1]}}°C</p>
+                            </div>
+                            <div class="text-xs w-full">
+                                <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Night)</span></h3>
+                                <p>{{$dayFlipCardDataTemp[2]}}°C</p>
+                            </div>
+                        </x-nightcard-flippable-backface>
                     </x-card-flippable>
 
 
@@ -225,35 +164,52 @@
                             <h3>{{$currentSensorData->mgl_dissolved_oxygen}} mg/l</h3>
                             <p class="text-gray-500 text-xs">Dissolved Oxygen</p>
                         </x-card-flippable-frontface>
-                        <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly">
+                        <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly  day-card">
                             <div class="text-xs w-full ">
-                                <h3 class="text-gray-500 ">Daily Average</h3>
-                                <p>{{$flipCardDataDO[0]}} mg/L</p>
+                                <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Day)</span></h3>
+                                <p>{{$dayFlipCardDataDO[0]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
-                                <h3 class="text-gray-500 ">Weekley Average</h3>
-                                <p>{{$flipCardDataDO[1]}} mg/L</p>
+                                <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Day)</span></h3>
+                                <p>{{$dayFlipCardDataDO[1]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
-                                <h3 class="text-gray-500 ">Monthly Average</h3>
-                                <p>{{$flipCardDataDO[2]}} mg/L</p>
+                                <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Day)</span></h3>
+                                <p>{{$dayFlipCardDataDO[2]}} mg/L</p>
                             </div>
                         </x-card-flippable-backface>
+                        <x-nightcard-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly">
+                            <div class="text-xs w-full ">
+                                <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Night)</span></h3>
+                                <p>{{$dayFlipCardDataDO[0]}} mg/L</p>
+                            </div>
+                            <div class="text-xs w-full">
+                                <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Night)</span></h3>
+                                <p>{{$dayFlipCardDataDO[1]}} mg/L</p>
+                            </div>
+                            <div class="text-xs w-full">
+                                <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Night)</span></h3>
+                                <p>{{$dayFlipCardDataDO[2]}} mg/L</p>
+                            </div>
+                        </x-nightcard-flippable-backface>
                     </x-card-flippable>
                 </div>
-                <x-card class="px-2 !my-3 !pb-1 z-10">
-                    <h2 class="">
-                        Sensor Data
-                    </h2>
-                    
-                    <form action="{{route('sensorData.index')}}" class="w-full flex justify-center flex-col">
-                        <x-date-time-picker></x-date-time-picker>
-                        <div class="w-full pt-3">
-                            <x-button-1 class="w-full">Search</x-button-1>
-                        </div>
-                    </form>
-                    
-                    <div id="graph" class="max-sm:h-60 h-96 flex items-center justify-center  my-2">
+                <x-card class="px-2 !my-3 !pb-1  z-10 flex flex-col items-center">
+                    <div class="px-2 h-auto w-full">
+                        <h2 class="w-full text-start ">
+                            Sensor Data
+                        </h2>
+
+                        <form action="{{route('sensorData.index')}}" class=" flex justify-center  flex-col w-full mt-2">
+                            <x-date-time-picker></x-date-time-picker>
+                            <div class="w-full pt-3">
+                                <x-button-1 class="w-full">Search</x-button-1>
+                            </div>
+                            <input type="hidden" name="sensor_id" value="{{$currentSensor->sensor_id}}">
+                        </form>
+                    </div>
+
+                    <div id="graph" class="max-sm:h-60 h-96 w-full flex items-center justify-center  my-2">
                         <canvas id="myChart"> </canvas>
                     </div>
                 </x-card>

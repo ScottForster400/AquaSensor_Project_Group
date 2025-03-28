@@ -29,8 +29,8 @@
         <x-warning>{{Session::pull('warning')}}</x-warning>
     @endif
 
-    <div class="py-12 flex justify-center">
-        <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
+    <div class="py-12 flex justify-center z-10">
+        <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-50">
 
             <form action="{{route('sensors.search')}}" method="GET" class = "w-4/5">
                 @include('layouts.searchbar')
@@ -38,11 +38,11 @@
 
 
                 @if (Auth::check())
-                    <div class="flex justify-around w-4/5 pt-4">
+                    <div class="flex justify-between w-4/5 pt-4">
                         <div>
                             <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Activate Sensor</x-modal-toggle>
                             <!-- Modal to activate Sensor -->
-                            <x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full">
+                            <x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full z-50">
                                 <x-modal-header data-modal-hide="edit">Activate Sensor</x-modal-header>
                                 <x-modal-body>
                                     <form method="post" action="{{ route('sensors.activate') }}" class="mt-6 space-y-6">
@@ -65,12 +65,12 @@
                                             </div>
                                             <div>
                                                 <x-input-label for="latitude" :value="__('Latitude')" />
-                                                <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" :value="old('latitude')" required autofocus autocomplete="latitude" />
+                                                <x-text-input id="latitude" name="latitude" type="number" step="0.000001" class="mt-1 block w-full" :value="old('latitude')" required autofocus autocomplete="latitude" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('latitude')" />
                                             </div>
                                             <div>
                                                 <x-input-label for="longitude" :value="__('Longitude')" />
-                                                <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
+                                                <x-text-input id="longitude" name="longitude" type="number" step="0.000001" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                                             </div>
                                             <div>
@@ -135,15 +135,22 @@
                 @include('layouts.sensor-table')
             </div>
 
+            <div class=" justify-center pb-10 h-56 sm:h-80 w-4/5 z-0 mt-5 flex opacity-0" id="map-container">
+                <div id="map" class="w-full h-full  rounded-lg">
 
+                </div>
+            </div>
 
 
 
         </div>
     </div>
     {{-- @include("layouts.maps") --}}
+    @include('layouts.waves')
     <script>
         window.SensorsJS = @json($Sensors);
+        window.OwnedSensors = @json($user_sensors);
     </script>
     <script src="{{ asset('js/userLocation.js') }}"></script>
+    <script src="{{ asset('js/LeafletMap.js') }}"></script>
 </x-app-layout>

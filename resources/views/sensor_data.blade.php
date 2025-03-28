@@ -9,10 +9,10 @@
 
         @include('layouts.sidebar')
         <div class="py-0 flex justify-center basis-11/12 z-10 pb-1">
-            <div class="flex items-center justify-center flex-col  mx-auto sm:px-6 lg:px-8 w-full z-10 h-80 pt-4">
+            <div class="flex items-center justify-center flex-col  mx-auto sm:px-6 lg:px-8 w-full z-10  pt-4">
 
 
-                <x-card class="mb-2 !px-4  z-10 h-80 pt-4">
+                <x-card class="mb-2 !px-4  z-10 h-auto pt-4">
                     @include('layouts.sensor-data-tab')
                 </x-card>
 
@@ -66,7 +66,7 @@
         //     ]
         // };
         // myChart.setOption(option);
-        
+
         // temp = 0  do = 1
         Chart.defaults.elements.bar.borderWidth = 0;
         console.dir({!!$data!!})
@@ -76,7 +76,7 @@
         var doSensorLine = [];
         for (var i = 0; i < {!! count($data) !!}; i++) {
             const color = [Math.random()*255, Math.random()*255, Math.random()*255]
-            tempSensorLine.push({pointHitRadius: 20,
+            tempSensorLine.push({pointHitRadius: 1000,
                 type: 'line',
                 label: sensorData[i][2],
                 backgroundColor: "rgba("+color[0]+", "+color[1]+", "+color[2]+", 0.5)",
@@ -90,10 +90,10 @@
                 borderColor: 'rgba('+color[0]+', '+color[1]+', '+color[2]+')',
                 data: sensorData[i][1]});
         }
-        const tempData = { 
+        const tempData = {
             labels: {!! json_encode($dates) !!},
             datasets: tempSensorLine};
-        const doData = { 
+        const doData = {
             labels: {!! json_encode($dates) !!},
             datasets: doSensorLine};
 
