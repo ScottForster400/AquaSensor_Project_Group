@@ -1,5 +1,6 @@
 <script>
     Chart.defaults.font.size = 12;
+    Chart.defaults.elements.bar.borderWidth = 0;
     const tempJson = {!! json_encode($mobileAveragedData[2]->toArray()) !!};
     const doJson = {!! json_encode($mobileAveragedData[3]->toArray()) !!};
     const dateJson = {!! json_encode($mobileAveragedData[0]->toArray()) !!};
@@ -13,14 +14,14 @@
     const data = {
         labels: dateJson,
         datasets: [{
-            pointHitRadius: 20,
+            pointHitRadius: 1000,
             type: 'line',
             label: 'Temp: °C',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
             borderColor: 'rgb(255, 99, 132)',
             data: tempJson,
         },{
-            pointHitRadius: 20,
+            pointHitRadius: 1000,
             type: 'line',
             label: 'DO: (mg/L)',
             backgroundColor: 'rgb(110, 99, 255,0.5)',
@@ -68,12 +69,13 @@
     const dataTemp = {
     labels: timeJson,
     datasets: [{
-        pointHitRadius: 20,
+        pointHitRadius: 1000,
         type: 'line',
         label: 'Temp: °C',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgb(255, 99, 132)',
         data: tempHourJson,
+        radius: 0
     }]
     };
     const tempConfig = {
@@ -103,12 +105,13 @@
     const dataDO = {
     labels: timeJson,
     datasets: [{
-        pointHitRadius: 20,
+        pointHitRadius: 1000,
         type: 'line',
         label: 'DO (mg,L)',
         backgroundColor: 'rgb(110, 99, 255,0.5)',
         borderColor: 'rgb(110, 99, 255)',
         data:doHourJson,
+        radius: 0
     }]
     };
     const DOConfig = {
