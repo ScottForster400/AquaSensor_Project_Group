@@ -6,8 +6,9 @@
 
     const tempHourJson = {!! json_encode($daysData[0]) !!};
     const doHourJson = {!! json_encode($daysData[1]) !!};
-    const timeJson = {!! json_encode($timeLabel) !!};
+    const timeJson = {!! json_encode($daysLabel) !!};
     console.dir({!! json_encode($daysData) !!})
+    console.dir(timeJson)
 
     const data = {
         labels: dateJson,
