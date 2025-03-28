@@ -16,7 +16,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
         <link rel="stylesheet" href="{{ asset('/css/waves/waves.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('/css/daynight/daynight.css') }}"/>
+
         <link rel="stylesheet" href="{{ asset('/css/sidebar.css') }}"/>
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -31,6 +31,7 @@
             {{-- <script src="path/to/chartjs/dist/chart.min.js"></script> --}}
             <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
             {{-- <script src="path/to/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script> --}}
+            <link rel="stylesheet" href="{{ asset('/css/daynight/daynight.css') }}"/>
         @endif
         @if ($currentRoute =="sensor_data.index")
             <script src="{{ asset('/js/sidebar.js') }} " defer></script>

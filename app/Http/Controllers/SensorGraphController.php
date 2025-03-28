@@ -238,6 +238,10 @@ class SensorGraphController extends Controller
         $splitLowerRange = explode("-", $lowerRange); //split the dates into parts
         $splitUpperRange = explode("-", $upperRange);
         $splitDataPoint = explode("-", $dataPoint);
+        if (count($splitDataPoint) == 1) {
+            $splitDataPoint = explode("/", $dataPoint);
+            $splitDataPoint[2] = substr($splitDataPoint[2], 1, 2);
+        }
         
         $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
         $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];

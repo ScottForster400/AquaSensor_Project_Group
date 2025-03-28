@@ -8,9 +8,20 @@
 <div class="py-12 flex justify-center">
     <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
         
+       
         @if(session('success'))
-            <p>{{ session('success') }}</p>
-        @endif
+    <div class="mb-6 w-full max-w-2xl px-4 py-3 rounded-lg bg-green-100 border border-green-300 text-green-800 flex items-start space-x-3 shadow-sm">
+    <svg class="w-5 h-5 mt-1 text-green-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M5 13l4 4L19 7"/>
+        </svg>
+
+        <div class="text-sm font-medium">
+            {{ session('success') }}
+        </div>
+    </div>
+            @endif
         @error('email')
             <x-warning>{{ $message }}</x-warning>
         @enderror
@@ -88,6 +99,8 @@
                 </form>
             </x-modal-body>
         </x-modal>
+
+        
 
         <x-modal id="deletesensor" class="bg-gray-500 bg-opacity-75 h-full">
             <x-modal-header data-modal-hide="deletesensor">Delete Sensor</x-modal-header>
