@@ -125,7 +125,7 @@ class SensorDataController extends Controller
                     $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
                 ];
 
-                $currentTime = explode( ':', date( 'H:i')); //, strtotime('-16 hours')
+                $currentTime = explode( ':', date( 'H:i', strtotime('-10 hours'))); //
                 $tempDataStore = []; //filtering current day data for time spans
                 if (($currentTime[0] <= $sunSet[0] && $currentTime[0] >= $sunRise[0]) || //if day
                     (($currentTime[0] == $sunSet[0] && $currentTime[1] <= $sunSet[1]) || ($currentTime[0] == $sunRise[0] && $currentTime[1] >= $sunRise[1]))) { 
@@ -151,12 +151,17 @@ class SensorDataController extends Controller
                 for ($i=0; $i<count($timeFrameEntries); $i++) { //average data for flip cards
                     $tempAverager = 0;
                     $doAverager = 0;
-                    for ($j= 0; $j<count($timeFrameEntries[$i]); $j++) { //get the total of data
-                        $tempAverager += $timeFrameEntries[$i][$j][$temp];
-                        $doAverager += $timeFrameEntries[$i][$j][$do];
+                    if (count($timeFrameEntries[$i]) > 0) {
+                        for ($j= 0; $j<count($timeFrameEntries[$i]); $j++) { //get the total of data
+                            $tempAverager += $timeFrameEntries[$i][$j][$temp];
+                            $doAverager += $timeFrameEntries[$i][$j][$do];
+                        }
+                        $averagedFlipData[0][$i] = number_format($tempAverager/count($timeFrameEntries[$i]), 3);
+                        $averagedFlipData[1][$i] = number_format($doAverager/count($timeFrameEntries[$i]), 3);
+                    } else {
+                        $averagedFlipData[0][$i] = 0;
+                        $averagedFlipData[1][$i] = 0;
                     }
-                    $averagedFlipData[0][$i] = number_format($tempAverager/count($timeFrameEntries[$i]), 3);
-                    $averagedFlipData[1][$i] = number_format($doAverager/count($timeFrameEntries[$i]), 3);
                 }   //save averages
             } else {
                 return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
