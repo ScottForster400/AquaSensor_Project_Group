@@ -29,8 +29,8 @@
         <x-warning>{{Session::pull('warning')}}</x-warning>
     @endif
 
-    <div class="py-12 flex justify-center">
-        <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
+    <div class="py-12 flex justify-center z-10">
+        <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-50">
 
             <form action="{{route('sensors.search')}}" method="GET" class = "w-4/5">
                 @include('layouts.searchbar')
@@ -42,7 +42,7 @@
                         <div>
                             <x-modal-toggle data-modal-target="edit" data-modal-toggle="edit">Activate Sensor</x-modal-toggle>
                             <!-- Modal to activate Sensor -->
-                            <x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full">
+                            <x-modal id="edit" class="bg-gray-500 bg-opacity-75 h-full z-50">
                                 <x-modal-header data-modal-hide="edit">Activate Sensor</x-modal-header>
                                 <x-modal-body>
                                     <form method="post" action="{{ route('sensors.activate') }}" class="mt-6 space-y-6">
@@ -146,6 +146,7 @@
         </div>
     </div>
     {{-- @include("layouts.maps") --}}
+    @include('layouts.waves')
     <script>
         window.SensorsJS = @json($Sensors);
         window.OwnedSensors = @json($user_sensors);
