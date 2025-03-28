@@ -79,7 +79,7 @@ class SensorDataController extends Controller
                             if (!$this->IsDateInRange($startDate, $endDate, $dataAverager[$j][$date])) { //if date outside range
                                 array_splice($dataAverager, $j, 1); //remove from array section
                             } else {
-                                if ($dataAverager[$j][$temp] >= -30 && $dataAverager[$j][$temp] <= 120 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
+                                if ($dataAverager[$j][$temp] > 0 && $dataAverager[$j][$temp] <= 40 && $dataAverager[$j][$do] >= 0 && $dataAverager[$j][$do] <= 65) {
                                     $averageTempData += $dataAverager[$j][$temp];
                                     $averageDoData += $dataAverager[$j][$do];
                                 } else { //if the current value is too high to be realistic (an error reading)
