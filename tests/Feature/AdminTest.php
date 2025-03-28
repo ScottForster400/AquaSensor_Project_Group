@@ -70,6 +70,27 @@ class AdminTest extends TestCase
 
     }
 
+    public function test_admin_can_create_user(): void{
+
+        $admin = User::factory()->create(['id' => '1']);
+        $response = $this->actingAs($admin)->post('admin/createUser', [
+            'name' => 'sensor50',
+            'email' => 0,
+            'company_name' => '1234567891234563',
+            'password' => 0,
+            'admin' => 0
+        ]);
+
+        $this->assertDatabaseHas('sensors',[
+            'sensor_id' => 'sensor50',
+            'opensource' => 0,
+            'activation_key' => '1234567891234563',
+            'activated' => 0
+       ]);
+
+
+    }
+
 
 
 
