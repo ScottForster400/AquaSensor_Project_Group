@@ -135,7 +135,11 @@
                 @include('layouts.sensor-table')
             </div>
 
+            <div class=" justify-center pb-10 h-56 w-4/5 z-0 mt-5 flex opacity-0" id="map-container">
+                <div id="map" class="w-full h-full  rounded-lg">
 
+                </div>
+            </div>
 
 
 
@@ -144,6 +148,8 @@
     {{-- @include("layouts.maps") --}}
     <script>
         window.SensorsJS = @json($Sensors);
+        window.OwnedSensors = @json($user_sensors);
     </script>
     <script src="{{ asset('js/userLocation.js') }}"></script>
+    <script src="{{ asset('js/LeafletMap.js') }}"></script>
 </x-app-layout>
