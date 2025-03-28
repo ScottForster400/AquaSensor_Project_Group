@@ -28,7 +28,7 @@
                     @include('layouts.searchbar')
                 </form>
                 <div class="flex justify-between w-10/12 ">
-                    <x-card class="mb-2 !px-4 !py-6 z-10 mr-2 w-full">
+                    <x-card class="mb-2 !px-4 !py-6 z-10 w-full">
                         <div id="card-top" class="flex flex-row h-20 px-2">
                             <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
                                 @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)

@@ -135,7 +135,7 @@
                 @include('layouts.sensor-table')
             </div>
 
-            <div class=" justify-center pb-10 h-56 w-4/5 z-0 mt-5 flex opacity-0" id="map-container">
+            <div class=" justify-center pb-10 h-56 sm:h-80 w-4/5 z-0 mt-5 flex opacity-0" id="map-container">
                 <div id="map" class="w-full h-full  rounded-lg">
 
                 </div>
