@@ -25,27 +25,63 @@ function flipCard(item){
 document.getElementById("check").onchange= function()
 {
 
-if (document.getElementById("check").checked==true)
-{
-document.getElementById("check2").checked=true;
-}
+    if (document.getElementById("check").checked==true)
+    {
+        document.getElementById("check2").checked=true;
+        document.querySelectorAll('.night-card').forEach(item => {
+            item.classList.remove('hidden') ;
+        });
+        document.querySelectorAll('.night-graph').forEach(item => {
+            item.classList.remove('hidden') ;
+        });
+        document.querySelectorAll('.day-graph').forEach(item => {
+            item.classList.add('hidden') ;
+        });
+    }
 
-else if (document.getElementById("check").checked==false)
-{
-document.getElementById("check2").checked=false;
-}
+    else if (document.getElementById("check").checked==false)
+    {
+        document.getElementById("check2").checked=false;
+        document.querySelectorAll('.night-card').forEach(item => {
+            item.classList.add('hidden') ;
+        });
+        document.querySelectorAll('.night-graph').forEach(item => {
+            item.classList.add('hidden') ;
+        });
+        document.querySelectorAll('.day-graph').forEach(item => {
+            item.classList.remove('hidden') ;
+        });
+    }
 }
 
 function desktopdaynight(){
     if (document.getElementById("check").checked==true)
         {
-        document.getElementById("check").checked=false;
-        document.getElementById("check2").checked=false;
+            document.getElementById("check").checked=false;
+            document.getElementById("check2").checked=false;
+            document.querySelectorAll('.night-card').forEach(item => {
+                item.classList.add('hidden') ;
+            });
+            document.querySelectorAll('.night-graph').forEach(item => {
+                item.classList.add('hidden') ;
+            });
+            document.querySelectorAll('.day-graph').forEach(item => {
+                item.classList.remove('hidden') ;
+            });
         }
 
     else if (document.getElementById("check").checked==false)
         {
-        document.getElementById("check").checked=true;
-        document.getElementById("check2").checked=true;
+            document.getElementById("check").checked=true;
+            document.getElementById("check2").checked=true;
+            document.querySelectorAll('.night-card').forEach(item => {
+                item.classList.remove('hidden') ;
+            });
+            document.querySelectorAll('.night-graph').forEach(item => {
+                item.classList.remove('hidden') ;
+            });
+            document.querySelectorAll('.day-graph').forEach(item => {
+                item.classList.add('hidden') ;
+            });
         }
 }
