@@ -34,7 +34,9 @@ class AdminTest extends TestCase
     }
 
     public function test_admin_can_create_sensor(): void{
-        $admin = User::factory()->create(['id' => '1']);
+
+        $admin = User::factory()->create(['admin' => '1']);
+
         $response = $this->actingAs($admin)->post('admin/createSensor', [
             'sensor_id' => 'sensor50',
             'opensource' => 0,
@@ -42,14 +44,14 @@ class AdminTest extends TestCase
             'activated' => 0
         ]);
 
-        $this->assertDatabaseHas('sensors',[
+        $this->assertDatabaseHas('sensors', [
             'sensor_id' => 'sensor50',
             'opensource' => 0,
             'activation_key' => '1234567891234563',
             'activated' => 0
-       ]);
+        ]);
 
-       $response->assertRedirectToRoute('admin.index');
+        $response->assertRedirectToRoute('admin.index');
 
     }
 
