@@ -27,7 +27,8 @@ class SensorController extends Controller
         $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
 
         //gets all open source and activated sensors
-        $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
+        $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);;
+        // searchbar code
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
         //?start=04%2F03%2F2025&end=20%2F03%2F2025
         return view('sensors',compact('opensource','user_sensors'))->with('Sensors',$sensors);
