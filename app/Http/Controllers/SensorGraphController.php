@@ -49,7 +49,7 @@ class SensorGraphController extends Controller
                 $startDateRange = $_REQUEST['start'];
                 $endDateRange = $_REQUEST['end'];
             }
-            
+
             if (count($requestOutput) > 0 || $_REQUEST['waterBody'] != "None") { //if theres a sensor selection
                 if ($_REQUEST['waterBody'] != "None") { //if its water body
                     $databaseSearch = Sensor::select('sensor_id')->where('activated', 1)->where('body_of_water', $_REQUEST['waterBody'])->get();
@@ -57,7 +57,7 @@ class SensorGraphController extends Controller
                         $requestOutput->push($value['sensor_id']);
                     }
                 }
-                
+
                 if (count($requestOutput) > 0) { //for all sensors in the display list
                     $selectedSensors = collect();
                     for ($t = 0; $t < count($requestOutput); $t++) { //if the sensors are publicly visable
@@ -81,17 +81,17 @@ class SensorGraphController extends Controller
         } else {
             $selectedSensors = ['sensor022']; //default to sensor022
         }
-        
+
         $data = collect();
         $filterdData = collect();
         for ($x = 0; $x < count($selectedSensors); $x++) {
             $tempData = $this->GetAndFormatCurl($selectedSensors[$x]); //get sensor info
             if (count($tempData) > 0) { //check if the sensor actualy has data (removes incorrect entries)
-                $data->push($tempData); 
+                $data->push($tempData);
                 $filterdData->push([collect(), collect(), $selectedSensors[$x]]);
             }
         }
-        
+
         if (count($data) > 0) {
             $dateDivisions = "day";
             if ($request->query() == null || ($_REQUEST['start'] == null && $_REQUEST['end'] == null)) {
@@ -114,7 +114,7 @@ class SensorGraphController extends Controller
                 $splitEndDate = explode('/', $_REQUEST['end']); //reformat for graph
                 $startDate = substr($splitStartDate[2], 2, 2).'-'.$splitStartDate[1].'-'.$splitStartDate[0];
                 $endDate = substr($splitEndDate[2], 2, 2).'-'.$splitEndDate[1].'-'.$splitEndDate[0];
-                
+
                 if (($splitEndDate[1]+($splitEndDate[2]-$splitStartDate[2])*12) - $splitEndDate[1] <= 12) { //selecting the right divisions so you can see the data properly
                     if (($splitEndDate[1]+($splitEndDate[2]-$splitStartDate[2])*12) - $splitEndDate[1] <= 1) {
                         $dateDivisions = "min"; //select the apropriate divder for the zoom
@@ -151,16 +151,16 @@ class SensorGraphController extends Controller
                 if ($data[$y][$i][$temp] > 0 && $data[$y][$i][$temp] <= 40 && $data[$y][$i][$do] > 0 && $data[$y][$i][$do] <= 65) { //filter it
                     if ($this->IsDateInRange($startDateRange, $endDateRange, $data[$y][$i][$date])) {
                         if ($dateDivisions != "day") { //add time values to the date if it not day sorted
-                            if ($dateDivisions == "hour") { //put the right hour into the date 
+                            if ($dateDivisions == "hour") { //put the right hour into the date
                                 $data[$y][$i][$date] .= ', '.floor(explode(':', $data[$y][$i][$time])[0]).':0';
                             } else {
                                 $currentTime = explode(':', $data[$y][$i][$time]);
                                 $data[$y][$i][$date] .= ', '.floor($currentTime[0]).':'.floor($currentTime[1]);
                             }
                         }
-                        
+
                         if ($i > 0) {
-                            if (strtotime($data[$y][$i-1][$date]) - strtotime($data[$y][$i][$date]) > 604800 || 
+                            if (strtotime($data[$y][$i-1][$date]) - strtotime($data[$y][$i][$date]) > 604800 ||
                             explode('-', $data[$y][$i-1][$date])[1] != explode('-', $data[$y][$i][$date])[1]) {
                                 $filterdData[$y][$ftemp]->push([null, null]);
                                 $filterdData[$y][$fdo]->push([null, null]);
@@ -179,13 +179,15 @@ class SensorGraphController extends Controller
                 ->with('bodyOfWater',$bodysOfwater)
                 ->with('ownedSensors',$ownedSensorsWithData)
                 ->with('data',$filterdData)
-                ->with('dates',$dates);
+                ->with('dates',$dates)
+                ->with('selectedSensors',$selectedSensors);
         }
         return view('sensor_data') //else just send the rest of the data
             ->with('sensors',$visableSensors)
             ->with('bodyOfWater',$bodysOfwater)
             ->with('data',$filterdData)
-            ->with('dates',$dates);
+            ->with('dates',$dates)
+            ->with('selectedSensors',$selectedSensors);
     }
 
     private function GetAndFormatCurl($search) {
@@ -235,10 +237,12 @@ class SensorGraphController extends Controller
             return true;
         }
 
-        $splitLowerRange = explode("-", $lowerRange); //split the dates into parts
-        $splitUpperRange = explode("-", $upperRange);
+        $splitLowerRange = explode("/", $lowerRange); //split the dates into parts
+        $splitUpperRange = explode("/", $upperRange);
+        $splitLowerRange[2] = substr($splitLowerRange[2], 2 ,2); //remove hundreds and thousands
+        $splitUpperRange[2] = substr($splitUpperRange[2], 2 ,2);
         $splitDataPoint = explode("-", $dataPoint);
-        
+
         $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
         $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
         $dataPoint = $splitDataPoint[2].$splitDataPoint[1].$splitDataPoint[0];

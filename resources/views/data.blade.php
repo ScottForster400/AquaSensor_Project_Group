@@ -28,7 +28,7 @@
                     @include('layouts.searchbar')
                 </form>
                 <div class="flex justify-between w-10/12 ">
-                    <x-card class="mb-2 !px-4 !py-6 z-10 mr-2 w-full">
+                    <x-card class="mb-2 !px-4 !py-6 z-10 w-full">
                         <div id="card-top" class="flex flex-row h-20 px-2">
                             <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
                                 @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)
@@ -49,41 +49,24 @@
                                     <p class="">{{$currentSensorData->temperature}}°c</p>
                                 </div>
                             </div>
-                            <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
-                                <p>{{$weekDay}}</p>
+                            <div id="card-top-right" title="Last Recorded Data" class="flex basis-1/4 flex-col items-end justify-between">
+                                <p data-tooltip-target="Data-tooltip">{{$weekDay}}</p>
+                                <div id="Data-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                                        Last Recorded Data
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
                                 <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
                                 <div class="flex flex-row items-center">
                                     <div class="h-5 w-5 mr-2">
-                                        @if($currentSensorData->mgl_dissolved_oxygen<=4)
-                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
+
+                                        @if($isActive=='inactive')
+                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="inactive" class="w-full h-full ">
                                             </div>
-                                            <p>Unsafe</p>
-                                        @elseif($currentSensorData->mgl_dissolved_oxygen<=6.5)
-
-                                            @if ($currentSensorData->temperature>=10)
-                                                    <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Caution</p>
-                                            @else
-                                                    <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Unsafe</p>
-                                            @endif
+                                            <p>Inactive</p>
                                         @else
-
-                                            @if ($currentSensorData->temperature>=14)
-                                                    <img src="{{URL::asset('imgs/safe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Safe</p>
-                                            @elseif($currentSensorData->temperature>=10)
-                                                    <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Caution</p>
-                                            @else
-                                                    <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Unsafe</p>
-                                            @endif
+                                                <img src="{{URL::asset('imgs/safe.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Active</p>
                                         @endif
 
                                 </div>
@@ -109,29 +92,29 @@
                         <x-card-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1 day-card">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Day)</span></h3>
-                                <p>{{$flipCardDataTemp[0]}}°C</p>
+                                <p>{{$dayFlipCardDataTemp[0]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Day)</span></h3>
-                                <p>{{$flipCardDataTemp[1]}}°C</p>
+                                <p>{{$dayFlipCardDataTemp[1]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Day)</span></h3>
-                                <p>{{$flipCardDataTemp[2]}}°C</p>
+                                <p>{{$dayFlipCardDataTemp[2]}}°C</p>
                             </div>
                         </x-card-flippable-backface>
                         <x-nightcard-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1 ">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Night)</span></h3>
-                                <p>{{$flipCardDataTemp[0]}}°C</p>
+                                <p>{{$dayFlipCardDataTemp[0]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Night)</span></h3>
-                                <p>{{$flipCardDataTemp[1]}}°C</p>
+                                <p>{{$dayFlipCardDataTemp[1]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Night)</span></h3>
-                                <p>{{$flipCardDataTemp[2]}}°C</p>
+                                <p>{{$dayFlipCardDataTemp[2]}}°C</p>
                             </div>
                         </x-nightcard-flippable-backface>
                     </x-card-flippable>
@@ -167,46 +150,49 @@
                         <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly  day-card">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Day)</span></h3>
-                                <p>{{$flipCardDataDO[0]}} mg/L</p>
+                                <p>{{$dayFlipCardDataDO[0]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Day)</span></h3>
-                                <p>{{$flipCardDataDO[1]}} mg/L</p>
+                                <p>{{$dayFlipCardDataDO[1]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Day)</span></h3>
-                                <p>{{$flipCardDataDO[2]}} mg/L</p>
+                                <p>{{$dayFlipCardDataDO[2]}} mg/L</p>
                             </div>
                         </x-card-flippable-backface>
-                        <x-nightcard-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly ">
+                        <x-nightcard-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span class="text-[9px]">(Night)</span></h3>
-                                <p>{{$flipCardDataDO[0]}} mg/L</p>
+                                <p>{{$dayFlipCardDataDO[0]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Weekly Avg <span class="text-[9px]">(Night)</span></h3>
-                                <p>{{$flipCardDataDO[1]}} mg/L</p>
+                                <p>{{$dayFlipCardDataDO[1]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Monthly Avg <span class="text-[9px]">(Night)</span></h3>
-                                <p>{{$flipCardDataDO[2]}} mg/L</p>
+                                <p>{{$dayFlipCardDataDO[2]}} mg/L</p>
                             </div>
                         </x-nightcard-flippable-backface>
                     </x-card-flippable>
                 </div>
-                <x-card class="px-2 !my-3 !pb-1 z-10">
-                    <h2 class="">
-                        Sensor Data
-                    </h2>
+                <x-card class="px-2 !my-3 !pb-1  z-10 flex flex-col items-center">
+                    <div class="px-2 h-auto w-full">
+                        <h2 class="w-full text-start ">
+                            Sensor Data
+                        </h2>
 
-                    <form action="{{route('sensorData.index')}}" class="w-full flex justify-center flex-col">
-                        <x-date-time-picker></x-date-time-picker>
-                        <div class="w-full pt-3">
-                            <x-button-1 class="w-full">Search</x-button-1>
-                        </div>
-                    </form>
+                        <form action="{{route('sensorData.index')}}" class=" flex justify-center  flex-col w-full mt-2">
+                            <x-date-time-picker></x-date-time-picker>
+                            <div class="w-full pt-3">
+                                <x-button-1 class="w-full">Search</x-button-1>
+                            </div>
+                            <input type="hidden" name="sensor_id" value="{{$currentSensor->sensor_id}}">
+                        </form>
+                    </div>
 
-                    <div id="graph" class="max-sm:h-60 h-96 flex items-center justify-center  my-2">
+                    <div id="graph" class="max-sm:h-60 h-96 w-full flex items-center justify-center  my-2">
                         <canvas id="myChart"> </canvas>
                     </div>
                 </x-card>

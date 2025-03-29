@@ -9,6 +9,7 @@ function openSource() {
     const openSourceSensors = document.querySelectorAll('.openSource');
     if (toggle.checked){
         openSourceSensors.forEach(sensor => {
+
             sensor.checked = true
         });
     }

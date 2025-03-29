@@ -1,11 +1,11 @@
 <div class="mb-4  border-gray-200 dark:border-gray-700">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center justify-evenly sm:justify-start" id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600 dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center max-[375px]:justify-between justify-start" id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600 dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
         <li class="me-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="temp--styled-tab" data-tabs-target="#temp" type="button" role="tab" aria-controls="temperature" aria-selected="false" onclick="showTemp()">All Sensors</button>
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="temp--styled-tab" data-tabs-target="#temp" type="button" role="tab" aria-controls="temperature" aria-selected="false" onclick="showMap()">All Sensors</button>
         </li>
         @if (Auth::check())
             <li class="me-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="DO-styled-tab" data-tabs-target="#DO" type="button" role="tab" aria-controls="dashboard" aria-selected="false" onclick="showDO()">My Sensors</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="DO-styled-tab" data-tabs-target="#DO" type="button" role="tab" aria-controls="dashboard" aria-selected="false" onclick="showMap()">My Sensors</button>
             </li>
         @endif
     </ul>
@@ -50,7 +50,7 @@
                                     <div class="!px-0">
                                         <x-modal-toggle data-modal-target="edit{{$sensor1}}" data-modal-toggle="edit{{$sensor1}}">Edit</x-modal-toggle>
                                     <!-- Modal to edit Sensor -->
-                                        <x-modal id="edit{{$sensor1}}" class="bg-gray-500 bg-opacity-75 h-full">
+                                        <x-modal id="edit{{$sensor1}}" class="bg-gray-500 bg-opacity-75 h-full z-50">
                                             <x-modal-header data-modal-hide="edit{{$sensor1}}">Edit Sensor</x-modal-header>
                                             <x-modal-body>
                                                 <form method="post" action="{{ route('sensors.update',$sensor1) }}" class="mt-6 space-y-6">
@@ -59,27 +59,27 @@
                                                     <div class="grid gap-6 mb-6 md:grid-cols-2">
                                                         <div>
                                                             <x-input-label for="sensor_name" :value="__('Sensor Name')" />
-                                                            <x-text-input id="sensor_name" name="sensor_name" type="text" class="mt-1 block w-full " :value="old('sensor_name')" required autofocus autocomplete="sensor_name" />
+                                                            <x-text-input id="sensor_name" name="sensor_name" type="text" class="mt-1 block w-full " value="{{$sensor1->sensor_name}}" required autofocus autocomplete="sensor_name" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('sensor_name')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="sensor_location" :value="__('Sensor Location')" />
-                                                            <x-text-input id="sensor_location" name="sensor_location" type="text" class="mt-1 block w-full" :value="old('sensor_location')" required autofocus autocomplete="sensor_location" />
+                                                            <x-text-input id="sensor_location" name="sensor_location" type="text" class="mt-1 block w-full" value="{{$sensor1->location}}" required autofocus autocomplete="sensor_location" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('sensor_location')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="body_of_water" :value="__('Body of Water')" />
-                                                            <x-text-input id="body_of_water" name="body_of_water" type="text" class="mt-1 block w-full" :value="old('body_of_water')" required autofocus autocomplete="body_of_water" />
+                                                            <x-text-input id="body_of_water" name="body_of_water" type="text" class="mt-1 block w-full" value="{{$sensor1->body_of_water}}" required autofocus autocomplete="body_of_water" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('body_of_water')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="latitude" :value="__('Latitude')" />
-                                                            <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" :value="old('latitude')" required autofocus autocomplete="latitude" />
+                                                            <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" value="{{$sensor1->latitude}}" required autofocus autocomplete="latitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('latitude')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="longitude" :value="__('Longitude')" />
-                                                            <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
+                                                            <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" value="{{$sensor1->longitude}}" required autofocus autocomplete="longitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                                                         </div>
                                                         <div class="mb-6">

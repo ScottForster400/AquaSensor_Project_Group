@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Sensor_Data;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SensorController;
@@ -7,9 +11,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\SensorGraphController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Models\Sensor_Data;
-use Illuminate\Support\Facades\DB;
 
+if (App::environment('production')) {
+    URL::forceScheme('https');
+}
 
 Route::get('/', [SensorDataController::class, 'index'])->name('sensorData.index');
 
