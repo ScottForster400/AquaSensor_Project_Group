@@ -26,6 +26,13 @@
                         {{ __('Sensor Data') }}
                     </x-nav-link>
                 </div>
+                @if (Auth::check() && Auth::user()->admin)
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
+                            {{ __('Admin') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->
@@ -103,6 +110,13 @@
                         {{ __('/ Sensor Data ') }}
                     </x-responsive-nav-link>
                 </div>
+                @if (Auth::check() && Auth::user()->admin)
+                    <div class="space-y-1 border-b-slate-200 border-b-2">
+                        <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
+                            {{ __('/ Admin') }}
+                        </x-responsive-nav-link>
+                    </div>
+                @endif
 
             </x-responsive-nav-accordion-body>
             {{-- <x-responsive-nav-link :href="route('sensorData.index')" :active="request()->routeIs('sensorData.index')">
