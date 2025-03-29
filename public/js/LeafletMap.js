@@ -17,8 +17,8 @@ if (window.OwnedSensors){
     window.OwnedSensors.data.forEach(sensor => {
         SensorMarkers.push({
             SensorId: sensor.sensor_id,
-            Latitude: sensor.latitude,
-            Longitude: sensor.longitude,
+            Latitude: parseFloat(sensor.latitude),
+            Longitude: parseFloat(sensor.longitude),
         })
     });
     console.log(SensorMarkers);
