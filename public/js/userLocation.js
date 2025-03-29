@@ -7,8 +7,8 @@ if (navigator.geolocation) {
         let SensorDictionary = new Map();
         if (window.SensorsJS){
             window.SensorsJS.forEach(sensor => {
-                var SensorLatitude = sensor.latitude;
-                var SensorLongitude = sensor.longitude;
+                var SensorLatitude = parseFloat(sensor.latitude);
+                var SensorLongitude = parseFloat(sensor.longitude);
                 const dLat = (SensorLatitude - UserLatitude) * (Math.PI / 180);
                 const dLon = (SensorLongitude - UserLongitude) * (Math.PI / 180);
 

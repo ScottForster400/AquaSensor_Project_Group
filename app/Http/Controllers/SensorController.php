@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Crypt;
 
 use function Laravel\Prompts\search;
 
@@ -230,13 +231,16 @@ class SensorController extends Controller
             return to_route('sensors.index');
         }
 
+        $EncryptedLatitude = Crypt::encryptString($request->latitude);
+        $EncryptedLongitude = Crypt::encryptString($request->longitude);
+
 
         $updated_sensor->update([
             'sensor_name' => $request->sensor_name,
             'location' => $request->sensor_location,
             'body_of_water' => $request->body_of_water,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
+            'latitude' => $EncryptedLatitude,
+            'longitude' => $EncryptedLongitude,
             'user_id' => $current_user,
             'activated' => 1,
             'opensource' => $request->opensource
@@ -269,13 +273,15 @@ class SensorController extends Controller
 
         $updated_sensor = Sensor::where('sensor_id',$sensor->sensor_id)->first();
 
+        $EncryptedLatitude = Crypt::encryptString($request->latitude);
+        $EncryptedLongitude = Crypt::encryptString($request->longitude);
 
         $updated_sensor->update([
              'sensor_name' => $request->sensor_name,
              'location' => $request->sensor_location,
              'body_of_water' => $request->body_of_water,
-             'latitude' => $request->latitude,
-             'longitude' => $request->longitude,
+             'latitude' => $EncryptedLatitude,
+             'longitude' => $EncryptedLongitude,
              'opensource' => $request->opensource
          ]);
         $updated_sensor->save();
