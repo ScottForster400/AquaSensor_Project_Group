@@ -11,12 +11,22 @@
 <div id="default-styled-tab-content" class="max-sm:h-44  h-80">
     <div class="hidden  rounded-lg bg-gray-50 dark:bg-gray-800 h-full w-full" id="temp" role="tabpanel" aria-labelledby="temperature-tab">
         <div id="graph-temp" class="h-full w-full flex items-center justify-center  my-2">
-            <canvas id="tempChart"> </canvas>
+            <div class="day-graph h-full w-full">
+                <canvas id="tempChart"> </canvas>
+            </div>
+            <div class="night-graph h-full w-full hidden">
+                <canvas id="tempChartNight"> </canvas>
+            </div>
         </div>
     </div>
     <div class="hidden p rounded-lg bg-gray-50 dark:bg-gray-800 h-full w-full " id="DO" role="tabpanel" aria-labelledby="dashboard-tab">
         <div id="graph-DO" class="h-full w-full  flex items-center justify-center  my-2">
-            <canvas id="DOChart"> </canvas>
+            <div class="day-graph h-full w-full">
+                <canvas id="DOChart" class="day-graph"> </canvas>
+            </div>
+            <div class="night-graph h-full w-full hidden">
+                <canvas id="DOChartNight" class="night-graph hidden"> </canvas>
+            </div>
         </div>
     </div>
 </div>

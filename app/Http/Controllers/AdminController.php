@@ -39,7 +39,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'admin' => $admin,
-            'company_name' => $request->companyname
+            'company_name' => $request->company_name
         ]);
 
         $newUser ->save();
