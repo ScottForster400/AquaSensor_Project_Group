@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Crypt;
 
 use function Laravel\Prompts\search;
 
@@ -26,7 +27,8 @@ class SensorController extends Controller
         $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
 
         //gets all open source and activated sensors
-        $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
+        $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);;
+        // searchbar code
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
         //?start=04%2F03%2F2025&end=20%2F03%2F2025
         return view('sensors',compact('opensource','user_sensors'))->with('Sensors',$sensors);
@@ -230,6 +232,9 @@ class SensorController extends Controller
             return to_route('sensors.index');
         }
 
+        // $EncryptedLatitude = Crypt::encryptString($request->latitude);
+        // $EncryptedLongitude = Crypt::encryptString($request->longitude);
+
 
         $updated_sensor->update([
             'sensor_name' => $request->sensor_name,
@@ -237,6 +242,8 @@ class SensorController extends Controller
             'body_of_water' => $request->body_of_water,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+            // 'latitude' => $EncryptedLatitude,
+            // 'longitude' => $EncryptedLongitude,
             'user_id' => $current_user,
             'activated' => 1,
             'opensource' => $request->opensource
@@ -269,6 +276,8 @@ class SensorController extends Controller
 
         $updated_sensor = Sensor::where('sensor_id',$sensor->sensor_id)->first();
 
+        // $EncryptedLatitude = Crypt::encryptString($request->latitude);
+        // $EncryptedLongitude = Crypt::encryptString($request->longitude);
 
         $updated_sensor->update([
              'sensor_name' => $request->sensor_name,
@@ -276,6 +285,8 @@ class SensorController extends Controller
              'body_of_water' => $request->body_of_water,
              'latitude' => $request->latitude,
              'longitude' => $request->longitude,
+            //  'latitude' => $EncryptedLatitude,
+            //  'longitude' => $EncryptedLongitude,
              'opensource' => $request->opensource
          ]);
         $updated_sensor->save();

@@ -21,7 +21,7 @@
                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}">
                                 <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
                                     <strong class="underline">{{Str::limit($sensor->sensor_name,15)}}</strong>
-                                    <p class="text-gray-600">{{Str::limit($sensor->location,20)}}</p>
+                                    <p class="text-gray-600">{{Str::limit($sensor->location,20)}} - {{Str::limit($sensor->body_of_water)}}</p>
                                 </x-modal-toggle>
                             </a>
                         </x-th>
@@ -42,7 +42,7 @@
                                 <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}">
                                     <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-1 py-1 transition-all duration-300 ease-in-out">
                                         <strong class="underline">{{Str::limit($sensor1->sensor_name,15)}}</strong>
-                                        <p class="text-gray-600">{{Str::limit($sensor1->location,20)}}</p>
+                                        <p class="text-gray-600 text-wrap">{{Str::limit($sensor1->location,20)}} - {{Str::limit($sensor->body_of_water)}}</p>
                                     </x-modal-toggle>
                                 </a>
                             </x-th>
@@ -60,27 +60,27 @@
                                                     <div class="grid gap-6 mb-6 md:grid-cols-2">
                                                         <div>
                                                             <x-input-label for="sensor_name" :value="__('Sensor Name')" />
-                                                            <x-text-input id="sensor_name" name="sensor_name" type="text" class="mt-1 block w-full " :value="old('sensor_name')" required autofocus autocomplete="sensor_name" />
+                                                            <x-text-input id="sensor_name" name="sensor_name" type="text" class="mt-1 block w-full " value="{{$sensor1->sensor_name}}" required autofocus autocomplete="sensor_name" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('sensor_name')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="sensor_location" :value="__('Sensor Location')" />
-                                                            <x-text-input id="sensor_location" name="sensor_location" type="text" class="mt-1 block w-full" :value="old('sensor_location')" required autofocus autocomplete="sensor_location" />
+                                                            <x-text-input id="sensor_location" name="sensor_location" type="text" class="mt-1 block w-full" value="{{$sensor1->location}}" required autofocus autocomplete="sensor_location" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('sensor_location')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="body_of_water" :value="__('Body of Water')" />
-                                                            <x-text-input id="body_of_water" name="body_of_water" type="text" class="mt-1 block w-full" :value="old('body_of_water')" required autofocus autocomplete="body_of_water" />
+                                                            <x-text-input id="body_of_water" name="body_of_water" type="text" class="mt-1 block w-full" value="{{$sensor1->body_of_water}}" required autofocus autocomplete="body_of_water" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('body_of_water')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="latitude" :value="__('Latitude')" />
-                                                            <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" :value="old('latitude')" required autofocus autocomplete="latitude" />
+                                                            <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" value="{{$sensor1->latitude}}" required autofocus autocomplete="latitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('latitude')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="longitude" :value="__('Longitude')" />
-                                                            <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" :value="old('longitude')" required autofocus autocomplete="longitude" />
+                                                            <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" value="{{$sensor1->longitude}}" required autofocus autocomplete="longitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                                                         </div>
                                                         <div class="mb-6">

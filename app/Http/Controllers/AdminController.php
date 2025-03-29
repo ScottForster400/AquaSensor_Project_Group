@@ -72,17 +72,20 @@ class AdminController extends Controller
     public function createSensor(Request $request)
     {
         $request->validate([
-            'sensor_id'=> 'required|string|max:255|unique:App\Models\Sensor,sensor_id',
-            'activation_key'=> 'string|max:16'
+            'sensor_id' => 'required|string|max:255|unique:sensors,sensor_id',
+            'activation_key' => 'required|string|max:16|unique:sensors,activation_key',
         ]);
+
         $sensor = new Sensor([
             'sensor_id' => $request->sensor_id,
             'opensource' => 0,
             'activated' => 0,
             'activation_key' => $request->activation_key
         ]);
+
         $sensor->save();
-        return to_route('admin.index')->with('success', "New sensor made successfully");
+
+        return to_route('admin.index')->with('success', 'New sensor made successfully');
     }
 
     /**
@@ -94,7 +97,6 @@ class AdminController extends Controller
             abort(403);
         } else {
             Sensor::where("sensor_id", $request->sensor_id)->delete();
-            //Sensor_Data::where('sensor_id', $request->sensor_id)->delete();
         }
         return to_route('admin.index')->with('success', "Sensor successfully deleted");
     }

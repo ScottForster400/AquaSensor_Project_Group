@@ -32,45 +32,10 @@
         </div>
     </div>
     {{-- @include('layouts.waves') --}}
+    @include('layouts.current_sensor_sidebar')
     <script defer>
-        // var myChart = echarts.init(document.getElementById('graph-temp'), null,{
-
-        // })
-        // window.addEventListener('resize', function() {
-        //     myChart.resize();
-        // });
-        // document.addEventListener('DOMContentLoaded',function () {
-        //     setTimeout(myChart.resize(),4000)
-        //     console.dir('qewiugfuiewgfiuewgfiuebgwifebgwyulfvwaiylfvbwylvfLWBVFLHEWV')
-        // })
-
-        // // Draw the chart
-        // option = {
-        //     xAxis: {
-        //         type: 'category',
-        //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        //     },
-        //     yAxis: {
-        //         type: 'value'
-        //     },
-        //     grid:{
-        //         height:"60%",
-        //         width: "80%"
-        //     },
-        //     series: [
-        //         {
-        //         data: [820, 932, 901, 934, 1290, 1330, 1320],
-        //         type: 'line',
-        //         smooth: true
-        //         }
-        //     ]
-        // };
-        // myChart.setOption(option);
-
         // temp = 0  do = 1
         Chart.defaults.elements.bar.borderWidth = 0;
-        console.dir({!!$data!!})
-        console.dir({!!$dates!!})
         var sensorData = {!! json_encode($data) !!}
         var tempSensorLine = [];
         var doSensorLine = [];
@@ -110,6 +75,7 @@
                     radius:0
                 }
             },
+
             scales: {
                 y: {
                     beginAtZero: true
@@ -147,6 +113,9 @@
                     radius:0
                 }
             },
+            animation: {
+                duration: 0
+            },
             scales: {
                 y: {
                     beginAtZero: true
@@ -174,11 +143,11 @@
 
         const myTempChart = new Chart(
         document.getElementById('tempChart'),
-        tempConfig // We'll add the configuration details later.
+        tempConfig
         );
         const myDoChart = new Chart(
         document.getElementById('doChart'),
-        doConfig // We'll add the configuration details later.
+        doConfig
         );
     </script>
 </x-app-layout>
