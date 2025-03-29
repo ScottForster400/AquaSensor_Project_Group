@@ -49,41 +49,24 @@
                                     <p class="">{{$currentSensorData->temperature}}°c</p>
                                 </div>
                             </div>
-                            <div id="card-top-right" class="flex basis-1/4 flex-col items-end justify-between">
-                                <p>{{$weekDay}}</p>
+                            <div id="card-top-right" title="Last Recorded Data" class="flex basis-1/4 flex-col items-end justify-between">
+                                <p data-tooltip-target="Data-tooltip">{{$weekDay}}</p>
+                                <div id="Data-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                                        Last Recorded Data
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
                                 <p>{{substr($currentSensorData->sensor_data_time, 0, 5);}}</p>
                                 <div class="flex flex-row items-center">
                                     <div class="h-5 w-5 mr-2">
-                                        @if($currentSensorData->mgl_dissolved_oxygen<=4)
-                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
+
+                                        @if($isActive=='inactive')
+                                                <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="inactive" class="w-full h-full ">
                                             </div>
-                                            <p>Unsafe</p>
-                                        @elseif($currentSensorData->mgl_dissolved_oxygen<=6.5)
-
-                                            @if ($currentSensorData->temperature>=10)
-                                                    <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Caution</p>
-                                            @else
-                                                    <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Unsafe</p>
-                                            @endif
+                                            <p>Inactive</p>
                                         @else
-
-                                            @if ($currentSensorData->temperature>=14)
-                                                    <img src="{{URL::asset('imgs/safe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Safe</p>
-                                            @elseif($currentSensorData->temperature>=10)
-                                                    <img src="{{URL::asset('imgs/caution.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Caution</p>
-                                            @else
-                                                    <img src="{{URL::asset('imgs/unsafe.svg')}}" alt="tick" class="w-full h-full ">
-                                                </div>
-                                                <p>Unsafe</p>
-                                            @endif
+                                                <img src="{{URL::asset('imgs/safe.svg')}}" alt="tick" class="w-full h-full ">
+                                            </div>
+                                            <p>Active</p>
                                         @endif
 
                                 </div>

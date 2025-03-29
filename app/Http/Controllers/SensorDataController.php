@@ -170,9 +170,42 @@ class SensorDataController extends Controller
             $currentSensorData = Sensor_Data::where('sensor_id',$sensor_id)->first(); //get latest values
             $currentSensor = Sensor::where('sensor_id', $sensor_id)->first();
 
-            $dt = Carbon::now();
-            $weekDay=($dt->englishDayOfWeek); //get current day of the week
-            
+            // $dt = Carbon::now();
+            // $weekDay=($dt->englishDayOfWeek); //get current day of the week
+            $currentSensorDataDate = $currentSensorData->sensor_data_date;
+            $year = substr($currentSensorDataDate,7);
+            $month = substr($currentSensorDataDate,4,2);
+            $day = substr($currentSensorDataDate,1,2);
+            $formatedDate = (" {$year}-{$month}-{$day}");
+
+            $currentSensorDataTime = $currentSensorData->sensor_data_time;
+            $weekDay = date('l', strtotime($formatedDate));
+            if(strtotime($currentSensorDataTime) < strtotime(date('H:i:s'))){
+                $timeDiff = strtotime(date('H:i:s')) - strtotime($currentSensorDataTime);
+                $hours = date('H',$timeDiff);
+                $hoursInMins = $hours*60;
+                $mins = date('i',$timeDiff);
+                $timeDiff = $hoursInMins + $mins;
+
+                if($weekDay != date('l')){
+                    $isActive = 'inactive';
+                }
+                elseif($timeDiff>14){
+                    $isActive = 'inactive';
+                }
+                else{
+                    $isActive = 'active';
+                }
+
+            }
+            else{
+                $isActive = 'active';
+            }
+
+
+
+
+
             $sensors = Sensor::where('opensource',1)->get(); //get opensource sensor count
 
             // day, night and time stuffs
@@ -217,7 +250,7 @@ class SensorDataController extends Controller
                 ->with('weekDay',$weekDay)
                 ->with('daysData',$reformatedData[0])->with('nightsData', $reformatedData[1])
                 ->with('daysLabel',$timeLabel[0])->with('nightsLabel',$timeLabel[1])
-                ->with('Sensors',$sensors);
+                ->with('Sensors',$sensors)->with('isActive',$isActive);
         }
         else{
             return view('data')->with('message', "No Sensor Data in system");
@@ -341,7 +374,7 @@ class SensorDataController extends Controller
         $splitDataPoint = explode("-", $dataPoint);
         $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
         $splitUpperRange[2] = substr($splitUpperRange[2], 2);
-        
+
         $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
         $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
         $dataPoint = $splitDataPoint[2].$splitDataPoint[1].$splitDataPoint[0];
@@ -359,7 +392,7 @@ class SensorDataController extends Controller
         $splitUpperData = explode("-", $upperData);
         $splitLowerRange[2] = substr($splitLowerRange[2], 2); //remove hundreds and thousands from range
         $splitUpperRange[2] = substr($splitUpperRange[2], 2);
-        
+
         $lowerRange = $splitLowerRange[2].$splitLowerRange[1].$splitLowerRange[0]; //make dates into DDMMYY for easy comparison
         $upperRange = $splitUpperRange[2].$splitUpperRange[1].$splitUpperRange[0];
         $lowerData = $splitLowerData[2].$splitLowerData[1].$splitLowerData[0];
