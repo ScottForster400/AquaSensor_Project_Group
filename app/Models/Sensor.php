@@ -17,13 +17,13 @@ class Sensor extends Model
 
     protected $fillable = ['latitude', 'longitude'];
 
-    public function getLatitudeAttribute($value)
-    {
-        return Crypt::decryptString($value);
-    }
+    // public function getLatitudeAttribute($value)
+    // {
+    //     return Crypt::decryptString($value);
+    // }
 
-    public function getLongitudeAttribute($value)
-    {
-        return Crypt::decryptString($value);
-    }
+    // public function getLongitudeAttribute($value)
+    // {
+    //     return Crypt::decryptString($value);
+    // }
 }
