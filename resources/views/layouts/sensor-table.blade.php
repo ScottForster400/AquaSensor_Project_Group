@@ -21,7 +21,7 @@
                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}">
                                 <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
                                     <strong class="underline">{{Str::limit($sensor->sensor_name,15)}}</strong>
-                                    <p class="text-gray-600">{{Str::limit($sensor->location,20)}}</p>
+                                    <p class="text-gray-600">{{Str::limit($sensor->location,20)}} - {{Str::limit($sensor->body_of_water)}}</p>
                                 </x-modal-toggle>
                             </a>
                         </x-th>
@@ -41,7 +41,7 @@
                                 <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}">
                                     <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-1 py-1 transition-all duration-300 ease-in-out">
                                         <strong class="underline">{{Str::limit($sensor1->sensor_name,15)}}</strong>
-                                        <p class="text-gray-600">{{Str::limit($sensor1->location,20)}}</p>
+                                        <p class="text-gray-600 text-wrap">{{Str::limit($sensor1->location,20)}} - {{Str::limit($sensor->body_of_water)}}</p>
                                     </x-modal-toggle>
                                 </a>
                             </x-th>
