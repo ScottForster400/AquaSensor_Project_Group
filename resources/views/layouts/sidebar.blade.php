@@ -27,7 +27,7 @@
                                     <x-accordion-body id="openSource">
 
                                         @foreach ($sensors as $sensor)
-                                            <x-switch-select class="openSource" name="{{$sensor->sensor_id}}">{{$sensor->sensor_id}}</x-switch-select>
+                                            <x-switch-select class="openSource" id="{{$sensor->sensor_id}}" name="{{$sensor->sensor_id}}">{{$sensor->sensor_id}}</x-switch-select>
                                         @endforeach
                                     </x-accordion-body>
                                 </x-accordion-head>
@@ -42,7 +42,7 @@
                                         <x-slot name="title" class="text-sm">My Sensors</x-slot>
                                         <x-accordion-body id="mySensors">
                                             @foreach ($ownedSensors as $ownedSensor)
-                                                <x-switch-select class="mySensor" name="{{$ownedSensor->sensor_id}}">{{$ownedSensor->sensor_id}}</x-switch-select>
+                                                <x-switch-select class="mySensor" id="{{$ownedSensor->sensor_id}}" name="{{$ownedSensor->sensor_id}}">{{$ownedSensor->sensor_id}}</x-switch-select>
                                             @endforeach
                                         </x-accordion-body>
                                     </x-accordion-head>
