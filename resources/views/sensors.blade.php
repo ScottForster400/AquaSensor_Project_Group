@@ -135,7 +135,7 @@
                 @include('layouts.sensor-table')
             </div>
             @if(Auth::check())
-                <div class=" justify-center pb-10 w-4/5 z-0 mt-5 flex opacity-0" id="map-container" style="height: 20rem">
+                <div class=" justify-center pb-10 w-4/5 z-0 mt-5 flex opacity-0 transition-opacity" id="map-container" style="height: 20rem">
                     <div id="map" class="w-full h-full  rounded-lg">
 
                     </div>
@@ -155,7 +155,7 @@
         </script>
     @endif
     <script>
-        window.SensorsJS = @json($Sensors);
+        window.SensorsJS = @json($SearchBarSensors);
     </script>
 
     <script src="{{ asset('js/userLocation.js') }}"></script>

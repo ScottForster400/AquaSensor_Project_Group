@@ -1,3 +1,4 @@
+
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
         var UserLatitude = position.coords.latitude;
@@ -5,8 +6,6 @@ if (navigator.geolocation) {
 
         const Radius = 6371;
         let SensorArray = [];
-
-        console.log(window.SensorsJS);
 
         if (window.SensorsJS) {
             window.SensorsJS.forEach(sensor => {
