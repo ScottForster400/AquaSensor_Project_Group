@@ -32,7 +32,7 @@
     <div class="py-12 flex justify-center z-10">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-50">
 
-            <form action="{{route('sensors.search')}}" method="GET" class = "w-4/5">
+            <form action="{{route('sensors.search')}}" id="SearchBarForm" method="GET" class = "w-4/5">
                 @include('layouts.searchbar')
             </form>
 
@@ -151,7 +151,7 @@
     @include('layouts.waves')
     <script>
         window.SensorsJS = @json($Sensors);
-        window.OwnedSensors = @json($user_sensors);
+        window.OwnedSensors = @json($SensorDataForMap);
     </script>
     <script src="{{ asset('js/userLocation.js') }}"></script>
     <script src="{{ asset('js/LeafletMap.js') }}"></script>
