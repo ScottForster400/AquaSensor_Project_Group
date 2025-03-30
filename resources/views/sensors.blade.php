@@ -155,7 +155,7 @@
         </script>
     @endif
     <script>
-        window.SensorsJS = @json($Sensors);
+        window.SensorsJS = @json($SearchBarSensors);
     </script>
 
     <script src="{{ asset('js/userLocation.js') }}"></script>

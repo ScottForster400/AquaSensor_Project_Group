@@ -50,7 +50,9 @@ class SensorController extends Controller
             ];
         }
 
-        return view('sensors',compact('opensource','user_sensors', 'SensorDataForMap'))->with('Sensors',$sensors);
+        $SearchBarSensors = Sensor::where('activated', 1)->get();
+     
+        return view('sensors',compact('opensource','user_sensors', 'SensorDataForMap'))->with('Sensors',$sensors)->with('SearchBarSensors', $SearchBarSensors);
 
     }
 
@@ -87,22 +89,26 @@ class SensorController extends Controller
 
                 $SensorDataForMap[$user_sensor->sensor_id] = [
                     "temperature" => $temperature,
-                    "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
                     "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                    "latitude" => $user_sensor->latitude,
+                    "longitude" => $user_sensor->longitude,
+                    "bodyOfWater" => $user_sensor->body_of_water,
                 ];
             }
 
             $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-            return view('sensors', compact('SensorDataForMap'))->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors);
+
+            $SearchBarSensors = Sensor::where('activated', 1)->get();
+            return view('sensors', compact('SensorDataForMap'))->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors)->with('SearchBarSensors', $SearchBarSensors);
 
         }
 
 
-
+        $SearchBarSensors = Sensor::where('activated', 1)->get();
 
 
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors',$sensors);;
+        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors',$sensors)->with('SearchBarSensors', $SearchBarSensors);
     }
 
     public function sort(){
@@ -126,16 +132,20 @@ class SensorController extends Controller
                     $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
                     $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
                     $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
-
+                    
                     $SensorDataForMap[$user_sensor->sensor_id] = [
                         "temperature" => $temperature,
-                        "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
                         "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                        "latitude" => $user_sensor->latitude,
+                        "longitude" => $user_sensor->longitude,
+                        "bodyOfWater" => $user_sensor->body_of_water,
                     ];
                 }
 
             }
-            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors)->with('SensorDataForMap',$SensorDataForMap);
+            $SearchBarSensors = Sensor::where('activated', 1)->get();
+
+            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors)->with('SensorDataForMap',$SensorDataForMap)->with('SearchBarSensors', $SearchBarSensors);
 
         } else{
 
@@ -151,7 +161,9 @@ class SensorController extends Controller
                 }
             }
 
-            return view('sensors')->with('opensource',$sensors)->with('Sensors',$sensors);
+            $SearchBarSensors = Sensor::where('activated', 1)->get();
+
+            return view('sensors')->with('opensource',$sensors)->with('Sensors',$sensors)->with('SearchBarSensors', $SearchBarSensors);
 
 
 
@@ -223,15 +235,19 @@ class SensorController extends Controller
 
                     $SensorDataForMap[$user_sensor->sensor_id] = [
                         "temperature" => $temperature,
-                        "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
                         "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                        "latitude" => $user_sensor->latitude,
+                        "longitude" => $user_sensor->longitude,
+                        "bodyOfWater" => $user_sensor->body_of_water,
                     ];
                 }
 
             }
 
             $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors)->with('SensorDataForMap',$SensorDataForMap);
+
+            $SearchBarSensors = Sensor::where('activated', 1)->get();
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors)->with('SensorDataForMap',$SensorDataForMap)->with('SearchBarSensors', $SearchBarSensors);
 
         }
         else{
@@ -264,7 +280,8 @@ class SensorController extends Controller
 
                 }
             }
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors', $opensource_searchedSensors);
+            $SearchBarSensors = Sensor::where('activated', 1)->get();
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors', $opensource_searchedSensors)->with('SearchBarSensors', $SearchBarSensors);
 
         }
 
