@@ -7,8 +7,8 @@
 
 <div class="py-12 flex justify-center">
     <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
-        
-       
+
+
         @if(session('success'))
     <div class="mb-6 w-full max-w-2xl px-4 py-3 rounded-lg bg-green-100 border border-green-300 text-green-800 flex items-start space-x-3 shadow-sm">
     <svg class="w-5 h-5 mt-1 text-green-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
@@ -100,7 +100,7 @@
             </x-modal-body>
         </x-modal>
 
-        
+
 
         <x-modal id="deletesensor" class="bg-gray-500 bg-opacity-75 h-full">
             <x-modal-header data-modal-hide="deletesensor">Delete Sensor</x-modal-header>
@@ -108,7 +108,7 @@
                 <x-table>
                     <x-table-body>
                         @foreach($allsensors as $sensor)
-                           
+
                             <x-tr>
                                 <x-th class="border-b border-gray-300 w-full">
                                     <form method="post" action="{{ route('admin.destroySensor') }}">
@@ -145,17 +145,17 @@
                             <x-text-input id="email" name="email" type="text" class="mt-1 block w-full" :value="old('email')" required autofocus autocomplete="email" />
                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
                         </div>
-                        <div>
+                        {{-- <div>
                             <x-input-label for="company_name" :value="__('Company Name')" />
                             <x-text-input id="company_name" name="company_name" type="text" class="mt-1 block w-full" :value="old('company_name')" required autofocus autocomplete="company_name" />
                             <x-input-error class="mt-2" :messages="$errors->get('company_name')" />
-                        </div>
+                        </div> --}}
                         <div>
                             <x-input-label for="password" :value="__('Password')" />
                             <x-text-input id="password" name="password" type="text" class="mt-1 block w-full" :value="old('password')" required autofocus autocomplete="password" />
                             <x-input-error class="mt-2" :messages="$errors->get('password')" />
                         </div>
-                        <div class="mb-6">
+                        <div class="flex items-end h-full">
                             <label for="admin" class="inline-flex items-center">
                                 <input type="checkbox" name="admin" id="admin" value="0" class="form-checkbox">
                                 <span class="ml-2">Admin?</span>
