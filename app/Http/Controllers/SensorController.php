@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\Sensor_Data;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Crypt;
 
@@ -31,7 +32,25 @@ class SensorController extends Controller
         // searchbar code
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
         //?start=04%2F03%2F2025&end=20%2F03%2F2025
-        return view('sensors',compact('opensource','user_sensors'))->with('Sensors',$sensors);
+
+        $user_sensors_map = Sensor::where('user_id', $current_user)->get();
+        $SensorDataForMap = [];
+
+        foreach ($user_sensors_map as $user_sensor){
+            $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+            $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+            $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+
+            $SensorDataForMap[$user_sensor->sensor_id] = [
+                "temperature" => $temperature,
+                "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                "latitude" => $user_sensor->latitude,
+                "longitude" => $user_sensor->longitude,
+                "bodyOfWater" => $user_sensor->body_of_water,
+            ];
+        }
+
+        return view('sensors',compact('opensource','user_sensors', 'SensorDataForMap'))->with('Sensors',$sensors);
 
     }
 
@@ -57,10 +76,31 @@ class SensorController extends Controller
             ->where('user_id',$current_user)
             ->paginate(5)->withQueryString();
 
+            $user_sensors_map = Sensor::where('user_id', $current_user)->get();
+
+            $SensorDataForMap = [];
+
+            foreach ($user_sensors_map as $user_sensor){
+                $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+                $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+                $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+
+                $SensorDataForMap[$user_sensor->sensor_id] = [
+                    "temperature" => $temperature,
+                    "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
+                    "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                ];
+            }
+
             $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors);
+            return view('sensors', compact('SensorDataForMap'))->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors);
 
         }
+
+
+
+
+
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
         return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors',$sensors);;
     }
@@ -72,34 +112,49 @@ class SensorController extends Controller
             if(array_key_exists('sort_by',$_REQUEST)){
                 $sortBy = $_REQUEST['sort_by'];
                 if($sortBy =='alph_asc'){
-                    $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                    $sensors = Sensor::where('opensource',1)->where('activated',1)->orderBy('sensor_name','asc')->paginate(5)->withQueryString();
                     $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','asc')->paginate(5)->withQueryString();
                 }
                 elseif($sortBy =='alph_des'){
-                    $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                    $sensors = Sensor::where('opensource',1)->where('activated',1)->orderBy('sensor_name','desc')->paginate(5)->withQueryString();
                     $usersensors = Sensor::where('user_id',$current_user)->orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                }
+                $user_sensors_map = Sensor::where('user_id', $current_user)->get();
+                $SensorDataForMap = [];
+
+                foreach ($user_sensors_map as $user_sensor){
+                    $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+                    $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+                    $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+
+                    $SensorDataForMap[$user_sensor->sensor_id] = [
+                        "temperature" => $temperature,
+                        "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
+                        "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                    ];
                 }
 
             }
-            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
+            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors)->with('SensorDataForMap',$SensorDataForMap);
 
         } else{
 
             if(array_key_exists('sort_by',$_REQUEST)){
                 $sortBy = $_REQUEST['sort_by'];
                 if($sortBy =='alph_asc'){
-                    $sensors = Sensor::orderBy('sensor_name','asc')->paginate(5)->withQueryString();
+                    $sensors = Sensor::where('opensource',1)->where('activated',1)->orderBy('sensor_name','asc')->paginate(5)->withQueryString();
                 }
                 elseif($sortBy =='alph_des'){
-                    $sensors = Sensor::orderBy('sensor_name','desc')->paginate(5)->withQueryString();
+                    $sensors = Sensor::where('opensource',1)->where('activated',1)->orderBy('sensor_name','desc')->paginate(5)->withQueryString();
                 }
 
+                }
             }
 
             return view('sensors')->with('opensource',$sensors)->with('Sensors',$sensors);
 
 
-        }
+
 
     }
 
@@ -158,11 +213,25 @@ class SensorController extends Controller
 
                 }
 
+                $user_sensors_map = Sensor::where('user_id', $current_user)->get();
+                $SensorDataForMap = [];
+
+                foreach ($user_sensors_map as $user_sensor){
+                    $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+                    $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+                    $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+
+                    $SensorDataForMap[$user_sensor->sensor_id] = [
+                        "temperature" => $temperature,
+                        "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
+                        "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                    ];
+                }
 
             }
 
             $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors);
+            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors)->with('SensorDataForMap',$SensorDataForMap);
 
         }
         else{

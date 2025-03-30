@@ -32,7 +32,7 @@
     <div class="py-12 flex justify-center z-10">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-50">
 
-            <form action="{{route('sensors.search')}}" method="GET" class = "w-4/5">
+            <form action="{{route('sensors.search')}}" id="SearchBarForm" method="GET" class = "w-4/5">
                 @include('layouts.searchbar')
             </form>
 
@@ -135,7 +135,7 @@
                 @include('layouts.sensor-table')
             </div>
             @if(Auth::check())
-                <div class=" justify-center pb-10 h-56 sm:h-80 w-4/5 z-0 mt-5 flex opacity-0" id="map-container">
+                <div class=" justify-center pb-10 w-4/5 z-0 mt-5 flex opacity-0" id="map-container" style="height: 20rem">
                     <div id="map" class="w-full h-full  rounded-lg">
 
                     </div>
@@ -147,12 +147,17 @@
 
         </div>
     </div>
-    {{-- @include("layouts.maps") --}}
+
     @include('layouts.waves')
+    @if(Auth::check())
+        <script>
+            window.OwnedSensors = @json($SensorDataForMap);
+        </script>
+    @endif
     <script>
         window.SensorsJS = @json($Sensors);
-        window.OwnedSensors = @json($user_sensors);
     </script>
+
     <script src="{{ asset('js/userLocation.js') }}"></script>
     <script src="{{ asset('js/LeafletMap.js') }}"></script>
 </x-app-layout>
