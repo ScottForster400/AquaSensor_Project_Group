@@ -31,11 +31,7 @@
                     <x-card class="mb-2 !px-4 !py-6 z-10 w-full">
                         <div id="card-top" class="flex flex-row h-20 px-2">
                             <div id="card-top-left" class="flex flex-col basis-3/4 justify-between">
-                                @if(Auth::user() == null || Auth::user()->id != $currentSensor->user_id)
-                                    <h2>{{Str::title($currentSensorData->sensor_id)}}</h2>
-                                @else
-                                    <h2>{{Str::title($currentSensor->sensor_name)}}</h2>
-                                @endif
+                                <h2>{{Str::title($currentSensor->sensor_name)}}</h2>
                                 <div id="DO-data" class=" hidden flex-row items-end">
                                     <div class="h-8 w-8 ">
                                         <img src="{{URL::asset('imgs/DO.svg')}}"" alt="dissolved_oxygen" class="w-full h-full" style="left: -4.5px; position:relative">
