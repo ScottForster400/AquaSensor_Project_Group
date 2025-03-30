@@ -151,8 +151,13 @@
     @include('layouts.waves')
     <script>
         window.SensorsJS = @json($Sensors);
-        window.OwnedSensors = @json($SensorDataForMap);
     </script>
     <script src="{{ asset('js/userLocation.js') }}"></script>
-    <script src="{{ asset('js/LeafletMap.js') }}"></script>
+
+    @if (Auth::check())
+        <script>
+            window.OwnedSensors = @json($SensorDataForMap);
+        </script>
+        <script src="{{ asset('js/LeafletMap.js') }}"></script>
+    @endif
 </x-app-layout>

@@ -85,8 +85,10 @@ class SensorController extends Controller
     
                 $SensorDataForMap[$user_sensor->sensor_id] = [
                     "temperature" => $temperature,
-                    "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
                     "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                    "latitude" => $user_sensor->latitude,
+                    "longitude" => $user_sensor->longitude,
+                    "bodyOfWater" => $user_sensor->body_of_water,
                 ];
             }
 
@@ -96,6 +98,7 @@ class SensorController extends Controller
         }
 
         $current_user = Auth::id();
+
         $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
 
         $SensorDataForMap = [];
@@ -107,8 +110,10 @@ class SensorController extends Controller
 
             $SensorDataForMap[$user_sensor->sensor_id] = [
                 "temperature" => $temperature,
-                "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
                 "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                "latitude" => $user_sensor->latitude,
+                "longitude" => $user_sensor->longitude,
+                "bodyOfWater" => $user_sensor->body_of_water,
             ];
         }
 
@@ -132,7 +137,26 @@ class SensorController extends Controller
                 }
 
             }
-            return view('sensors')->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
+
+            $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
+
+            $SensorDataForMap = [];
+
+            foreach ($user_sensors as $user_sensor){
+                $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+                $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+                $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+    
+                $SensorDataForMap[$user_sensor->sensor_id] = [
+                    "temperature" => $temperature,
+                    "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                    "latitude" => $user_sensor->latitude,
+                    "longitude" => $user_sensor->longitude,
+                    "bodyOfWater" => $user_sensor->body_of_water,
+                ];
+            }
+
+            return view('sensors', compact('SensorDataForMap'))->with('opensource',$sensors)->with('user_sensors',$usersensors)->with('Sensors',$sensors);
 
         } else{
 
@@ -146,10 +170,7 @@ class SensorController extends Controller
                 }
 
             }
-
             return view('sensors')->with('opensource',$sensors)->with('Sensors',$sensors);
-
-
         }
 
     }
@@ -212,8 +233,26 @@ class SensorController extends Controller
 
             }
 
+            $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
+
+            $SensorDataForMap = [];
+
+            foreach ($user_sensors as $user_sensor){
+                $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+                $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+                $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+    
+                $SensorDataForMap[$user_sensor->sensor_id] = [
+                    "temperature" => $temperature,
+                    "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                    "latitude" => $user_sensor->latitude,
+                    "longitude" => $user_sensor->longitude,
+                    "bodyOfWater" => $user_sensor->body_of_water,
+                ];
+            }
+
             $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors);
+            return view('sensors', compact('SensorDataForMap'))->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors', $sensors);
 
         }
         else{

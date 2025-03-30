@@ -29,10 +29,16 @@ if (window.OwnedSensors){
     SensorMarkers.forEach(function (location) {
         L.marker([location.Latitude, location.Longitude])
             .addTo(map)
-            .bindPopup(`<b>Sensor ID:</b> ${location.SensorId} <br>
-                <b>Temperature:</b> ${location.Temperature}°C <br>
-                <b>Dissolved Oxygen (mg/L):</b> ${location.mglDissolvedOxygen} mg/L <br>
-                <b>Body Of Water:</b> ${location.BodyOfWater}`);
+            .bindPopup(`
+                <div style="text-align: center;">
+                    <b>Sensor ID:</b> ${location.SensorId} <br>
+                    <b>Temperature:</b> ${location.Temperature}°C <br>
+                    <b>Dissolved Oxygen (%):</b> ${location.dissolvedOxygenPercent}% <br>
+                    <b>Dissolved Oxygen (mg/L):</b> ${location.mglDissolvedOxygen} mg/L <br>
+                    <br>
+                    <a href="/sensorData/search?search=${location.SensorId}" class="btn btn-primary" style="display: block; margin-top: 10px;">View Sensor Data</a>
+                </div>
+                `);
     });
 }
 
