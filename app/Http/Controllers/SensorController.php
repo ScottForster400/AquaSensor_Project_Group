@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\Sensor_Data;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Crypt;
 
@@ -30,7 +31,24 @@ class SensorController extends Controller
         $opensource = Sensor::where('activated', 1)->where('opensource',1)->paginate(5);
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
         //?start=04%2F03%2F2025&end=20%2F03%2F2025
-        return view('sensors',compact('opensource','user_sensors'))->with('Sensors',$sensors);
+
+        $SensorDataForMap = [];
+
+        foreach ($user_sensors as $user_sensor){
+            $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+            $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+            $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+
+            $SensorDataForMap[$user_sensor->sensor_id] = [
+                "temperature" => $temperature,
+                "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                "latitude" => $user_sensor->latitude,
+                "longitude" => $user_sensor->longitude,
+                "bodyOfWater" => $user_sensor->body_of_water,
+            ];
+        }
+
+        return view('sensors',compact('opensource','user_sensors', 'SensorDataForMap'))->with('Sensors',$sensors);
 
     }
 
@@ -56,12 +74,46 @@ class SensorController extends Controller
             ->where('user_id',$current_user)
             ->paginate(5)->withQueryString();
 
+            $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
+
+            $SensorDataForMap = [];
+
+            foreach ($user_sensors as $user_sensor){
+                $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+                $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+                $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+    
+                $SensorDataForMap[$user_sensor->sensor_id] = [
+                    "temperature" => $temperature,
+                    "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
+                    "mglDissolvedOxygen" => $mglDissolvedOxygen,
+                ];
+            }
+
             $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-            return view('sensors')->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors);
+            return view('sensors', compact('SensorDataForMap'))->with('opensource',$opensource_searchedSensors)->with('user_sensors',$users_searchedSensors)->with('Sensors',$sensors);
 
         }
+
+        $current_user = Auth::id();
+        $user_sensors = Sensor::where('user_id', $current_user)->paginate(5);
+
+        $SensorDataForMap = [];
+
+        foreach ($user_sensors as $user_sensor){
+            $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
+            $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
+            $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
+
+            $SensorDataForMap[$user_sensor->sensor_id] = [
+                "temperature" => $temperature,
+                "dissolvedOxygenPercent" => $dissolvedOxygenPercent,
+                "mglDissolvedOxygen" => $mglDissolvedOxygen,
+            ];
+        }
+
         $sensors = Sensor::where('opensource',1)->where('activated',1)->get();
-        return view('sensors')->with('opensource',$opensource_searchedSensors)->with('Sensors',$sensors);;
+        return view('sensors', compact('SensorDataForMap'))->with('opensource',$opensource_searchedSensors)->with('Sensors',$sensors);;
     }
 
     public function sort(){
