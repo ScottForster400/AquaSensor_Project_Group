@@ -17,13 +17,13 @@ class Sensor extends Model
 
     protected $fillable = ['latitude', 'longitude', 'sensor_id', 'user_id', 'sensor_name', 'location', 'body_of_water','opensource','activation_key','activated','created_at','updated_at'];
 
-    // public function getLatitudeAttribute($value)
-    // {
-    //     return Crypt::decryptString($value);
-    // }
+    public function getLatitudeAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
 
-    // public function getLongitudeAttribute($value)
-    // {
-    //     return Crypt::decryptString($value);
-    // }
+    public function getLongitudeAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
 }
