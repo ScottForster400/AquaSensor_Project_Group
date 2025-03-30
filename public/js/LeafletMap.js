@@ -29,13 +29,3 @@ if (window.OwnedSensors){
     });
 }
 
-function showMap(){
-    const renderedMap = document.getElementById('map-container')
-    if (renderedMap.classList.contains('opacity-0')){
-        renderedMap.classList.remove('opacity-0');
-
-    }
-    else{
-        renderedMap.classList.add('opacity-0');
-    }
-}

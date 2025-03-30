@@ -38,6 +38,7 @@
             <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
             <link rel="stylesheet" href="{{ asset('/css/waves/waves.css') }}"/>
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+            <script src="{{ asset('/js/showMap.js') }} " defer></script>
         @endif
 
 
