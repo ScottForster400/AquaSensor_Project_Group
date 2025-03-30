@@ -31,7 +31,7 @@ class AdminController extends Controller
             'name'=> 'required|max:255|string',
             'email'=> 'required|max:255|string|lowercase|email|unique:App\Models\user,email',
             'password'=> 'required|max:255',
-            'company_name'=> 'required|max:255|string'
+
         ]);
         if ($request->admin != null) { $admin = 1; }
         $newUser = new User([
@@ -39,7 +39,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'admin' => $admin,
-            'company_name' => $request->company_name
+
         ]);
 
         $newUser ->save();
