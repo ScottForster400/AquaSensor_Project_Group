@@ -3,7 +3,7 @@
     <head>
         @php
             $currentRoute = Route::currentRouteName();
-
+            $sensorRoutes = collect(['sensors.index','sensors.search','sensors.sort','sensors.sortSearch']);
         @endphp
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +18,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         @if($currentRoute =="sensorData.index")
             <link rel="stylesheet" href="{{ asset('/css/waves/waves.css') }}"/>
             <script src="{{ asset('/js/dataPage.js') }} " defer></script>
@@ -33,7 +34,7 @@
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
 
 
-        @elseif ($currentRoute =="sensors.index")
+        @elseif (in_array($currentRoute,$sensorRoutes->toArray()))
 
             <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
             <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
