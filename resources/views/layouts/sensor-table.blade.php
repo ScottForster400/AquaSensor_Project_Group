@@ -75,12 +75,12 @@
                                                         </div>
                                                         <div>
                                                             <x-input-label for="latitude" :value="__('Latitude')" />
-                                                            <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" value="{{$sensor1->latitude}}" required autofocus autocomplete="latitude" />
+                                                            <x-text-input id="latitude" name="latitude" type="number" step="0.000001" class="mt-1 block w-full" value="{{$sensor1->latitude}}" required autofocus autocomplete="latitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('latitude')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="longitude" :value="__('Longitude')" />
-                                                            <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" value="{{$sensor1->longitude}}" required autofocus autocomplete="longitude" />
+                                                            <x-text-input id="longitude" name="longitude" type="number" step="0.000001" class="mt-1 block w-full" value="{{$sensor1->longitude}}" required autofocus autocomplete="longitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                                                         </div>
                                                         <div class="mb-6">
