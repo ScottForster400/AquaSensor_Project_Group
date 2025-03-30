@@ -19,11 +19,15 @@ class Sensor extends Model
 
     public function getLatitudeAttribute($value)
     {
-        return Crypt::decryptString($value);
+        if ($value != null) {
+            return Crypt::decryptString($value);
+        }
     }
 
     public function getLongitudeAttribute($value)
     {
-        return Crypt::decryptString($value);
+        if ($value != null) {
+            return Crypt::decryptString($value);
+        }
     }
 }
