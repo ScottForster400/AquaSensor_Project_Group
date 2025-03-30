@@ -33,6 +33,7 @@
 
 
         @elseif ($currentRoute =="sensors.index")
+
             <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
             <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
             <link rel="stylesheet" href="{{ asset('/css/waves/waves.css') }}"/>
