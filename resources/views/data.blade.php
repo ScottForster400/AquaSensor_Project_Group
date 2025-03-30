@@ -173,7 +173,7 @@
                         </x-nightcard-flippable-backface>
                     </x-card-flippable>
                 </div>
-                <x-card class="px-2 !my-3 !pb-1  z-10 flex flex-col items-center">
+                <x-card class="px-2 !my-3 !pb-1  z-10 flex flex-col items-center !mb-52">
                     <div class="px-2 h-auto w-full">
                         <h2 class="w-full text-start ">
                             Sensor Data
