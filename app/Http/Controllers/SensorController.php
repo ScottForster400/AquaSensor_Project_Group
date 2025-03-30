@@ -51,7 +51,7 @@ class SensorController extends Controller
         }
 
         $SearchBarSensors = Sensor::where('activated', 1)->get();
-     
+
         return view('sensors',compact('opensource','user_sensors', 'SensorDataForMap'))->with('Sensors',$sensors)->with('SearchBarSensors', $SearchBarSensors);
 
     }
@@ -132,7 +132,7 @@ class SensorController extends Controller
                     $temperature = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('temperature');
                     $dissolvedOxygenPercent = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('%dissolved_oxygen');
                     $mglDissolvedOxygen = Sensor_Data::where('sensor_id', $user_sensor->sensor_id)->value('mgl_dissolved_oxygen');
-                    
+
                     $SensorDataForMap[$user_sensor->sensor_id] = [
                         "temperature" => $temperature,
                         "mglDissolvedOxygen" => $mglDissolvedOxygen,
@@ -289,7 +289,7 @@ class SensorController extends Controller
 
     public function activate(Request $request)
     {
-        $inappropriate_language = file_get_contents(resource_path('textfiles\offensive_language.txt'));
+        $inappropriate_language = file_get_contents(resource_path('textfiles/offensive_language.txt'));
         $words = explode("\n", $inappropriate_language);
         foreach($words as $word){
             if($request->sensor_name == $word){
@@ -343,7 +343,7 @@ class SensorController extends Controller
     public function update(Request $request, Sensor $sensor)
     {
 
-        $inappropriate_language = file_get_contents(resource_path('textfiles\offensive_language.txt'));
+        $inappropriate_language = file_get_contents(resource_path('textfiles/offensive_language.txt'));
         $words = explode("\n", $inappropriate_language);
         foreach($words as $word){
             if($request->sensor_name == $word){
