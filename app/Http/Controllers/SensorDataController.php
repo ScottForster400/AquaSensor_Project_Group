@@ -127,7 +127,6 @@ class SensorDataController extends Controller
                     $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
                 ];
 
-                $currentTime = date( 'Hi');
                 $currentDate = date( 'ymd');
                 $nightTimeSplitData = [[],[]]; //filtering current day data for time spans
                 for ($z=0; $z<count($timeFrameEntries[0]); $z++) { //day entries
@@ -147,23 +146,44 @@ class SensorDataController extends Controller
                         //echo "<a>$cumilatedTime; $sunRise; $sunSet --- $currentDate $cumilatedDate --- $startOfDayCheck1:$startOfDayCheck2:$endOfDayCheck</a><br>";
                     }
                 }
-
+                                  //day temp        do    night temp        do
                 $averagedFlipData = [[[0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0]]]; //setup
-                for ($i=0; $i<count($timeFrameEntries); $i++) { //average data for flip cards
-                    $tempAverager = 0;
-                    $doAverager = 0;
-                    if (count($timeFrameEntries[$i]) > 0) {
-                        for ($j= 0; $j<count($timeFrameEntries[$i]); $j++) { //get the total of data
-                            $tempAverager += $timeFrameEntries[$i][$j][$temp];
-                            $doAverager += $timeFrameEntries[$i][$j][$do];
-                        }
-                        $averagedFlipData[0][$i] = number_format($tempAverager/count($timeFrameEntries[$i]), 3);
-                        $averagedFlipData[1][$i] = number_format($doAverager/count($timeFrameEntries[$i]), 3);
-                    } else {
-                        $averagedFlipData[0][$i] = 0;
-                        $averagedFlipData[1][$i] = 0;
+                for ($t=0; $t<2; $t++) {
+                    $tempTotal = [0, 0];
+                    $doTotal = [0, 0];
+                    for ($a=0; $a<count($nightTimeSplitData[$t]); $a++) {
+                        $tempTotal[0] += $nightTimeSplitData[$t][$a][$temp];
+                        $doTotal[0] += $nightTimeSplitData[$t][$a][$do];
                     }
-                }   //save averages
+                    $averagedFlipData[$t][0][0] = number_format($tempTotal[0]/count($nightTimeSplitData[$t]), 3);
+                    $averagedFlipData[$t][1][0] = number_format($doTotal[0]/count($nightTimeSplitData[$t]), 3);
+                }
+
+                for ($i=1; $i<3; $i++) { //for each time span
+                    $entrysInTimes = [0, 0];
+                    $tempTotal = [0, 0];
+                    $doTotal = [0, 0];
+                    for ($a=0; $a<count($timeFrameEntries[$i]); $a++) {
+                        $splitTime = explode(':', $timeFrameEntries[$i][$a][$time]);
+                        $cumilatedTime = $splitTime[0].$splitTime[1];
+                        //echo "$sunRise, $cumilatedTime, $sunSet<br>";
+                        if ($sunRise <= $cumilatedTime && $cumilatedTime <= $sunSet) {
+                            $entrysInTimes[0]++;
+                            $tempTotal[0] += $timeFrameEntries[$i][$a][$temp];
+                            $doTotal[0] += $timeFrameEntries[$i][$a][$do];
+                        } else {
+                            $entrysInTimes[1]++;
+                            $tempTotal[1] += $timeFrameEntries[$i][$a][$temp];
+                            $doTotal[1] += $timeFrameEntries[$i][$a][$do];
+                        }
+                    }
+                    $averagedFlipData[0][0][$i] = number_format($tempTotal[0]/$entrysInTimes[0], 3);
+                    $averagedFlipData[0][1][$i] = number_format($doTotal[0]/$entrysInTimes[0], 3);
+                    $averagedFlipData[1][0][$i] = number_format($tempTotal[1]/$entrysInTimes[1], 3);
+                    $averagedFlipData[1][1][$i] = number_format($doTotal[1]/$entrysInTimes[1], 3);
+                    //echo $averagedFlipData[0][0][$i].', '.$averagedFlipData[0][1][$i].', '.$averagedFlipData[1][0][$i].', '.$averagedFlipData[1][1][$i].'<br>';
+                }
+                
             } else {
                 return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
             }
@@ -248,13 +268,12 @@ class SensorDataController extends Controller
                 $timeLabel[0]->push("{$ret}:{$minsForHour}");
                 if ($i/60 == 24) { $i = 0; } //reset the time to 0 on hitting h24
             }
-            //dd($reformatedData[0]);
 
             return view('data')
                 ->with('mobileAveragedData',$mobileAveragedData)
                 ->with('desktopAveragedData',$averagedData)
-                ->with('dayFlipCardDataDO', $averagedFlipData[1])//->with('nightFlipCardDataDO', $averagedFlipData[1][1])
-                ->with('dayFlipCardDataTemp', $averagedFlipData[0])//->with('nightFlipCardDataTemp', $averagedFlipData[1][0])
+                ->with('dayFlipCardDataDO', $averagedFlipData[0][1])->with('nightFlipCardDataDO', $averagedFlipData[1][1])
+                ->with('dayFlipCardDataTemp', $averagedFlipData[0][0])->with('nightFlipCardDataTemp', $averagedFlipData[1][0])
                 ->with('currentSensorData',$currentSensorData)
                 ->with('currentSensor',$currentSensor)
                 ->with('weekDay',$weekDay)
