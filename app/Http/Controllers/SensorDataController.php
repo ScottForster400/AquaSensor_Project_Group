@@ -181,8 +181,7 @@ class SensorDataController extends Controller
 
             $currentSensorDataTime = $currentSensorData->sensor_data_time;
             $weekDay = date('l', strtotime($formatedDate));
-            dump($currentSensorDataTime);
-            dump(date('H:i:s'));
+
 
             if(strtotime($currentSensorDataTime) < strtotime(date('H:i:s'))){
                 $timeDiff = strtotime(date('H:i:s')) - strtotime($currentSensorDataTime);
@@ -196,12 +195,11 @@ class SensorDataController extends Controller
                 $mins = date('i',$timeDiff);
                 $timeDiff = $hoursInMins + $mins;
                 if($weekDay != date('l')){
-                    dump('week');
+
                     $isActive = 'inactive';
                 }
                 elseif($timeDiff>14){
-                    dump('time');
-                    dump($timeDiff);
+
                     $isActive = 'inactive';
                 }
                 else{
