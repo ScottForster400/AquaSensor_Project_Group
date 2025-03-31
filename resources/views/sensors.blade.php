@@ -75,7 +75,7 @@
                                             </div>
                                             <div>
                                                 <x-input-label for="activation_key" :value="__('Activation Key')" />
-                                                <x-text-input id="activation_key" name="activation_key" type="number" class="mt-1 block w-full" :value="old('activation_key')" required autofocus autocomplete="activation_key" />
+                                                <x-text-input id="activation_key" name="activation_key" type="text" class="mt-1 block w-full" :value="old('activation_key')" required autofocus autocomplete="activation_key" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('activation_key')" />
                                             </div>
                                             <div class="mb-6">
