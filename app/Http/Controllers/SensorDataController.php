@@ -15,6 +15,7 @@ class SensorDataController extends Controller
      */
     public function index(Request $request)
     {
+        date_default_timezone_set('Europe/London');
         $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
         //get open source sensor count
         //dd(!$this->Compare2Dates("09-02-25", "13/03/2025", true) . ", " . $this->Compare2Dates("15-04-25", "13/03/2025", false));
@@ -126,7 +127,6 @@ class SensorDataController extends Controller
                     $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
                 ];
 
-                $currentTime = date( 'Hi');
                 $currentDate = date( 'ymd');
                 $nightTimeSplitData = [[],[]]; //filtering current day data for time spans
                 for ($z=0; $z<count($timeFrameEntries[0]); $z++) { //day entries
@@ -146,8 +146,45 @@ class SensorDataController extends Controller
                         //echo "<a>$cumilatedTime; $sunRise; $sunSet --- $currentDate $cumilatedDate --- $startOfDayCheck1:$startOfDayCheck2:$endOfDayCheck</a><br>";
                     }
                 }
-
+                                  //day temp        do    night temp        do
                 $averagedFlipData = [[[0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0]]]; //setup
+                $tempTotal = [0, 0];
+                $doTotal = [0, 0];
+                for ($t=0; $t<2; $t++) {
+                    for ($a=0; $a<count($nightTimeSplitData[$t]); $a++) {
+                        $tempTotal[0] += $nightTimeSplitData[$t][$a][$temp];
+                        $doTotal[0] += $nightTimeSplitData[$t][$a][$do];
+                    }    
+                    $averagedFlipData[$t][0][0] = number_format($tempTotal[0]/count($nightTimeSplitData[$t]), 3);
+                    $averagedFlipData[$t][1][0] = number_format($doTotal[0]/count($nightTimeSplitData[$t]), 3);
+                }
+                
+                for ($i=1; $i<3; $i++) { //for each time span
+                    $entrysInTimes = [0, 0];
+                    $tempTotal = [0, 0];
+                    $doTotal = [0, 0];
+                    for ($a=0; $a<count($timeFrameEntries[$i]); $a++) {
+                        $splitTime = explode(':', $timeFrameEntries[$i][$a][$time]);
+                        $cumilatedTime = $splitTime[0].$splitTime[1];
+                        //echo "$sunRise, $cumilatedTime, $sunSet<br>";
+                        if ($sunRise <= $cumilatedTime && $cumilatedTime <= $sunSet) {
+                            $entrysInTimes[0]++;
+                            $tempTotal[0] += $timeFrameEntries[$i][$a][$temp];
+                            $doTotal[0] += $timeFrameEntries[$i][$a][$do];
+                        } else {
+                            $entrysInTimes[1]++;
+                            $tempTotal[1] += $timeFrameEntries[$i][$a][$temp];
+                            $doTotal[1] += $timeFrameEntries[$i][$a][$do];
+                        }
+                    }
+                    $averagedFlipData[0][0][$i] = number_format($tempTotal[0]/$entrysInTimes[0], 3);
+                    $averagedFlipData[0][1][$i] = number_format($doTotal[0]/$entrysInTimes[0], 3);
+                    $averagedFlipData[1][0][$i] = number_format($tempTotal[1]/$entrysInTimes[1], 3);
+                    $averagedFlipData[1][1][$i] = number_format($doTotal[1]/$entrysInTimes[1], 3);
+                    //echo $averagedFlipData[0][0][$i].', '.$averagedFlipData[0][1][$i].', '.$averagedFlipData[1][0][$i].', '.$averagedFlipData[1][1][$i].'<br>';
+                }
+                //dd($averagedFlipData);
+
                 for ($i=0; $i<count($timeFrameEntries); $i++) { //average data for flip cards
                     $tempAverager = 0;
                     $doAverager = 0;
@@ -180,17 +217,25 @@ class SensorDataController extends Controller
 
             $currentSensorDataTime = $currentSensorData->sensor_data_time;
             $weekDay = date('l', strtotime($formatedDate));
+
+
             if(strtotime($currentSensorDataTime) < strtotime(date('H:i:s'))){
                 $timeDiff = strtotime(date('H:i:s')) - strtotime($currentSensorDataTime);
-                $hours = date('H',$timeDiff);
-                $hoursInMins = $hours*60;
+                $hours = date('h',$timeDiff);
+                if($hours>1){
+                    $hoursInMins = $hours*60;
+                }
+                else{
+                    $hoursInMins = 1;
+                }
                 $mins = date('i',$timeDiff);
                 $timeDiff = $hoursInMins + $mins;
-
                 if($weekDay != date('l')){
+
                     $isActive = 'inactive';
                 }
                 elseif($timeDiff>14){
+
                     $isActive = 'inactive';
                 }
                 else{
@@ -198,27 +243,28 @@ class SensorDataController extends Controller
                 }
 
             }
+            elseif(date('y-m-d') != $formatedDate){
+                $isActive = 'inactive';
+            }
             else{
                 $isActive = 'active';
             }
-
-
-
 
 
             $sensors = Sensor::where('opensource',1)->get(); //get opensource sensor count
 
             // day, night and time stuffs
             $reformatedData = [[[], []], [[], []]];
-            if (Count($nightTimeSplitData[0]) > 0) {
+            if (Count($nightTimeSplitData[0]) > 0 || Count($nightTimeSplitData[1]) > 0) {
                 for ($o= 0; $o<2; $o++) { //reformat the data
                     for ($j= 0; $j<Count($nightTimeSplitData[$o]); $j++) {
                         $reformatTime = explode(':', $nightTimeSplitData[$o][$j][$time]);
-                        $reformatedData[$o][0][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$temp]];
-                        $reformatedData[$o][1][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$do]];
+                        $reformatedData[$o][0][$j] = [$reformatTime[0].':'.$reformatTime[1], $nightTimeSplitData[$o][$j][$temp]];
+                        $reformatedData[$o][1][$j] = [$reformatTime[0].':'.$reformatTime[1], $nightTimeSplitData[$o][$j][$do]];
                     }
                 }
             }
+            //dd($reformatedData, $nightTimeSplitData);
 
             $timeLabel=[collect(), collect()];
             $riseInMins = $sunRise%100 + floor($sunRise/100)*60;
@@ -348,6 +394,7 @@ class SensorDataController extends Controller
         array_shift($data);
         return $data;
     }
+
     public function search(Request $request){
         $searchRequest = $request->search;
 

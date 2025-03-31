@@ -39,6 +39,7 @@ class SensorGraphController extends Controller
 
         if ($request->query() != null) { //if theres been a query through
             $requestOutput = collect();
+
             foreach (array_keys($_REQUEST) as $requestPart) { //seperate out the individual sensors
                 if ($requestPart != "_token" && $requestPart != "_method" && $requestPart != "waterBody" && $requestPart != "start" && $requestPart != "end") {
                     $requestOutput->push($requestPart);
@@ -53,11 +54,14 @@ class SensorGraphController extends Controller
             if (count($requestOutput) > 0 || $_REQUEST['waterBody'] != "None") { //if theres a sensor selection
                 if ($_REQUEST['waterBody'] != "None") { //if its water body
                     $databaseSearch = Sensor::select('sensor_id')->where('activated', 1)->where('body_of_water', $_REQUEST['waterBody'])->get();
+                    $requestOutput = collect();
                     foreach ($databaseSearch as $value) { //find the sensors in that body and add replace the list with them
                         $requestOutput->push($value['sensor_id']);
                     }
+
                 }
 
+                // dd($visableSensors);
                 if (count($requestOutput) > 0) { //for all sensors in the display list
                     $selectedSensors = collect();
                     for ($t = 0; $t < count($requestOutput); $t++) { //if the sensors are publicly visable
