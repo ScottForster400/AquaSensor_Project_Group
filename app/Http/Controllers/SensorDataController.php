@@ -127,6 +127,10 @@ class SensorDataController extends Controller
                     $this->GetAndFormatCurl($activeSensor . "&fromdate=" . date('d-m-y', strtotime('-'.(string)(date('j')-1).' days')) . "&todate=" . date('d-m-y'))
                 ];
 
+                if (count($timeFrameEntries[0]) > 300) { $timeFrameEntries[0] = []; } //api gives most entries on dates not having data so prevent errors
+                if (count($timeFrameEntries[1]) > 1000) { $timeFrameEntries[1] = []; }
+                if (count($timeFrameEntries[2]) > 4200) { $timeFrameEntries[2] = []; }
+
                 $currentDate = date( 'ymd');
                 $nightTimeSplitData = [[],[]]; //filtering current day data for time spans
                 for ($z=0; $z<count($timeFrameEntries[0]); $z++) { //day entries
