@@ -47,6 +47,7 @@ class SensorController extends Controller
                 "latitude" => $user_sensor->latitude,
                 "longitude" => $user_sensor->longitude,
                 "bodyOfWater" => $user_sensor->body_of_water,
+                "SensorName" => $user_sensor->sensor_name,
             ];
         }
 
@@ -93,6 +94,7 @@ class SensorController extends Controller
                     "latitude" => $user_sensor->latitude,
                     "longitude" => $user_sensor->longitude,
                     "bodyOfWater" => $user_sensor->body_of_water,
+                    "SensorName" => $user_sensor->sensor_name,
                 ];
             }
 
@@ -139,6 +141,7 @@ class SensorController extends Controller
                         "latitude" => $user_sensor->latitude,
                         "longitude" => $user_sensor->longitude,
                         "bodyOfWater" => $user_sensor->body_of_water,
+                        "SensorName" => $user_sensor->sensor_name,
                     ];
                 }
 
@@ -239,6 +242,7 @@ class SensorController extends Controller
                         "latitude" => $user_sensor->latitude,
                         "longitude" => $user_sensor->longitude,
                         "bodyOfWater" => $user_sensor->body_of_water,
+                        "SensorName" => $user_sensor->sensor_name,
                     ];
                 }
 

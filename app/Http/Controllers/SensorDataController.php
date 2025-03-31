@@ -186,7 +186,6 @@ class SensorDataController extends Controller
                 $hoursInMins = $hours*60;
                 $mins = date('i',$timeDiff);
                 $timeDiff = $hoursInMins + $mins;
-
                 if($weekDay != date('l')){
                     $isActive = 'inactive';
                 }
@@ -198,27 +197,28 @@ class SensorDataController extends Controller
                 }
 
             }
+            elseif(date('y-m-d') != $formatedDate){
+                $isActive = 'inactive';
+            }
             else{
                 $isActive = 'active';
             }
-
-
-
 
 
             $sensors = Sensor::where('opensource',1)->get(); //get opensource sensor count
 
             // day, night and time stuffs
             $reformatedData = [[[], []], [[], []]];
-            if (Count($nightTimeSplitData[0]) > 0) {
+            if (Count($nightTimeSplitData[0]) > 0 || Count($nightTimeSplitData[1]) > 0) {
                 for ($o= 0; $o<2; $o++) { //reformat the data
                     for ($j= 0; $j<Count($nightTimeSplitData[$o]); $j++) {
                         $reformatTime = explode(':', $nightTimeSplitData[$o][$j][$time]);
-                        $reformatedData[$o][0][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$temp]];
-                        $reformatedData[$o][1][$j] = [$reformatTime[0].':'.$reformatTime[1], $timeFrameEntries[0][$j][$do]];
+                        $reformatedData[$o][0][$j] = [$reformatTime[0].':'.$reformatTime[1], $nightTimeSplitData[$o][$j][$temp]];
+                        $reformatedData[$o][1][$j] = [$reformatTime[0].':'.$reformatTime[1], $nightTimeSplitData[$o][$j][$do]];
                     }
                 }
             }
+            //dd($reformatedData, $nightTimeSplitData);
 
             $timeLabel=[collect(), collect()];
             $riseInMins = $sunRise%100 + floor($sunRise/100)*60;
@@ -348,6 +348,7 @@ class SensorDataController extends Controller
         array_shift($data);
         return $data;
     }
+
     public function search(Request $request){
         $searchRequest = $request->search;
 
