@@ -183,7 +183,7 @@ class SensorDataController extends Controller
                     $averagedFlipData[1][1][$i] = number_format($doTotal[1]/$entrysInTimes[1], 3);
                     //echo $averagedFlipData[0][0][$i].', '.$averagedFlipData[0][1][$i].', '.$averagedFlipData[1][0][$i].', '.$averagedFlipData[1][1][$i].'<br>';
                 }
-                dd($averagedFlipData);
+                //dd($averagedFlipData);
 
                 for ($i=0; $i<count($timeFrameEntries); $i++) { //average data for flip cards
                     $tempAverager = 0;
