@@ -148,9 +148,9 @@ class SensorDataController extends Controller
                 }
                                   //day temp        do    night temp        do
                 $averagedFlipData = [[[0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0]]]; //setup
-                $tempTotal = [0, 0];
-                $doTotal = [0, 0];
                 for ($t=0; $t<2; $t++) {
+                    $tempTotal = [0, 0];
+                    $doTotal = [0, 0];
                     for ($a=0; $a<count($nightTimeSplitData[$t]); $a++) {
                         $tempTotal[0] += $nightTimeSplitData[$t][$a][$temp];
                         $doTotal[0] += $nightTimeSplitData[$t][$a][$do];
