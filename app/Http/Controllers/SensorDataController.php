@@ -15,6 +15,7 @@ class SensorDataController extends Controller
      */
     public function index(Request $request)
     {
+        date_default_timezone_set('Europe/London');
         $sensorCount = Count(Sensor::where('opensource', 1)->where('activated', 1)->get());
         //get open source sensor count
         //dd(!$this->Compare2Dates("09-02-25", "13/03/2025", true) . ", " . $this->Compare2Dates("15-04-25", "13/03/2025", false));
@@ -180,16 +181,27 @@ class SensorDataController extends Controller
 
             $currentSensorDataTime = $currentSensorData->sensor_data_time;
             $weekDay = date('l', strtotime($formatedDate));
+            dump($currentSensorDataTime);
+            dump(date('H:i:s'));
+
             if(strtotime($currentSensorDataTime) < strtotime(date('H:i:s'))){
                 $timeDiff = strtotime(date('H:i:s')) - strtotime($currentSensorDataTime);
-                $hours = date('H',$timeDiff);
-                $hoursInMins = $hours*60;
+                $hours = date('h',$timeDiff);
+                if($hours>1){
+                    $hoursInMins = $hours*60;
+                }
+                else{
+                    $hoursInMins = 1;
+                }
                 $mins = date('i',$timeDiff);
                 $timeDiff = $hoursInMins + $mins;
                 if($weekDay != date('l')){
+                    dump('week');
                     $isActive = 'inactive';
                 }
                 elseif($timeDiff>14){
+                    dump('time');
+                    dump($timeDiff);
                     $isActive = 'inactive';
                 }
                 else{
