@@ -21,7 +21,7 @@
         </label>
     </x-slot>
 
-    @if(isset($currentSensorData))
+    @if(!isset($message))
         <div class="py-12 flex justify-center z-10 pb-1">
             <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full z-10 ">
                 <form id="SearchBarForm" autocomplete="off" action="{{route('sensorData.search')}}" class = "w-10/12">
@@ -203,7 +203,7 @@
     <div class="py-12 flex justify-center">
         <div class="flex items-center flex-col max-w-7xl mx-auto sm:px-6 lg:px-8 w-full ">
             <x-card>
-                <h2>No Sensor Data in system</h2>
+                <h2>{{ $message }}</h2>
             </x-card>
         </div>
     </div>
