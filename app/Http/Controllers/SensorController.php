@@ -61,9 +61,11 @@ class SensorController extends Controller
 
         $searchRequest = $request->search;
         $opensource_searchedSensors = Sensor::
-        Where('sensor_name','like',"%$searchRequest%")
-        ->orWhere('sensor_id','like',"%$searchRequest%")
-        ->orWhere('location','like',"%$searchRequest%")
+        where(function ($query) use ($searchRequest) {
+            $query->Where('sensor_name','like',"%$searchRequest%")
+            ->orWhere('sensor_id','like',"%$searchRequest%")
+            ->orWhere('location','like',"%$searchRequest%");
+        })
         ->where('activated',1)
         ->where('opensource',1)
         ->paginate(5)->withQueryString();
@@ -193,18 +195,22 @@ class SensorController extends Controller
                 $sortBy = $_REQUEST['sort_by'];
                 if($sortBy =='alph_asc'){
                     $opensource_searchedSensors = Sensor::
-                    Where('sensor_name','like',"%$searchRequest%")
-                    ->orWhere('sensor_id','like',"%$searchRequest%")
-                    ->orWhere('location','like',"%$searchRequest%")
+                    where(function ($query) use ($searchRequest) {
+                        $query->Where('sensor_name','like',"%$searchRequest%")
+                        ->orWhere('sensor_id','like',"%$searchRequest%")
+                        ->orWhere('location','like',"%$searchRequest%");
+                    })
                     ->where('activated',1)
                     ->where('opensource',1)
                     ->orderBy('sensor_name','asc')
                     ->paginate(5)->withQueryString();
 
                     $users_searchedSensors = Sensor::
-                    Where('sensor_name','like',"%$searchRequest%")
-                    ->orWhere('sensor_id','like',"%$searchRequest%")
-                    ->orWhere('location','like',"%$searchRequest%")
+                    where(function ($query) use ($searchRequest) {
+                        $query->Where('sensor_name','like',"%$searchRequest%")
+                        ->orWhere('sensor_id','like',"%$searchRequest%")
+                        ->orWhere('location','like',"%$searchRequest%");
+                    })
                     ->where('user_id',$current_user)
                     ->orderBy('sensor_name','asc')
                     ->paginate(5)->withQueryString();
@@ -213,18 +219,22 @@ class SensorController extends Controller
                 }
                 elseif($sortBy =='alph_des'){
                     $opensource_searchedSensors = Sensor::
-                    Where('sensor_name','like',"%$searchRequest%")
-                    ->orWhere('sensor_id','like',"%$searchRequest%")
-                    ->orWhere('location','like',"%$searchRequest%")
+                    where(function ($query) use ($searchRequest) {
+                        $query->Where('sensor_name','like',"%$searchRequest%")
+                        ->orWhere('sensor_id','like',"%$searchRequest%")
+                        ->orWhere('location','like',"%$searchRequest%");
+                    })
                     ->where('activated',1)
                     ->where('opensource',1)
                     ->orderBy('sensor_name','desc')
                     ->paginate(5)->withQueryString();
 
                     $users_searchedSensors = Sensor::
-                    Where('sensor_name','like',"%$searchRequest%")
-                    ->orWhere('sensor_id','like',"%$searchRequest%")
-                    ->orWhere('location','like',"%$searchRequest%")
+                    where(function ($query) use ($searchRequest) {
+                        $query->Where('sensor_name','like',"%$searchRequest%")
+                        ->orWhere('sensor_id','like',"%$searchRequest%")
+                        ->orWhere('location','like',"%$searchRequest%");
+                    })
                     ->where('user_id',$current_user)
                     ->orderBy('sensor_name','desc')
                     ->paginate(5)->withQueryString();
@@ -266,9 +276,11 @@ class SensorController extends Controller
                 $sortBy = $_REQUEST['sort_by'];
                 if($sortBy =='alph_asc'){
                     $opensource_searchedSensors = Sensor::
-                    Where('sensor_name','like',"%$searchRequest%")
-                    ->orWhere('sensor_id','like',"%$searchRequest%")
-                    ->orWhere('location','like',"%$searchRequest%")
+                    where(function ($query) use ($searchRequest) {
+                        $query->Where('sensor_name','like',"%$searchRequest%")
+                        ->orWhere('sensor_id','like',"%$searchRequest%")
+                        ->orWhere('location','like',"%$searchRequest%");
+                    })
                     ->where('activated',1)
                     ->where('opensource',1)
                     ->orderBy('sensor_name','asc')
@@ -277,9 +289,11 @@ class SensorController extends Controller
                 }
                 elseif($sortBy =='alph_des'){
                     $opensource_searchedSensors = Sensor::
-                    Where('sensor_name','like',"%$searchRequest%")
-                    ->orWhere('sensor_id','like',"%$searchRequest%")
-                    ->orWhere('location','like',"%$searchRequest%")
+                    where(function ($query) use ($searchRequest) {
+                        $query->Where('sensor_name','like',"%$searchRequest%")
+                        ->orWhere('sensor_id','like',"%$searchRequest%")
+                        ->orWhere('location','like',"%$searchRequest%");
+                    })
                     ->where('activated',1)
                     ->where('opensource',1)
                     ->orderBy('sensor_name','desc')
