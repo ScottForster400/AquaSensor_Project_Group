@@ -73,12 +73,15 @@ class SensorController extends Controller
             $current_user = Auth::user()->id;
 
             $users_searchedSensors = Sensor::
-            Where('sensor_name','like',"%$searchRequest%")
-            ->orWhere('sensor_id','like',"%$searchRequest%")
-            ->orWhere('location','like',"%$searchRequest%")
+            where(function ($query) use ($searchRequest) {
+                $query->Where('sensor_name','like',"%$searchRequest%")
+                ->orWhere('sensor_id','like',"%$searchRequest%")
+                ->orWhere('location','like',"%$searchRequest%");
+            })
             ->where('user_id',$current_user)
             ->paginate(5)->withQueryString();
-
+                        
+            
             $user_sensors_map = Sensor::where('user_id', $current_user)->get();
 
             $SensorDataForMap = [];
