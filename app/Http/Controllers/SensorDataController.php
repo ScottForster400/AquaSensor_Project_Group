@@ -151,36 +151,40 @@ class SensorDataController extends Controller
                 for ($t=0; $t<2; $t++) {
                     $tempTotal = [0, 0];
                     $doTotal = [0, 0];
-                    for ($a=0; $a<count($nightTimeSplitData[$t]); $a++) {
-                        $tempTotal[0] += $nightTimeSplitData[$t][$a][$temp];
-                        $doTotal[0] += $nightTimeSplitData[$t][$a][$do];
+                    if (count($nightTimeSplitData[$t]) > 0) {
+                        for ($a=0; $a<count($nightTimeSplitData[$t]); $a++) {
+                            $tempTotal[0] += $nightTimeSplitData[$t][$a][$temp];
+                            $doTotal[0] += $nightTimeSplitData[$t][$a][$do];
+                        }
+                        $averagedFlipData[$t][0][0] = number_format($tempTotal[0]/count($nightTimeSplitData[$t]), 3);
+                        $averagedFlipData[$t][1][0] = number_format($doTotal[0]/count($nightTimeSplitData[$t]), 3);
                     }
-                    $averagedFlipData[$t][0][0] = number_format($tempTotal[0]/count($nightTimeSplitData[$t]), 3);
-                    $averagedFlipData[$t][1][0] = number_format($doTotal[0]/count($nightTimeSplitData[$t]), 3);
                 }
 
                 for ($i=1; $i<3; $i++) { //for each time span
                     $entrysInTimes = [0, 0];
                     $tempTotal = [0, 0];
                     $doTotal = [0, 0];
-                    for ($a=0; $a<count($timeFrameEntries[$i]); $a++) {
-                        $splitTime = explode(':', $timeFrameEntries[$i][$a][$time]);
-                        $cumilatedTime = $splitTime[0].$splitTime[1];
-                        //echo "$sunRise, $cumilatedTime, $sunSet<br>";
-                        if ($sunRise <= $cumilatedTime && $cumilatedTime <= $sunSet) {
-                            $entrysInTimes[0]++;
-                            $tempTotal[0] += $timeFrameEntries[$i][$a][$temp];
-                            $doTotal[0] += $timeFrameEntries[$i][$a][$do];
-                        } else {
-                            $entrysInTimes[1]++;
-                            $tempTotal[1] += $timeFrameEntries[$i][$a][$temp];
-                            $doTotal[1] += $timeFrameEntries[$i][$a][$do];
+                    if (count($timeFrameEntries[$i]) > 0)  {
+                        for ($a=0; $a<count($timeFrameEntries[$i]); $a++) {
+                            $splitTime = explode(':', $timeFrameEntries[$i][$a][$time]);
+                            $cumilatedTime = $splitTime[0].$splitTime[1];
+                            //echo "$sunRise, $cumilatedTime, $sunSet<br>";
+                            if ($sunRise <= $cumilatedTime && $cumilatedTime <= $sunSet) {
+                                $entrysInTimes[0]++;
+                                $tempTotal[0] += $timeFrameEntries[$i][$a][$temp];
+                                $doTotal[0] += $timeFrameEntries[$i][$a][$do];
+                            } else {
+                                $entrysInTimes[1]++;
+                                $tempTotal[1] += $timeFrameEntries[$i][$a][$temp];
+                                $doTotal[1] += $timeFrameEntries[$i][$a][$do];
+                            }
                         }
+                        $averagedFlipData[0][0][$i] = number_format($tempTotal[0]/$entrysInTimes[0], 3);
+                        $averagedFlipData[0][1][$i] = number_format($doTotal[0]/$entrysInTimes[0], 3);
+                        $averagedFlipData[1][0][$i] = number_format($tempTotal[1]/$entrysInTimes[1], 3);
+                        $averagedFlipData[1][1][$i] = number_format($doTotal[1]/$entrysInTimes[1], 3);
                     }
-                    $averagedFlipData[0][0][$i] = number_format($tempTotal[0]/$entrysInTimes[0], 3);
-                    $averagedFlipData[0][1][$i] = number_format($doTotal[0]/$entrysInTimes[0], 3);
-                    $averagedFlipData[1][0][$i] = number_format($tempTotal[1]/$entrysInTimes[1], 3);
-                    $averagedFlipData[1][1][$i] = number_format($doTotal[1]/$entrysInTimes[1], 3);
                     //echo $averagedFlipData[0][0][$i].', '.$averagedFlipData[0][1][$i].', '.$averagedFlipData[1][0][$i].', '.$averagedFlipData[1][1][$i].'<br>';
                 }
                 
