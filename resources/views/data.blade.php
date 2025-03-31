@@ -103,15 +103,15 @@
                         <x-nightcard-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1 ">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span style="font-size: 9px">(Night)</span></h3>
-                                <p>{{$dayFlipCardDataTemp[0]}}°C</p>
+                                <p>{{$nightFlipCardDataTemp[0]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Weekly Avg <span style="font-size: 9px">(Night)</span></h3>
-                                <p>{{$dayFlipCardDataTemp[1]}}°C</p>
+                                <p>{{$nightFlipCardDataTemp[1]}}°C</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Monthly Avg <span style="font-size: 9px">(Night)</span></h3>
-                                <p>{{$dayFlipCardDataTemp[2]}}°C</p>
+                                <p>{{$nightFlipCardDataTemp[2]}}°C</p>
                             </div>
                         </x-nightcard-flippable-backface>
                     </x-card-flippable>
@@ -162,15 +162,15 @@
                         <x-nightcard-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly">
                             <div class="text-xs w-full ">
                                 <h3 class="text-gray-500 ">Daily Avg <span style="font-size: 9px">(Night)</span></h3>
-                                <p>{{$dayFlipCardDataDO[0]}} mg/L</p>
+                                <p>{{$nightFlipCardDataDO[0]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Weekly Avg <span style="font-size: 9px">(Night)</span></h3>
-                                <p>{{$dayFlipCardDataDO[1]}} mg/L</p>
+                                <p>{{$nightFlipCardDataDO[1]}} mg/L</p>
                             </div>
                             <div class="text-xs w-full">
                                 <h3 class="text-gray-500 ">Monthly Avg <span style="font-size: 9px">(Night)</span></h3>
-                                <p>{{$dayFlipCardDataDO[2]}} mg/L</p>
+                                <p>{{$nightFlipCardDataDO[2]}} mg/L</p>
                             </div>
                         </x-nightcard-flippable-backface>
                     </x-card-flippable>
