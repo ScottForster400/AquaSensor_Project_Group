@@ -84,6 +84,7 @@
                             </div>
                             <h3>{{$currentSensorData->temperature}}°c</h3>
                             <p class="text-gray-500 text-xs">Temperature</p>
+                            <p class="text-gray-500 text-[9px]">(Click Me)</p>
                         </x-card-flippable-frontface>
                         <x-card-flippable-backface class="items-start justify-between sm:justify-evenly !text-left !px-1 !py-1 day-card">
                             <div class="text-xs w-full ">
@@ -137,11 +138,12 @@
 
                     <x-card-flippable class="ml-2 max-w-64 z-10">
                         <x-card-flippable-frontface>
-                            <div class="h-9 w-9 flex justify-center items-center ">
+                            <div class="h-8 w-8 flex justify-center items-center ">
                                 <img src="{{URL::asset('imgs/DO.svg')}}" alt="dissolved_oxygen" class="w-full h-full">
                             </div>
                             <h3>{{$currentSensorData->mgl_dissolved_oxygen}} mg/l</h3>
                             <p class="text-gray-500 text-xs">Dissolved Oxygen</p>
+                            <p class="text-gray-500 text-[9px]">(Click Me)</p>
                         </x-card-flippable-frontface>
                         <x-card-flippable-backface class="items-start justify-between !text-left !px-1 !py-1 sm:justify-evenly  day-card">
                             <div class="text-xs w-full ">

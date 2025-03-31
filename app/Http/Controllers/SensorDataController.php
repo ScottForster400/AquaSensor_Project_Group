@@ -186,7 +186,6 @@ class SensorDataController extends Controller
                 $hoursInMins = $hours*60;
                 $mins = date('i',$timeDiff);
                 $timeDiff = $hoursInMins + $mins;
-
                 if($weekDay != date('l')){
                     $isActive = 'inactive';
                 }
@@ -197,6 +196,9 @@ class SensorDataController extends Controller
                     $isActive = 'active';
                 }
 
+            }
+            elseif(date('y-m-d') != $formatedDate){
+                $isActive = 'inactive';
             }
             else{
                 $isActive = 'active';
