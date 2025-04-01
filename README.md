@@ -20,5 +20,4 @@
 - Flowbite
 - Chart.js
 - Leaflet
-- Mapbox
 - NodeJS
