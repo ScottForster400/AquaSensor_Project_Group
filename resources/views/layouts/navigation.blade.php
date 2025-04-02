@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 z-40">
+<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 z-40 relative">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -33,11 +33,13 @@
                         </x-nav-link>
                     </div>
                 @endif
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                        {{ __('Profile') }}
-                    </x-nav-link>
-                </div>
+                @if(Auth::check())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
+                            {{ __('Profile') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->
@@ -115,18 +117,6 @@
                         {{ __('/ Sensor Data ') }}
                     </x-responsive-nav-link>
                 </div>
-                @if (Auth::check() && Auth::user()->admin)
-                    <div class="space-y-1 border-b-slate-200 border-b-2">
-                        <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
-                            {{ __('/ Admin') }}
-                        </x-responsive-nav-link>
-                    </div>
-                @endif
-                <div class="space-y-1 border-b-slate-200 border-b-2">
-                    <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                        {{ __('/ Profile') }}
-                    </x-responsive-nav-link>
-                </div>
 
             </x-responsive-nav-accordion-body>
             {{-- <x-responsive-nav-link :href="route('sensorData.index')" :active="request()->routeIs('sensorData.index')">
@@ -145,6 +135,20 @@
                 {{ __('/ Contact') }}
             </x-responsive-nav-link>
         </div>
+        @if (Auth::check() && Auth::user()->admin)
+            <div class="space-y-1 border-b-slate-200 border-b-2">
+                <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
+                    {{ __('/ Admin') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+        @if(Auth::check())
+            <div class="space-y-1 border-b-slate-200 border-b-2">
+                <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
+                    {{ __('/ Profile') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
 
         <div class="space-y-1 border-b-slate-200 border-b-2 ">
             @if (Auth::check())

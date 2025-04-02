@@ -1,7 +1,7 @@
 <div class="mb-4  border-gray-200 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center max-[375px]:justify-between justify-start" id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600 dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
         <li class="me-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="temp--styled-tab" data-tabs-target="#temp" type="button" role="tab" aria-controls="temperature" aria-selected="false" onclick="showMap()">All Sensors</button>
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="temp--styled-tab" data-tabs-target="#temp" type="button" role="tab" aria-controls="temperature" aria-selected="false" onclick="hideMap()">All Sensors</button>
         </li>
         @if (Auth::check())
             <li class="me-2" role="presentation">
@@ -21,7 +21,7 @@
                             <a href="{{route('sensorData.index', ['sensor_id'=>$sensor->sensor_id])}}">
                                 <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-4 py-2 transition-all duration-300 ease-in-out">
                                     <strong class="underline">{{Str::limit($sensor->sensor_name,15)}}</strong>
-                                    <p class="text-gray-600">{{Str::limit($sensor->location,20)}}</p>
+                                    <p class="text-gray-600">{{Str::limit($sensor->location,20)}} - {{Str::limit($sensor->body_of_water)}}</p>
                                 </x-modal-toggle>
                             </a>
                         </x-th>
@@ -41,7 +41,7 @@
                                 <a href="{{route('sensorData.index', ['sensor_id'=>$sensor1->sensor_id])}}">
                                     <x-modal-toggle class="w-full !text-gray-950 bg-transparent hover:text-blue-800 hover:bg-transparent focus:outline-none font-medium rounded-md text-sm px-1 py-1 transition-all duration-300 ease-in-out">
                                         <strong class="underline">{{Str::limit($sensor1->sensor_name,15)}}</strong>
-                                        <p class="text-gray-600">{{Str::limit($sensor1->location,20)}}</p>
+                                        <p class="text-gray-600 " style="text-wrap: auto;">{{Str::limit($sensor1->location,20)}} - {{Str::limit($sensor->body_of_water)}}</p>
                                     </x-modal-toggle>
                                 </a>
                             </x-th>
@@ -74,12 +74,12 @@
                                                         </div>
                                                         <div>
                                                             <x-input-label for="latitude" :value="__('Latitude')" />
-                                                            <x-text-input id="latitude" name="latitude" type="number" class="mt-1 block w-full" value="{{$sensor1->latitude}}" required autofocus autocomplete="latitude" />
+                                                            <x-text-input id="latitude" name="latitude" type="number" step="0.000001" class="mt-1 block w-full" value="{{$sensor1->latitude}}" required autofocus autocomplete="latitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('latitude')" />
                                                         </div>
                                                         <div>
                                                             <x-input-label for="longitude" :value="__('Longitude')" />
-                                                            <x-text-input id="longitude" name="longitude" type="number" class="mt-1 block w-full" value="{{$sensor1->longitude}}" required autofocus autocomplete="longitude" />
+                                                            <x-text-input id="longitude" name="longitude" type="number" step="0.000001" class="mt-1 block w-full" value="{{$sensor1->longitude}}" required autofocus autocomplete="longitude" />
                                                             <x-input-error class="mt-2" :messages="$errors->get('longitude')" />
                                                         </div>
                                                         <div class="mb-6">
