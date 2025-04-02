@@ -390,7 +390,11 @@ class SensorDataController extends Controller
         $searchRequest = $request->search;
 
         $searchedSensor = Sensor::
-        Where('sensor_id','like',"%$searchRequest%")
+        where(function ($query) use ($searchRequest) {
+            $query->Where('sensor_name','like',"%$searchRequest%")
+            ->orWhere('sensor_id','like',"%$searchRequest%")
+            ->orWhere('location','like',"%$searchRequest%");
+        })
         ->where('activated',1)
         ->where('opensource',1)
         ->first();
