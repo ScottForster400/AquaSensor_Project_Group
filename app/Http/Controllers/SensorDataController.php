@@ -191,7 +191,7 @@ class SensorDataController extends Controller
                     }
                     //echo $averagedFlipData[0][0][$i].', '.$averagedFlipData[0][1][$i].', '.$averagedFlipData[1][0][$i].', '.$averagedFlipData[1][1][$i].'<br>';
                 }
-                
+
             } else {
                 return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
             }
@@ -390,13 +390,17 @@ class SensorDataController extends Controller
         $searchRequest = $request->search;
 
         $searchedSensor = Sensor::
-        Where('sensor_id','like',"%$searchRequest%")
+        where(function ($query) use ($searchRequest) {
+            $query->Where('sensor_name','like',"%$searchRequest%")
+            ->orWhere('sensor_id','like',"%$searchRequest%")
+            ->orWhere('location','like',"%$searchRequest%");
+        })
         ->where('activated',1)
         ->where('opensource',1)
         ->first();
 
         if($searchedSensor == null){
-            return view('data');
+            return view('data')->with('message', "This sensor is not accessible");
         }
         else{
             $sensor_id=$searchedSensor->sensor_id;

@@ -19,7 +19,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        @if($currentRoute =="sensorData.index")
+        @if($currentRoute =="sensorData.index" || $currentRoute == "sensorData.search")
             <link rel="stylesheet" href="{{ asset('/css/waves/waves.css') }}"/>
             <script src="{{ asset('/js/dataPage.js') }} " defer></script>
             <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
