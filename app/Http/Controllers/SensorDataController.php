@@ -191,7 +191,7 @@ class SensorDataController extends Controller
                     }
                     //echo $averagedFlipData[0][0][$i].', '.$averagedFlipData[0][1][$i].', '.$averagedFlipData[1][0][$i].', '.$averagedFlipData[1][1][$i].'<br>';
                 }
-                
+
             } else {
                 return view('data')->with('message', "The sensor that attempted to display is bugged (".$sensor_id."). Please let an admin know");
             }
@@ -396,7 +396,7 @@ class SensorDataController extends Controller
         ->first();
 
         if($searchedSensor == null){
-            return view('data');
+            return view('data')->with('message', "This sensor is not accessible");
         }
         else{
             $sensor_id=$searchedSensor->sensor_id;
